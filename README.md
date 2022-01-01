@@ -4,7 +4,6 @@
 
 | 제목 | 내용 |
 | ---- | ---- |
-
 | 프로젝트 참여자 | 1인 프로젝트 |
 | 담당 영역 | 디자인, 퍼블리싱, 프론트 개발 전반 |
 | 주요 특징 | React-native, TypeScript, StyledComponent |

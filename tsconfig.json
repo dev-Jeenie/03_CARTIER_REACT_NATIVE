@@ -60,5 +60,13 @@
   },
   "exclude": [
     "node_modules", "babel.config.js", "metro.config.js", "jest.config.js"
-  ]
+  ],
+  "baseUrl": "./src",
+  "paths": {
+    "~/*": ["./*"],
+    "#components/*": ["./components/*"],
+    "#pages/*": ["./pages/*"],
+    "#assets/*": ["./assets/*"],
+  },
 }
+

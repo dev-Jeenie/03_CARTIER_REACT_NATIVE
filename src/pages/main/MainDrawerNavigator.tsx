@@ -8,11 +8,21 @@ export type MainDrawerParamList = {
 };
 
 const MainDrawerNavigator = () => {
-  const MainDrawer = React.useMemo(() => createDrawerNavigator(), []);
+  const MainDrawer = React.useMemo(
+    () => createDrawerNavigator<MainDrawerParamList>(),
+    [],
+  );
 
   return (
     <>
-      <MainDrawer.Navigator drawerContent={prop => <AsideMenu {...prop} />}>
+      <MainDrawer.Navigator
+        screenOptions={{
+          drawerType: 'front',
+          drawerStyle: {
+            width: '100%',
+          },
+        }}
+        drawerContent={prop => <AsideMenu {...prop} />}>
         <MainDrawer.Screen
           name="HomeStackNavigator"
           component={HomeStackNavigator}

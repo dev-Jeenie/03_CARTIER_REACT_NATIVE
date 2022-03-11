@@ -16,19 +16,8 @@ module.exports = {
           '.js',
           '.json',
         ],
-        alias: {
-          '#apis': './src/apis',
-          '#assets': './src/assets',
-          '#commons': './src/commons',
-          '#components': './src/components',
-          '#contexts': './src/contexts',
-          '#nav': './src/nav',
-          '#pages': './src/pages',
-          '#reducer': './src/reducer',
-          '#types': './src/types',
-          '#utils': './src/utils',
-        },
       },
     ],
-  ],
+    'react-native-reanimated/plugin' // PUT IT HERE
+  ]
 };

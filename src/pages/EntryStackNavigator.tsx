@@ -1,5 +1,6 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
+import MainDrawerNavigator from './main/MainDrawerNavigator';
 
 export type EntryStackParamList = {
   Login: undefined;
@@ -15,10 +16,6 @@ const EntryStackNavigator = () => {
   const Login = () => {
     return <></>;
   };
-  const MainDrawerNavigator = () => {
-    return <></>;
-  };
-
   return (
     <Stack.Navigator initialRouteName="MainDrawerNavigator">
       <Stack.Screen name="Login" component={Login} />

@@ -5,6 +5,7 @@ import {
 } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
+import StyledText from '../commons/StyledText';
 import EntryStackNavigator, {
   EntryStackParamList,
 } from '../pages/EntryStackNavigator';

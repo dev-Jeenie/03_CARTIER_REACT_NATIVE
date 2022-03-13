@@ -7,6 +7,7 @@ type AsideMenuProps = DrawerContentComponentProps & {};
 const AsideMenu = ({}: AsideMenuProps) => {
   return (
     <>
+      <View style={{flexDirection: 'row'}}></View>
       <ScrollView></ScrollView>
     </>
   );

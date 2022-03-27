@@ -10,11 +10,26 @@ export type StyledTextProps = {
 } & TextProps;
 
 const StyledText = ({type, color, style, children}: StyledTextProps) => {
+  const textKey = type ?? 'normal';
+  const colorKey = color ?? 'GRAY_000';
+
+  const textStyle = React.useMemo(() => {
+    return theme.fonts?.[textKey] || theme.fonts.normal;
+  }, [textKey]);
+
+  const colorStyle = React.useMemo(
+    () => ({
+      color: theme.colors?.[colorKey],
+    }),
+    [colorKey],
+  );
   return (
     <Text
       style={[
-        // theme.fonts[type] ?? theme.fonts.contentTitle,
+        // theme.fonts[type] ?? theme.fonts.normal,
         // {color: theme.colors[color] ?? theme.colors.GRAY_000},
+        colorStyle,
+        textStyle,
         style,
       ]}>
       {children}

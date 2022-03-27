@@ -4,9 +4,9 @@ const colors = {
   DEFAULT_WHITE: '#ffffff',
   DARK_GRAY: '#151515',
   GRAY_000: 'rgb(41,41,41)',
-  GRAY_100: 'rgb(58,58,58)',
-  GRAY_200: 'rgb(80,80,80)',
-  GRAY_300: 'rgb(153,153,153)',
+  GRAY_100: 'rgb(80,80,80)',
+  GRAY_200: 'rgb(153,153,153)',
+  GRAY_300: 'rgb(230,230,230)',
   MAIN_RED: '#880B16',
 } as const;
 
@@ -23,9 +23,24 @@ const fonts = StyleSheet.create({
     fontSize: 18,
     // fontFamily: 'GFS Didot',
   },
+  listTitle: {
+    fontSize: 16,
+    // fontFamily: 'GFS Didot',
+  },
+  normal: {
+    fontSize: 14,
+    // fontFamily: 'GFS Didot',
+  },
+  slideText: {
+    fontSize: 16,
+    // fontFamily: 'GFS Didot',
+  },
 });
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  globalPaddingLeft: {paddingLeft: 20},
+  globalPaddingVertical: {paddingVertical: 20},
+});
 
 const theme = {
   colors,

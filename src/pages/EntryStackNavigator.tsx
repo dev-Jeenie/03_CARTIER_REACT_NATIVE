@@ -17,7 +17,9 @@ const EntryStackNavigator = () => {
     return <></>;
   };
   return (
-    <Stack.Navigator initialRouteName="MainDrawerNavigator">
+    <Stack.Navigator
+      initialRouteName="MainDrawerNavigator"
+      screenOptions={{headerShown: false}}>
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen
         name="MainDrawerNavigator"

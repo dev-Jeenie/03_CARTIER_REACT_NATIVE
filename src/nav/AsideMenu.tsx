@@ -14,6 +14,8 @@ import theme from '../commons/theme';
 import assets from '../../assets';
 import CloseButton from '../components/common/CloseButton';
 import {DrawerActions, useNavigation} from '@react-navigation/native';
+import HeaderContainer from '../components/common/HeaderContainer';
+import {useWindowDimensions} from 'react-native';
 
 type AsideMenuProps = DrawerContentComponentProps & {};
 
@@ -89,19 +91,21 @@ const BottomList = ({text, onPress}: {text: string; onPress: () => void}) => {
 
 const AsideMenu = ({}: AsideMenuProps) => {
   const navigation = useNavigation();
+  const {width} = useWindowDimensions();
 
   return (
     <>
-      <View style={styles.header}>
+      <HeaderContainer>
         <CloseButton
           onPress={() => navigation.dispatch(DrawerActions.closeDrawer())}
         />
         <Image
           source={assets.logo_r}
-          style={{width: 120}}
+          style={{width: 140, position: 'absolute', left: width / 2 - 70}}
           resizeMode={'contain'}
         />
-      </View>
+      </HeaderContainer>
+
       <ScrollView>
         <MenuList
           title={'Collections'}

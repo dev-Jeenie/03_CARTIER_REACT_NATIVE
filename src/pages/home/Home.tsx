@@ -395,41 +395,61 @@ const Home = () => {
       <View
         style={[
           theme.styles.globalPaddingHorizontal,
-          {marginVertical: 30, alignItems: 'center', backgroundColor: 'pink'},
+          {
+            marginVertical: 30,
+            alignItems: 'center',
+            // backgroundColor: 'pink'
+          },
         ]}>
         <StyledText type="titleEnglish">CARTIER COLLECTIONS</StyledText>
         <StyledText type="contentTitle">
           까르띠에 컬렉션을 만나보세요
         </StyledText>
         <View
-          style={{
-            flexDirection: 'row',
-            flexWrap: 'nowrap',
-            marginTop: 30,
-          }}>
+          style={[
+            {
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              marginVertical: 30,
+              justifyContent: 'space-between',
+            },
+          ]}>
           <Image
             source={assets.thum_panthere_wt}
-            style={{width: 100, height: 100}}
-            resizeMode="center"
+            style={{
+              width: width / 2 - 25,
+              height: width / 2 - 25,
+            }}
           />
           <Image
             source={assets.thum_trinity_r}
-            style={{width: 100, height: 100}}
-            resizeMode="center"
+            style={{
+              width: width / 2 - 25,
+              height: width / 2 - 25,
+              marginBottom: 10,
+            }}
           />
-          <View style={{flexDirection: 'row'}}>
-            <Image
-              source={assets.thum_juste_br}
-              style={{width: 100, height: 100}}
-              resizeMode="center"
-            />
-            <Image
-              source={assets.cartier_panthere_4}
-              style={{width: 100, height: 100}}
-              resizeMode="center"
-            />
-          </View>
+          <Image
+            source={assets.thum_panthere_wt}
+            style={{
+              width: width / 2 - 25,
+              height: width / 2 - 25,
+            }}
+          />
+          <Image
+            source={assets.thum_trinity_r}
+            style={{
+              width: width / 2 - 25,
+              height: width / 2 - 25,
+            }}
+          />
         </View>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Collections')}
+          style={{flexDirection: 'row'}}>
+          <StyledText>더 알아보기</StyledText>
+          <StyledText>{'   >'}</StyledText>
+        </TouchableOpacity>
       </View>
 
       <Section
@@ -473,20 +493,19 @@ const Home = () => {
               />
             </Animated.View> */}
           </View>
-          <View style={styles.imageBackground}>
+          <View style={[styles.imageBackground]}>
             <View
-              style={
-                {
-                  // opacity: imgOpacity_1,
-                  // transform: [{translateY: textTranslateY_1}],
-                }
-              }>
-              <StyledText
-                color="DEFAULT_WHITE"
-                type="contentTitle"
-                style={{marginBottom: 20}}>
+              style={{
+                borderColor: 'red',
+                borderWidth: 1,
+                alignItems: 'center',
+              }}>
+              <StyledText color="DEFAULT_WHITE" type="contentTitle">
                 까르띠에는 고객에게 최상의 서비스를 제공할 것을 약속합니다.
               </StyledText>
+              <TouchableOpacity onPress={() => {}}>
+                <StyledText color="DEFAULT_WHITE">더 알아보기</StyledText>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

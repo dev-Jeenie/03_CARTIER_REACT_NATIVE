@@ -8,7 +8,13 @@ import {
 } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
-import {Dimensions, Image, useWindowDimensions, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  Platform,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import assets from '../../assets';
 import StyledText from '../commons/StyledText';
@@ -16,29 +22,127 @@ import theme from '../commons/theme';
 import BackButton from '../components/common/BackButton';
 import HeaderContainer from '../components/common/HeaderContainer';
 import MenuButton from '../components/common/MenuButton';
+import MypageButton from '../components/common/MypageButton';
+import CollectionDetail from '../pages/collection/CollectionDetail';
 import EntryStackNavigator, {
   EntryStackParamList,
 } from '../pages/EntryStackNavigator';
 import Home from '../pages/home/Home';
 import Login from '../pages/Login';
 import SubmitIdPassword from '../pages/login/SubmitIdPassword';
+import Collections from '../pages/main/Collections';
+import Mypage from '../pages/mypage/Mypage';
+import ProductDetail from '../pages/product/ProductDetail';
 import AsideMenu from './AsideMenu';
 // import MainDrawerNavigator from '../pages/main/MainDrawerNavigator';
 
 const {width} = Dimensions.get('window');
 
-type HomeStackParamList = {
+export type HomeStackParamList = {
   Home: undefined;
+  Collections: undefined;
+  CollectionDetail: {
+    title: 'juste' | 'panthere' | 'love' | 'trinity' | 'ecrou';
+  };
+  Mypage: undefined;
+  ProductDetail: {id: string};
 };
 
 const HomeStackNavigator = () => {
+  const navigation = useNavigation();
   const Stack = React.useMemo(
     () => createStackNavigator<HomeStackParamList>(),
     [],
   );
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator
+      // screenOptions={{headerShown: false}}
+      screenOptions={{
+        // headerTitleStyle: {
+        //   color: theme.colors.grayScale1000,
+        //   fontSize: 16,
+        //   fontWeight: '500',
+        //   fontStyle: 'normal',
+        //   letterSpacing: 0,
+        //   maxWidth: 220,
+        // },
+        // headerStyle: {
+        //   backgroundColor: theme.colors.defaultBackground,
+        //   shadowColor: 'transparent',
+        // },
+        headerTitleAlign: 'center',
+        // headerBackTitleVisible: false,
+        headerBackImage: () => (
+          <View
+            style={{
+              paddingHorizontal: Platform.OS === 'ios' ? 20 : 10,
+            }}>
+            <Image
+              style={{width: 24, height: 24}}
+              source={assets.icon_ChevronLeft}
+            />
+          </View>
+        ),
+      }}>
       <Stack.Screen name="Home" component={Home} />
+
+      <Stack.Screen
+        name="Collections"
+        component={Collections}
+        options={{
+          header: () => {
+            return (
+              <HeaderContainer
+                style={{borderBottomWidth: 0, backgroundColor: 'pink'}}>
+                <BackButton onPress={() => navigation.goBack()} />
+                <Image
+                  source={assets.logo_w}
+                  style={{
+                    width: 140,
+                    position: 'absolute',
+                    left: width / 2 - 70,
+                  }}
+                  resizeMode={'contain'}
+                />
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                  }}>
+                  {/* <View
+                    style={{
+                      backgroundColor: theme.colors.DEFAULT_WHITE,
+                      width: 25,
+                      height: 25,
+                      marginLeft: 10,
+                    }}
+                  /> */}
+                  <MypageButton onPress={() => navigation.navigate('Mypage')} />
+                  <View
+                    style={{
+                      backgroundColor: theme.colors.DEFAULT_WHITE,
+                      width: 25,
+                      height: 25,
+                      marginLeft: 10,
+                    }}
+                  />
+                </View>
+              </HeaderContainer>
+            );
+          },
+        }}
+      />
+      <Stack.Screen
+        name="CollectionDetail"
+        component={CollectionDetail}
+        options={{}}
+      />
+      <Stack.Screen name="Mypage" component={Mypage} options={{}} />
+      <Stack.Screen
+        name="ProductDetail"
+        component={ProductDetail}
+        options={{}}
+      />
     </Stack.Navigator>
   );
 };
@@ -113,7 +217,7 @@ const MainDrawerNavigator = () => {
           component={HomeStackNavigator}
           options={
             {
-              // headerTransparent: false,
+              // headerShown: false,
             }
           }
         />

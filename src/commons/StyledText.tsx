@@ -6,10 +6,17 @@ export type StyledTextProps = {
   type?: keyof typeof theme.fonts;
   color?: keyof typeof theme.colors;
   style?: StyleProp<TextStyle>;
-  children?: string;
+  children?: any;
+  isBold?: boolean;
 } & TextProps;
 
-const StyledText = ({type, color, style, children}: StyledTextProps) => {
+const StyledText = ({
+  type,
+  color,
+  style,
+  children,
+  isBold,
+}: StyledTextProps) => {
   const textKey = type ?? 'normal';
   const colorKey = color ?? 'GRAY_000';
 
@@ -31,6 +38,7 @@ const StyledText = ({type, color, style, children}: StyledTextProps) => {
         colorStyle,
         textStyle,
         style,
+        isBold && {fontWeight: 'bold'},
       ]}>
       {children}
     </Text>

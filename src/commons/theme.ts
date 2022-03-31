@@ -15,6 +15,10 @@ const fonts = StyleSheet.create({
     fontSize: 28,
     // fontFamily: 'Noto Serif KR',
   },
+  collectionTitle: {
+    fontSize: 20,
+    // fontFamily: 'Noto Serif KR',
+  },
   contentTitle: {
     fontSize: 18,
     // fontFamily: 'Noto Serif KR',

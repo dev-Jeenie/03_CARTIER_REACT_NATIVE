@@ -55,4 +55,5 @@ export default {
   icon_ShareWhite: require('./src/assets/icon_ShareWhite.png'),
   icon_HeartStroke: require('./src/assets/icon_HeartStroke.png'),
   icon_HeartFill: require('./src/assets/icon_HeartFill.png'),
+  icon_cart: require('./src/assets/icon_cart.png'),
 };

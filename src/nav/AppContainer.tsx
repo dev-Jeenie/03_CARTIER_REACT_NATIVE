@@ -20,6 +20,7 @@ import assets from '../../assets';
 import StyledText from '../commons/StyledText';
 import theme from '../commons/theme';
 import BackButton from '../components/common/BackButton';
+import CartButton from '../components/common/CartButton';
 import HeaderContainer from '../components/common/HeaderContainer';
 import MenuButton from '../components/common/MenuButton';
 import MypageButton from '../components/common/MypageButton';
@@ -57,33 +58,35 @@ const HomeStackNavigator = () => {
   return (
     <Stack.Navigator
       // screenOptions={{headerShown: false}}
-      screenOptions={{
-        // headerTitleStyle: {
-        //   color: theme.colors.grayScale1000,
-        //   fontSize: 16,
-        //   fontWeight: '500',
-        //   fontStyle: 'normal',
-        //   letterSpacing: 0,
-        //   maxWidth: 220,
-        // },
-        // headerStyle: {
-        //   backgroundColor: theme.colors.defaultBackground,
-        //   shadowColor: 'transparent',
-        // },
-        headerTitleAlign: 'center',
-        // headerBackTitleVisible: false,
-        headerBackImage: () => (
-          <View
-            style={{
-              paddingHorizontal: Platform.OS === 'ios' ? 20 : 10,
-            }}>
-            <Image
-              style={{width: 24, height: 24}}
-              source={assets.icon_ChevronLeft}
-            />
-          </View>
-        ),
-      }}>
+      screenOptions={
+        {
+          // headerTitleStyle: {
+          //   color: theme.colors.grayScale1000,
+          //   fontSize: 16,
+          //   fontWeight: '500',
+          //   fontStyle: 'normal',
+          //   letterSpacing: 0,
+          //   maxWidth: 220,
+          // },
+          // headerStyle: {
+          //   backgroundColor: theme.colors.defaultBackground,
+          //   shadowColor: 'transparent',
+          // },
+          // headerTitleAlign: 'center',
+          // // headerBackTitleVisible: false,
+          // headerBackImage: () => (
+          //   <View
+          //     style={{
+          //       paddingHorizontal: Platform.OS === 'ios' ? 20 : 10,
+          //     }}>
+          //     <Image
+          //       style={{width: 24, height: 24}}
+          //       source={assets.icon_ChevronLeft}
+          //     />
+          //   </View>
+          // ),
+        }
+      }>
       <Stack.Screen name="Home" component={Home} />
 
       <Stack.Screen
@@ -190,22 +193,8 @@ const MainDrawerNavigator = () => {
                   style={{
                     flexDirection: 'row',
                   }}>
-                  <View
-                    style={{
-                      backgroundColor: theme.colors.DEFAULT_WHITE,
-                      width: 25,
-                      height: 25,
-                      marginLeft: 10,
-                    }}
-                  />
-                  <View
-                    style={{
-                      backgroundColor: theme.colors.DEFAULT_WHITE,
-                      width: 25,
-                      height: 25,
-                      marginLeft: 10,
-                    }}
-                  />
+                  <MypageButton onPress={() => navigation.navigate('Mypage')} />
+                  <CartButton onPress={() => navigation.navigate('Cart')} />
                 </View>
               </HeaderContainer>
             );

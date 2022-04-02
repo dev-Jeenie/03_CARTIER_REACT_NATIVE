@@ -415,14 +415,14 @@ const Home = () => {
             },
           ]}>
           <Image
-            source={assets.thum_panthere_wt}
+            source={assets.thum_juste_br}
             style={{
               width: width / 2 - 25,
               height: width / 2 - 25,
             }}
           />
           <Image
-            source={assets.thum_trinity_r}
+            source={assets.juste_r_yg_3}
             style={{
               width: width / 2 - 25,
               height: width / 2 - 25,
@@ -430,7 +430,7 @@ const Home = () => {
             }}
           />
           <Image
-            source={assets.thum_panthere_wt}
+            source={assets.cartier_panthere_4}
             style={{
               width: width / 2 - 25,
               height: width / 2 - 25,
@@ -496,16 +496,11 @@ const Home = () => {
           <View style={[styles.imageBackground]}>
             <View
               style={{
-                borderColor: 'red',
-                borderWidth: 1,
                 alignItems: 'center',
               }}>
               <StyledText color="DEFAULT_WHITE" type="contentTitle">
-                까르띠에는 고객에게 최상의 서비스를 제공할 것을 약속합니다.
+                까르띠에는 최상의 서비스를 약속합니다.
               </StyledText>
-              <TouchableOpacity onPress={() => {}}>
-                <StyledText color="DEFAULT_WHITE">더 알아보기</StyledText>
-              </TouchableOpacity>
             </View>
           </View>
         </View>

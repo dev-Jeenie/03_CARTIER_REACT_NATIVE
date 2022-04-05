@@ -21,6 +21,7 @@ import StyledText from '../commons/StyledText';
 import theme from '../commons/theme';
 import BackButton from '../components/common/BackButton';
 import CartButton from '../components/common/CartButton';
+import {collectionType} from '../components/common/collectionMap';
 import HeaderContainer from '../components/common/HeaderContainer';
 import MenuButton from '../components/common/MenuButton';
 import MypageButton from '../components/common/MypageButton';
@@ -43,7 +44,8 @@ export type HomeStackParamList = {
   Home: undefined;
   Collections: undefined;
   CollectionDetail: {
-    title: 'juste' | 'panthere' | 'love' | 'trinity' | 'ecrou';
+    collection_id: collectionType;
+    // title: 'juste' | 'panthere' | 'love' | 'trinity' | 'ecrou';
   };
   Mypage: undefined;
   ProductDetail: {id: string};

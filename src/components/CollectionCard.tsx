@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import assets from '../../assets';
 import StyledText from '../commons/StyledText';
 
 const CollectionCard = ({
@@ -15,8 +16,8 @@ const CollectionCard = ({
   onPress,
   isBanner,
 }: {
-  title: string;
-  thumbnail: ImageSourcePropType;
+  title?: string;
+  thumbnail?: ImageSourcePropType;
   contents: string;
   onPress?: () => void;
   isBanner?: boolean;

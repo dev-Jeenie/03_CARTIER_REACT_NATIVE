@@ -57,83 +57,88 @@ const HomeStackNavigator = () => {
   );
   return (
     <Stack.Navigator
-      // screenOptions={{headerShown: false}}
-      screenOptions={
-        {
-          // headerTitleStyle: {
-          //   color: theme.colors.grayScale1000,
-          //   fontSize: 16,
-          //   fontWeight: '500',
-          //   fontStyle: 'normal',
-          //   letterSpacing: 0,
-          //   maxWidth: 220,
-          // },
-          // headerStyle: {
-          //   backgroundColor: theme.colors.defaultBackground,
-          //   shadowColor: 'transparent',
-          // },
-          // headerTitleAlign: 'center',
-          // // headerBackTitleVisible: false,
-          // headerBackImage: () => (
-          //   <View
-          //     style={{
-          //       paddingHorizontal: Platform.OS === 'ios' ? 20 : 10,
-          //     }}>
-          //     <Image
-          //       style={{width: 24, height: 24}}
-          //       source={assets.icon_ChevronLeft}
-          //     />
-          //   </View>
-          // ),
-        }
-      }>
+      screenOptions={{
+        headerShown: false,
+        // headerTitleAlign: 'left',
+        // headerTitleStyle: theme.fonts.pageTitle,
+      }}
+      // screenOptions={
+      //   {
+      // headerTitleStyle: {
+      //   color: theme.colors.grayScale1000,
+      //   fontSize: 16,
+      //   fontWeight: '500',
+      //   fontStyle: 'normal',
+      //   letterSpacing: 0,
+      //   maxWidth: 220,
+      // },
+      // headerStyle: {
+      //   backgroundColor: theme.colors.defaultBackground,
+      //   shadowColor: 'transparent',
+      // },
+      // headerTitleAlign: 'center',
+      // // headerBackTitleVisible: false,
+      // headerBackImage: () => (
+      //   <View
+      //     style={{
+      //       paddingHorizontal: Platform.OS === 'ios' ? 20 : 10,
+      //     }}>
+      //     <Image
+      //       style={{width: 24, height: 24}}
+      //       source={assets.icon_ChevronLeft}
+      //     />
+      //   </View>
+      // ),
+      // }
+      // }
+    >
       <Stack.Screen name="Home" component={Home} />
 
       <Stack.Screen
         name="Collections"
         component={Collections}
-        options={{
-          header: () => {
-            return (
-              <HeaderContainer
-                style={{borderBottomWidth: 0, backgroundColor: 'pink'}}>
-                <BackButton onPress={() => navigation.goBack()} />
-                <Image
-                  source={assets.logo_w}
-                  style={{
-                    width: 140,
-                    position: 'absolute',
-                    left: width / 2 - 70,
-                  }}
-                  resizeMode={'contain'}
-                />
+        // options={{
+        //   header: () => {
+        //     return (
+        //       <HeaderContainer
+        //         style={{borderBottomWidth: 0, backgroundColor: 'pink'}}>
+        //         <BackButton onPress={() => navigation.goBack()} />
+        //         <Image
+        //           source={assets.logo_w}
+        //           style={{
+        //             width: 140,
+        //             position: 'absolute',
+        //             left: width / 2 - 70,
+        //           }}
+        //           resizeMode={'contain'}
+        //         />
 
-                <View
-                  style={{
-                    flexDirection: 'row',
-                  }}>
-                  {/* <View
-                    style={{
-                      backgroundColor: theme.colors.DEFAULT_WHITE,
-                      width: 25,
-                      height: 25,
-                      marginLeft: 10,
-                    }}
-                  /> */}
-                  <MypageButton onPress={() => navigation.navigate('Mypage')} />
-                  <View
-                    style={{
-                      backgroundColor: theme.colors.DEFAULT_WHITE,
-                      width: 25,
-                      height: 25,
-                      marginLeft: 10,
-                    }}
-                  />
-                </View>
-              </HeaderContainer>
-            );
-          },
-        }}
+        //         <View
+        //           style={{
+        //             flexDirection: 'row',
+        //           }}>
+        //           {/* <View
+        //             style={{
+        //               backgroundColor: theme.colors.DEFAULT_WHITE,
+        //               width: 25,
+        //               height: 25,
+        //               marginLeft: 10,
+        //             }}
+        //           /> */}
+        //           <MypageButton onPress={() => navigation.navigate('Mypage')} />
+        //           <View
+        //             style={{
+        //               backgroundColor: theme.colors.DEFAULT_WHITE,
+        //               width: 25,
+        //               height: 25,
+        //               marginLeft: 10,
+        //             }}
+        //           />
+        //         </View>
+        //       </HeaderContainer>
+        //     );
+        //   },
+        // }}
       />
       <Stack.Screen
         name="CollectionDetail"
@@ -170,7 +175,7 @@ const MainDrawerNavigator = () => {
             width: '100%',
           },
           headerTransparent: true,
-          headerTitleStyle: {color: theme.colors.DEFAULT_WHITE},
+          // headerTitleStyle: {color: theme.colors.DEFAULT_WHITE},
           header: () => {
             return (
               <HeaderContainer>
@@ -178,13 +183,15 @@ const MainDrawerNavigator = () => {
                   onPress={() =>
                     navigation.dispatch(DrawerActions.openDrawer())
                   }
+                  style={{
+                    position: 'absolute',
+                    left: 20,
+                  }}
                 />
                 <Image
-                  source={assets.logo_w}
+                  source={assets.logo_r}
                   style={{
-                    width: 140,
-                    position: 'absolute',
-                    left: width / 2 - 70,
+                    width: 130,
                   }}
                   resizeMode={'contain'}
                 />
@@ -192,9 +199,14 @@ const MainDrawerNavigator = () => {
                 <View
                   style={{
                     flexDirection: 'row',
+                    position: 'absolute',
+                    right: 20,
                   }}>
                   <MypageButton onPress={() => navigation.navigate('Mypage')} />
-                  <CartButton onPress={() => navigation.navigate('Cart')} />
+                  <CartButton
+                    onPress={() => navigation.navigate('Cart')}
+                    style={{marginLeft: 10}}
+                  />
                 </View>
               </HeaderContainer>
             );
@@ -204,11 +216,10 @@ const MainDrawerNavigator = () => {
         <MainDrawer.Screen
           name="HomeStackNavigator"
           component={HomeStackNavigator}
-          options={
-            {
-              // headerShown: false,
-            }
-          }
+          options={{
+            // headerShown: false,
+            headerTransparent: false,
+          }}
         />
       </MainDrawer.Navigator>
     </>
@@ -252,50 +263,55 @@ const AuthStack = () => {
       <Stack.Screen
         name="SubmitIdPassword"
         component={SubmitIdPassword}
-        options={{
-          // headerBackgroundContainerStyle: {
-          //   backgroundColor: theme.colors.GRAY_300,
-          //   height: 50,
-          // },
-          header: () => {
-            return (
-              <HeaderContainer style={{borderBottomWidth: 0}}>
-                <BackButton onPress={() => navigation.goBack()} />
-                <Image
-                  source={assets.logo_w}
-                  style={{
-                    width: 140,
-                    position: 'absolute',
-                    left: width / 2 - 70,
-                  }}
-                  resizeMode={'contain'}
-                />
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                  }}>
-                  <View
-                    style={{
-                      backgroundColor: theme.colors.DEFAULT_WHITE,
-                      width: 25,
-                      height: 25,
-                      marginLeft: 10,
-                    }}
-                  />
-                  <View
-                    style={{
-                      backgroundColor: theme.colors.DEFAULT_WHITE,
-                      width: 25,
-                      height: 25,
-                      marginLeft: 10,
-                    }}
-                  />
-                </View>
-              </HeaderContainer>
-            );
-          },
-        }}
+        options={
+          {
+            // headerBackgroundContainerStyle: {
+            //   backgroundColor: theme.colors.GRAY_300,
+            //   height: 50,
+            // },
+            //   header: () => {
+            //     return (
+            //       <HeaderContainer style={{borderBottomWidth: 0}}>
+            //         <BackButton onPress={() => navigation.goBack()} />
+            //         <Image
+            //           source={assets.logo_w}
+            //           style={{
+            //             width: 140,
+            //             position: 'absolute',
+            //             left: width / 2 - 70,
+            //           }}
+            //           resizeMode={'contain'}
+            //         />
+            //         <View
+            //           style={{
+            //             flexDirection: 'row',
+            //           }}>
+            //           <View
+            //             style={{
+            //               backgroundColor: theme.colors.DEFAULT_WHITE,
+            //               width: 25,
+            //               height: 25,
+            //               marginLeft: 10,
+            //             }}
+            //           />
+            //           <View
+            //             style={{
+            //               backgroundColor: theme.colors.DEFAULT_WHITE,
+            //               width: 25,
+            //               height: 25,
+            //               marginLeft: 10,
+            //             }}
+            //           />
+            //         </View>
+            //       </HeaderContainer>
+            //     );
+            //   },
+          }
+        }
+      />
+      <Stack.Screen
+        name="MainDrawerNavigator"
+        component={MainDrawerNavigator}
       />
     </Stack.Navigator>
   );
@@ -320,7 +336,6 @@ const AppContainer = () => {
           card: '#ffffff',
         },
       }}>
-      {/* <EntryStackNavigator /> */}
       <Stack.Navigator screenOptions={{headerShown: false}}>
         {!principal ? (
           <Stack.Screen name="AuthStack" component={AuthStack} />

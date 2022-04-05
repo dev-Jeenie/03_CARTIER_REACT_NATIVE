@@ -1,22 +1,26 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {Image, StyleProp, TouchableOpacity, ViewStyle} from 'react-native';
+import assets from '../../../assets';
 import theme from '../../commons/theme';
 
 type CloseButtonProps = {
   onPress: () => void;
+  style?: StyleProp<ViewStyle>;
 };
 
-const CloseButton = ({onPress}: CloseButtonProps) => {
+const CloseButton = ({onPress, style}: CloseButtonProps) => {
   return (
     <TouchableOpacity
-      style={{
-        width: 15,
-        height: 15,
-        backgroundColor: theme.colors.MAIN_RED,
-        position: 'absolute',
-        left: 20,
-      }}
-      onPress={onPress}></TouchableOpacity>
+      style={[
+        {
+          position: 'absolute',
+          left: 20,
+        },
+        style,
+      ]}
+      onPress={onPress}>
+      <Image source={assets.icon_close} style={{width: 30, height: 30}} />
+    </TouchableOpacity>
   );
 };
 

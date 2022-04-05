@@ -49,6 +49,7 @@ export default {
   icon_loadMore: require('./src/assets/icon_loadMore.png'),
   icon_More: require('./src/assets/icon_More.png'),
   icon_MypageStroke: require('./src/assets/icon_MypageStroke.png'),
+  icon_Mypage: require('./src/assets/icon_Mypage.png'),
   icon_Search: require('./src/assets/icon_Search.png'),
   icon_SearchGray: require('./src/assets/icon_SearchGray.png'),
   icon_Share: require('./src/assets/icon_Share.png'),
@@ -56,4 +57,6 @@ export default {
   icon_HeartStroke: require('./src/assets/icon_HeartStroke.png'),
   icon_HeartFill: require('./src/assets/icon_HeartFill.png'),
   icon_cart: require('./src/assets/icon_cart.png'),
+  icon_close: require('./src/assets/icon_close.png'),
+  icon_menu: require('./src/assets/icon_menu.png'),
 };

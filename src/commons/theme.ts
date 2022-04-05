@@ -43,8 +43,9 @@ const fonts = StyleSheet.create({
 
 const styles = StyleSheet.create({
   globalPaddingLeft: {paddingLeft: 20},
-  globalPaddingVertical: {paddingVertical: 20},
   globalPaddingHorizontal: {paddingHorizontal: 20},
+  globalPaddingVertical: {paddingVertical: 20},
+  globalPaddingVertical30: {paddingVertical: 30},
 });
 
 const theme = {

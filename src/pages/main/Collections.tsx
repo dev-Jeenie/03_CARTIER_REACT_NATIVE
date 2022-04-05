@@ -6,8 +6,10 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import assets from '../../../assets';
 import StyledText from '../../commons/StyledText';
 import theme from '../../commons/theme';
@@ -15,8 +17,10 @@ import CollectionCard from '../../components/CollectionCard';
 
 const Collections = () => {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
+
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={theme.styles.globalPaddingVertical30}>
       <View style={{alignItems: 'center'}}>
         <StyledText type="pageTitle">까르띠에 컬렉션</StyledText>
       </View>

@@ -98,10 +98,11 @@ const AsideMenu = ({}: AsideMenuProps) => {
       <HeaderContainer>
         <CloseButton
           onPress={() => navigation.dispatch(DrawerActions.closeDrawer())}
+          style={{position: 'absolute', left: 20}}
         />
         <Image
           source={assets.logo_r}
-          style={{width: 140, position: 'absolute', left: width / 2 - 70}}
+          style={{width: 130}}
           resizeMode={'contain'}
         />
       </HeaderContainer>

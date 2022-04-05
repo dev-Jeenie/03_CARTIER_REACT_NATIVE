@@ -29,11 +29,8 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    // justifyContent: 'center',
-    justifyContent: 'space-between',
-    // justifyContent: 'space-between',
+    justifyContent: 'center',
     height: 100,
-    // backgroundColor: 'pink',
     borderBottomWidth: 3,
     borderBottomColor: theme.colors.MAIN_RED,
   },

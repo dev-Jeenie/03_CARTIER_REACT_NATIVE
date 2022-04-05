@@ -1,18 +1,16 @@
 import React from 'react';
-import {Image, TouchableOpacity} from 'react-native';
+import {Image, StyleProp, TouchableOpacity, ViewStyle} from 'react-native';
 import assets from '../../../assets';
 
 type MypageButtonProps = {
   onPress: () => void;
+  style?: StyleProp<ViewStyle>;
 };
 
-const MypageButton = ({onPress}: MypageButtonProps) => {
+const MypageButton = ({onPress, style}: MypageButtonProps) => {
   return (
-    <TouchableOpacity onPress={onPress}>
-      <Image
-        source={assets.icon_MypageStroke}
-        style={{width: 20, height: 20}}
-      />
+    <TouchableOpacity onPress={onPress} style={style}>
+      <Image source={assets.icon_Mypage} style={{width: 30, height: 30}} />
     </TouchableOpacity>
   );
 };

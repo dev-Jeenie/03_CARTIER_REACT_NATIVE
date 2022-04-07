@@ -14,10 +14,12 @@ const BigButton = ({
   text,
   onPress,
   style,
+  isWhite,
 }: {
   text: string;
   onPress: () => void;
   style?: StyleProp<ViewStyle>;
+  isWhite?: boolean;
 }) => {
   const {width} = Dimensions.get('window');
 
@@ -25,7 +27,8 @@ const BigButton = ({
     <TouchableOpacity
       style={[
         {
-          width: width - 40,
+          width: '100%',
+          // width: width - 40,
           alignSelf: 'center',
           backgroundColor: theme.colors.MAIN_RED,
           height: 60,
@@ -34,9 +37,16 @@ const BigButton = ({
           borderRadius: 5,
         },
         style,
+        isWhite && {
+          backgroundColor: theme.colors.DEFAULT_WHITE,
+          borderColor: theme.colors.GRAY_200,
+          borderWidth: 1,
+        },
       ]}
       onPress={onPress}>
-      <StyledText color="DEFAULT_WHITE" type="contentTitle">
+      <StyledText
+        color={!isWhite ? 'DEFAULT_WHITE' : 'DARK_GRAY'}
+        type="contentTitle">
         {text}
       </StyledText>
     </TouchableOpacity>

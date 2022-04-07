@@ -94,7 +94,7 @@ const ListItem = ({id, name, image, des, price}: productType) => {
               height: width / 2 - 40,
             }}
           />
-          <LikeButton id={id} />
+          <LikeButton id={id} isCoverImage />
         </View>
         <View style={[styles.textWrapper, {}]}>
           <StyledText type="contentTitle" numberOfLines={1}>

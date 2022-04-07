@@ -25,6 +25,7 @@ import {collectionType} from '../components/common/collectionMap';
 import HeaderContainer from '../components/common/HeaderContainer';
 import MenuButton from '../components/common/MenuButton';
 import MypageButton from '../components/common/MypageButton';
+import {CartProvider} from '../contexts/CartProvider';
 import CollectionDetail from '../pages/collection/CollectionDetail';
 import EntryStackNavigator, {
   EntryStackParamList,
@@ -169,7 +170,7 @@ const MainDrawerNavigator = () => {
     [],
   );
   return (
-    <>
+    <CartProvider>
       <MainDrawer.Navigator
         screenOptions={{
           drawerType: 'front',
@@ -224,7 +225,7 @@ const MainDrawerNavigator = () => {
           }}
         />
       </MainDrawer.Navigator>
-    </>
+    </CartProvider>
   );
 };
 

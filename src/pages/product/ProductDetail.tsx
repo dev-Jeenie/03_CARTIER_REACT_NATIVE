@@ -14,17 +14,29 @@ import {detailProps, onGetProductDetail} from '../../apis/main';
 import StyledText from '../../commons/StyledText';
 import theme from '../../commons/theme';
 import BigButton from '../../components/common/BigButton';
+import LikeButton from '../../components/common/LikeButton';
+import ShareButton from '../../components/common/ShareButton';
 import {HomeStackParamList} from '../../nav/AppContainer';
+import RNPickerSelect from 'react-native-picker-select';
+import SimpleToast from 'react-native-simple-toast';
+import {useCartContext} from '../../contexts/CartProvider';
 
 export type ProductDetailRouteProp = RouteProp<
   HomeStackParamList,
   'ProductDetail'
 >;
+
 const ProductDetail = () => {
   const [data, setData] = React.useState<detailProps>();
   const route = useRoute<ProductDetailRouteProp>();
   const {width} = useWindowDimensions();
   const [tab, setTab] = React.useState(0);
+  const [size, setSize] = React.useState<
+    'none' | '55' | '56' | '57' | '58' | '59' | '60' | '61' | '62' | 'inquiry'
+  >('55');
+
+  const {cartInfo} = useCartContext();
+  console.log('cartInfo ::::::', cartInfo);
 
   React.useEffect(() => {
     initData();
@@ -36,23 +48,31 @@ const ProductDetail = () => {
     setData(res);
   };
 
+  const onAddToCart = () => {
+    console.log(size);
+    if (size === 'none') {
+      SimpleToast.show('사이즈를 선택해주세요');
+    } else {
+      SimpleToast.show('쇼핑백에 추가하였습니다');
+      // 장바구니 Context 호출
+    }
+  };
+
   const _renderTabBody = (tab: number, data: any) => {
+    console.log('data ========', data);
     if (tab === 0)
       return (
         <>
-          <StyledText type="contentTitle">JUSTE UN CLU RING</StyledText>
-          <StyledText type="contentTitle">저스트 앵 끌루 링</StyledText>
-          <StyledText>제품번호 B8301446</StyledText>
+          <StyledText type="contentTitle">{data?.en_name || '--'}</StyledText>
+          <StyledText type="contentTitle">{data?.name || '--'}</StyledText>
+          <StyledText>제품번호 {route.params.id || '--'}</StyledText>
           <StyledText>수입자 ㈜ 리치몬트 코리아</StyledText>
           <StyledText>까르띠에 보증서 동봉</StyledText>
           <StyledText>
             품질보증기준 : 관련 법 및 소비자 분쟁해결 규정에 따름
           </StyledText>
           <StyledText type="contentTitle">제품 설명</StyledText>
-          <StyledText>
-            저스트 앵 끌루 링, 18K 화이트 골드, 총 0.59캐럿의 브릴리언트 컷
-            다이아몬드 77개 세팅. 폭 : 1.8MM
-          </StyledText>
+          <StyledText>{data?.info || '--'}</StyledText>
         </>
       );
     return (
@@ -90,14 +110,70 @@ const ProductDetail = () => {
         scrollEnabled={true}
         contentContainerStyle={theme.styles.globalPaddingVertical}
         renderItem={({item}) => {
-          return <Image source={item} style={{width: width}} />;
+          return (
+            <Image source={item} style={{width: width}} resizeMode="contain" />
+          );
         }}
       />
       <View style={styles.mainWrapper}>
         <View style={styles.texts}>
           <StyledText type="pageTitle">{data?.en_name || '--'}</StyledText>
           <StyledText type="pageTitle">{data?.name || '--'}</StyledText>
-          <StyledText>{data?.des || '--'}</StyledText>
+          <StyledText color="GRAY_100">{data?.des || '--'}</StyledText>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginVertical: 10,
+            }}>
+            <StyledText style={{marginRight: 10}}>사이즈</StyledText>
+            <RNPickerSelect
+              onValueChange={value => setSize(value)}
+              value={size}
+              placeholder={{label: '선택하세요', value: 'none'}}
+              items={[
+                {label: '55', value: '55'},
+                {label: '56', value: '56'},
+                {label: '57', value: '57'},
+                {label: '58', value: '58'},
+                {label: '59', value: '59'},
+                {label: '60', value: '60'},
+                {label: '61', value: '61'},
+                {label: '62', value: '62'},
+                {label: '전화문의', value: 'inquiry'},
+              ]}
+              style={{
+                placeholder: {color: theme.colors.GRAY_100},
+                iconContainer: {},
+                inputIOSContainer: {
+                  flex: 1,
+                  borderRadius: 5,
+                  borderWidth: 1,
+                  borderColor: theme.colors.GRAY_200,
+                  paddingHorizontal: 10,
+                  paddingVertical: 5,
+                  width: 100,
+                  alignItems: 'center',
+                },
+                inputAndroidContainer: {
+                  backgroundColor: 'pink',
+                },
+              }}
+            />
+
+            <View style={{flexDirection: 'row', marginLeft: 20}}>
+              <LikeButton id={route.params.id} style={{marginRight: 15}} />
+              <ShareButton
+                id={route.params.id}
+                data={{
+                  url: 'https://brave-case-c88.notion.site/Jeenie-e2d2fa1944c3449bb58349b1e2b1b871',
+                }}
+              />
+            </View>
+          </View>
+          <StyledText type="pageTitle">
+            {data?.price?.toLocaleString() || '--'} 원
+          </StyledText>
         </View>
         <View style={styles.btnWrapper}>
           <BigButton
@@ -108,7 +184,7 @@ const ProductDetail = () => {
           />
           <BigButton
             text="쇼핑백에 추가하기"
-            onPress={() => {}}
+            onPress={onAddToCart}
             style={{borderRadius: 0}}
           />
         </View>
@@ -135,6 +211,29 @@ const ProductDetail = () => {
         </View>
         <View style={styles.tabBody}>{_renderTabBody(tab, data)}</View>
       </View>
+      <View>
+        <StyledText>관련상품</StyledText>
+        <FlatList
+          data={[assets.juste_r_yg, assets.juste_r_yg, assets.juste_r_yg]}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          snapToAlignment={'start'}
+          snapToInterval={width}
+          decelerationRate={'fast'}
+          pagingEnabled
+          scrollEnabled={true}
+          contentContainerStyle={theme.styles.globalPaddingVertical}
+          renderItem={({item}) => {
+            return (
+              <Image
+                source={item}
+                style={{width: width}}
+                resizeMode="contain"
+              />
+            );
+          }}
+        />
+      </View>
     </ScrollView>
   );
 };
@@ -147,10 +246,12 @@ const styles = StyleSheet.create({
   },
   texts: {
     paddingHorizontal: 20,
+    marginVertical: 30,
   },
   btnWrapper: {},
   tabWrapper: {
     // paddingHorizontal: 20,
+    marginTop: 30,
   },
   tabs: {
     flexDirection: 'row',
@@ -160,14 +261,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 50,
     alignItems: 'center',
-    borderWidth: 3,
+    borderWidth: 1,
     borderColor: theme.colors.GRAY_200,
   },
   tabBody: {
     paddingHorizontal: 20,
     paddingVertical: 20,
     backgroundColor: theme.colors.GRAY_300,
-    borderBottomColor: theme.colors.MAIN_RED,
-    borderBottomWidth: 3,
+    borderColor: theme.colors.MAIN_RED,
   },
 });

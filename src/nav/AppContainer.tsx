@@ -26,6 +26,7 @@ import HeaderContainer from '../components/common/HeaderContainer';
 import MenuButton from '../components/common/MenuButton';
 import MypageButton from '../components/common/MypageButton';
 import {CartProvider} from '../contexts/CartProvider';
+import Cart from '../pages/cart/Cart';
 import CollectionDetail from '../pages/collection/CollectionDetail';
 import EntryStackNavigator, {
   EntryStackParamList,
@@ -49,6 +50,7 @@ export type HomeStackParamList = {
     // title: 'juste' | 'panthere' | 'love' | 'trinity' | 'ecrou';
   };
   Mypage: undefined;
+  Cart: undefined;
   ProductDetail: {id: string};
 };
 
@@ -96,6 +98,15 @@ const HomeStackNavigator = () => {
       // }
     >
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen
+        name="Cart"
+        component={Cart}
+        options={{
+          headerBackImage: () => {
+            return <BackButton onPress={() => navigation.goBack()} />;
+          },
+        }}
+      />
 
       <Stack.Screen
         name="Collections"
@@ -170,62 +181,60 @@ const MainDrawerNavigator = () => {
     [],
   );
   return (
-    <CartProvider>
-      <MainDrawer.Navigator
-        screenOptions={{
-          drawerType: 'front',
-          drawerStyle: {
-            width: '100%',
-          },
-          headerTransparent: true,
-          // headerTitleStyle: {color: theme.colors.DEFAULT_WHITE},
-          header: () => {
-            return (
-              <HeaderContainer>
-                <MenuButton
-                  onPress={() =>
-                    navigation.dispatch(DrawerActions.openDrawer())
-                  }
-                  style={{
-                    position: 'absolute',
-                    left: 20,
-                  }}
-                />
-                <Image
-                  source={assets.logo_r}
-                  style={{
-                    width: 130,
-                  }}
-                  resizeMode={'contain'}
-                />
+    // <CartProvider>
+    // </CartProvider>
+    <MainDrawer.Navigator
+      screenOptions={{
+        drawerType: 'front',
+        drawerStyle: {
+          width: '100%',
+        },
+        headerTransparent: true,
+        // headerTitleStyle: {color: theme.colors.DEFAULT_WHITE},
+        header: () => {
+          return (
+            <HeaderContainer>
+              <MenuButton
+                onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+                style={{
+                  position: 'absolute',
+                  left: 20,
+                }}
+              />
+              <Image
+                source={assets.logo_r}
+                style={{
+                  width: 130,
+                }}
+                resizeMode={'contain'}
+              />
 
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    position: 'absolute',
-                    right: 20,
-                  }}>
-                  <MypageButton onPress={() => navigation.navigate('Mypage')} />
-                  <CartButton
-                    onPress={() => navigation.navigate('Cart')}
-                    style={{marginLeft: 10}}
-                  />
-                </View>
-              </HeaderContainer>
-            );
-          },
+              <View
+                style={{
+                  flexDirection: 'row',
+                  position: 'absolute',
+                  right: 20,
+                }}>
+                <MypageButton onPress={() => navigation.navigate('Mypage')} />
+                <CartButton
+                  onPress={() => navigation.navigate('Cart')}
+                  style={{marginLeft: 10}}
+                />
+              </View>
+            </HeaderContainer>
+          );
+        },
+      }}
+      drawerContent={prop => <AsideMenu {...prop} />}>
+      <MainDrawer.Screen
+        name="HomeStackNavigator"
+        component={HomeStackNavigator}
+        options={{
+          // headerShown: false,
+          headerTransparent: false,
         }}
-        drawerContent={prop => <AsideMenu {...prop} />}>
-        <MainDrawer.Screen
-          name="HomeStackNavigator"
-          component={HomeStackNavigator}
-          options={{
-            // headerShown: false,
-            headerTransparent: false,
-          }}
-        />
-      </MainDrawer.Navigator>
-    </CartProvider>
+      />
+    </MainDrawer.Navigator>
   );
 };
 

@@ -20,6 +20,7 @@ import {HomeStackParamList} from '../../nav/AppContainer';
 import RNPickerSelect from 'react-native-picker-select';
 import SimpleToast from 'react-native-simple-toast';
 import {useCartContext} from '../../contexts/CartProvider';
+import PickerSelect from '../../components/PickerSelect';
 
 export type ProductDetailRouteProp = RouteProp<
   HomeStackParamList,
@@ -31,9 +32,7 @@ const ProductDetail = () => {
   const route = useRoute<ProductDetailRouteProp>();
   const {width} = useWindowDimensions();
   const [tab, setTab] = React.useState(0);
-  const [size, setSize] = React.useState<
-    'none' | '55' | '56' | '57' | '58' | '59' | '60' | '61' | '62' | 'inquiry'
-  >('55');
+  const [size, setSize] = React.useState<string>('55');
 
   const {cartInfo} = useCartContext();
   console.log('cartInfo ::::::', cartInfo);
@@ -127,10 +126,10 @@ const ProductDetail = () => {
               marginVertical: 10,
             }}>
             <StyledText style={{marginRight: 10}}>사이즈</StyledText>
-            <RNPickerSelect
+            {/* <RNPickerSelect */}
+            <PickerSelect
               onValueChange={value => setSize(value)}
               value={size}
-              placeholder={{label: '선택하세요', value: 'none'}}
               items={[
                 {label: '55', value: '55'},
                 {label: '56', value: '56'},
@@ -142,23 +141,6 @@ const ProductDetail = () => {
                 {label: '62', value: '62'},
                 {label: '전화문의', value: 'inquiry'},
               ]}
-              style={{
-                placeholder: {color: theme.colors.GRAY_100},
-                iconContainer: {},
-                inputIOSContainer: {
-                  flex: 1,
-                  borderRadius: 5,
-                  borderWidth: 1,
-                  borderColor: theme.colors.GRAY_200,
-                  paddingHorizontal: 10,
-                  paddingVertical: 5,
-                  width: 100,
-                  alignItems: 'center',
-                },
-                inputAndroidContainer: {
-                  backgroundColor: 'pink',
-                },
-              }}
             />
 
             <View style={{flexDirection: 'row', marginLeft: 20}}>

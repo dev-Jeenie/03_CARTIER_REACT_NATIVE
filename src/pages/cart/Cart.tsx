@@ -1,8 +1,16 @@
 import React from 'react';
-import {Image, ScrollView, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import assets from '../../../assets';
 import StyledText from '../../commons/StyledText';
+import theme from '../../commons/theme';
 import CloseButton from '../../components/common/CloseButton';
+import PickerSelect from '../../components/PickerSelect';
 import {getStorage, setStorage} from '../../libs/AsyncStorageManager';
 
 type cartDataType = {
@@ -11,7 +19,10 @@ type cartDataType = {
 
 const CART_DATA = 'cart_data';
 const Cart = () => {
-  const [cartData, setCartData] = React.useState<cartDataType | undefined>();
+  const [cartData, setCartData] = React.useState<cartDataType[] | undefined>(
+    [],
+  );
+  const [size, setSize] = React.useState<string>('55');
   //   {
   //   id: '123',
   // }
@@ -55,43 +66,110 @@ const Cart = () => {
   // }, []);
 
   return (
-    <ScrollView contentContainerStyle={{backgroundColor: 'pink', flex: 1}}>
-      <View>
-        {/* {[cartData]?.map(item => (
-          <StyledText>{item}</StyledText>
-        ))} */}
-        <TouchableOpacity
-          // onPress={() => onClickToAddCart('id')}
-          style={{width: 100, backgroundColor: 'red'}}>
-          <StyledText>추가하기</StyledText>
-        </TouchableOpacity>
+    <ScrollView contentContainerStyle={[theme.styles.globalPaddingVertical30]}>
+      <View style={{alignItems: 'center'}}>
+        <StyledText type="pageTitle">쇼핑백</StyledText>
       </View>
+      <View style={styles.cartBody}>
+        <CartItem id={'0'} size={size} setSize={setSize} />
+        {/* {cartData &&
+          cartData?.map((item: cartDataType) => {
+            return <CartItem id={item?.id} size={size} setSize={setSize} />;
+          })} */}
+      </View>
+      <View style={styles.totalWrapper}></View>
     </ScrollView>
   );
 };
 
 export default Cart;
 
-export const CartItem = ({id}: {id: string}) => {
+export const CartItem = ({
+  id,
+  size,
+  setSize,
+}: {
+  id: string;
+  size: string;
+  setSize: any;
+}) => {
   return (
     <View style={{flexDirection: 'row'}}>
-      <Image source={assets.juste_r_wg_2} style={{width: 100}} />
-      <View style={{backgroundColor: 'red'}}>
-        <View style={{flexDirection: 'row'}}>
+      <Image
+        source={assets.juste_r_wg_2}
+        style={{width: 130}}
+        resizeMode="contain"
+      />
+      <View style={{backgroundColor: 'pink', flex: 1}}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <View>
             <StyledText>JUSTE UN CLOU RING</StyledText>
             <StyledText>저스트 앵 끌루 링</StyledText>
           </View>
-          <CloseButton onPress={() => {}} />
+          <TouchableOpacity style={{}} onPress={() => {}}>
+            <Image source={assets.icon_close} style={{width: 15, height: 15}} />
+          </TouchableOpacity>
         </View>
         <View>
-          <StyledText>JUSTE UN CLOU RING</StyledText>
-          <StyledText>저스트 앵 끌루 링</StyledText>
+          <View style={styles.list}>
+            <StyledText>옵션 : 사이즈 (55)</StyledText>
+            <PickerSelect
+              onValueChange={value => setSize(value)}
+              value={size}
+              items={[
+                {label: '55', value: '55'},
+                {label: '56', value: '56'},
+                {label: '57', value: '57'},
+                {label: '58', value: '58'},
+                {label: '59', value: '59'},
+                {label: '60', value: '60'},
+                {label: '61', value: '61'},
+                {label: '62', value: '62'},
+                {label: '전화문의', value: 'inquiry'},
+              ]}
+            />
+          </View>
+          <View style={styles.list}>
+            <StyledText>수량</StyledText>
+            <PickerSelect
+              onValueChange={value => setSize(value)}
+              value={size}
+              items={[
+                {label: '55', value: '55'},
+                {label: '56', value: '56'},
+                {label: '57', value: '57'},
+                {label: '58', value: '58'},
+                {label: '59', value: '59'},
+                {label: '60', value: '60'},
+                {label: '61', value: '61'},
+                {label: '62', value: '62'},
+                {label: '전화문의', value: 'inquiry'},
+              ]}
+            />
+          </View>
         </View>
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  cartBody: {
+    paddingHorizontal: 20,
+  },
+  totalWrapper: {
+    backgroundColor: theme.colors.GRAY_100,
+    borderTopColor: theme.colors.MAIN_RED,
+    borderTopWidth: 3,
+  },
+  list: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: 'red',
+    borderWidth: 1,
+    justifyContent: 'space-between',
+  },
+});
 
 // {
 //   id: 'br_02',

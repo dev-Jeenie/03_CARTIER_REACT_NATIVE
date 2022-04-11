@@ -24,7 +24,7 @@ const PickerSelect = ({
         placeholder: {color: theme.colors.GRAY_100},
         iconContainer: {},
         inputIOSContainer: {
-          flex: 1,
+          // flex: 1,
           borderRadius: 5,
           borderWidth: 1,
           borderColor: theme.colors.GRAY_200,

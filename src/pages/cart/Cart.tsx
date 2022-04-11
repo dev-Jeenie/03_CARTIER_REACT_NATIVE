@@ -11,6 +11,7 @@ import assets from '../../../assets';
 import {detailProps} from '../../apis/main';
 import StyledText from '../../commons/StyledText';
 import theme from '../../commons/theme';
+import BigButton from '../../components/common/BigButton';
 import CloseButton from '../../components/common/CloseButton';
 import PickerSelect from '../../components/PickerSelect';
 import {getStorage, setStorage} from '../../libs/AsyncStorageManager';
@@ -24,8 +25,7 @@ const CART_DATA = 'cart_data';
 
 const Cart = () => {
   const [cartData, setCartData] = React.useState<cartDataType[]>([]);
-  const [totalPrice, setTotalPrice] = React.useState(0);
-
+  const [totalPrice, setTotalPrice] = React.useState<number>(0);
   const initData = async () => {
     const res = await getStorage(CART_DATA);
     console.log('장바구니의 데이터 res :::::', JSON.parse(res));
@@ -33,9 +33,8 @@ const Cart = () => {
   };
   console.log('cartData :::::', cartData);
 
-  const handleTotal = () => {};
-
   const saveStorage = async () => {
+    SimpleToast.show('스토리지에 저장 후 결제 페이지로 이동');
     // const result = await getStorage(CART_DATA);
     // console.log(result && 'result ::::', result);
     // result && setCartData(result);
@@ -63,62 +62,82 @@ const Cart = () => {
     initData();
   }, []);
 
+  const _renderOrderId = React.useMemo(() => {
+    return Date.now();
+  }, [cartData]);
+
   return (
-    <ScrollView contentContainerStyle={[theme.styles.globalPaddingVertical30]}>
-      <View style={{alignItems: 'center', marginBottom: 30}}>
-        <StyledText type="pageTitle">쇼핑백</StyledText>
+    <ScrollView
+      // contentContainerStyle={[theme.styles.globalPaddingVertical30]}
+      contentContainerStyle={{
+        paddingTop: 30,
+        flex: 1,
+      }}>
+      <View
+        style={{
+          flex: 1,
+          // backgroundColor: 'pink'
+        }}>
+        <View style={{alignItems: 'center', marginBottom: 30}}>
+          <StyledText type="pageTitle">쇼핑백</StyledText>
+        </View>
+        <View style={styles.cartBody}>
+          {cartData?.length < 1 ? (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: 100,
+              }}>
+              <StyledText type="contentTitle" color="GRAY_200">
+                아직 추가된 상품이 없습니다
+              </StyledText>
+            </View>
+          ) : (
+            cartData?.map((item: cartDataType, index: number) => {
+              return (
+                <CartItem
+                  key={index}
+                  {...item}
+                  setTotalPrice={setTotalPrice}
+
+                  // size={size}
+                  // setSize={setSize}
+                  // count={count}
+                  // setCount={setCount}
+                  // onCountUp={() => onCountUp()}
+                  // onCountDown={() => onCountDown()}
+                />
+              );
+            })
+          )}
+        </View>
       </View>
-      <View style={styles.cartBody}>
-        {cartData?.length < 1 ? (
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: 100,
-            }}>
-            <StyledText type="contentTitle" color="GRAY_200">
-              아직 추가된 상품이 없습니다
-            </StyledText>
-          </View>
-        ) : (
-          cartData?.map((item: cartDataType, index: number) => {
-            return (
-              <CartItem
-                key={index}
-                {...item}
-                // size={size}
-                // setSize={setSize}
-                // count={count}
-                // setCount={setCount}
-                // onCountUp={() => onCountUp()}
-                // onCountDown={() => onCountDown()}
-              />
-            );
-          })
-        )}
-      </View>
-      <View style={styles.totalWrapper}>
+      <View style={[styles.totalWrapper]}>
         <StyledText type="h3_BOLD" isBold style={{marginBottom: 20}}>
           주문정보
         </StyledText>
         <View style={styles.totalList}>
           <StyledText color="GRAY_100">주문번호</StyledText>
-          <StyledText type="h4_normal">{Date.now()}</StyledText>
+          <StyledText type="h4_normal">{_renderOrderId}</StyledText>
         </View>
         <View>
           <View style={styles.totalList}>
             <StyledText color="GRAY_100">합계(세금 포함)</StyledText>
-            <StyledText type="h4_normal">{totalPrice || '0'}원</StyledText>
+            <StyledText type="h4_normal">{totalPrice || '0'} 원</StyledText>
           </View>
           <View style={styles.totalList}>
             <StyledText color="GRAY_100">기타(선물 포장 등)</StyledText>
-            <StyledText type="h4_normal">{totalPrice || '0'}원</StyledText>
+            <StyledText type="h4_normal">0 원</StyledText>
           </View>
           <View style={styles.totalList}>
             <StyledText color="GRAY_100">총 주문금액</StyledText>
-            <StyledText type="h4_normal">{totalPrice || '0'}원</StyledText>
+            <StyledText type="h4_normal">
+              {totalPrice?.toLocaleString() || '0'} 원
+            </StyledText>
           </View>
         </View>
+        <BigButton text="주문하기" onPress={() => saveStorage()} />
       </View>
     </ScrollView>
   );
@@ -133,6 +152,7 @@ export const CartItem = ({
   name,
   size,
   price,
+  setTotalPrice,
 }: // setSize,
 // count,
 // setCount,
@@ -141,6 +161,7 @@ export const CartItem = ({
 {
   id: string;
   size: string;
+  setTotalPrice: Dispatch<SetStateAction<number>>;
   // setSize: Dispatch<SetStateAction<string>>;
   // count: number;
   // setCount: Dispatch<SetStateAction<number>>;
@@ -150,11 +171,16 @@ export const CartItem = ({
   const [sizeState, setSizeState] = React.useState(size);
   const [count, setCount] = React.useState<number>(1);
 
+  React.useEffect(() => {
+    setTotalPrice(prev => count * price);
+  }, [count]);
+
   const onCountUp = () => {
     if (count === 9) {
       return SimpleToast.show('9개까지 주문 가능합니다.');
     } else {
       setCount(prev => prev + 1);
+      setTotalPrice(prev => count * price);
     }
   };
   const onCountDown = () => {
@@ -162,6 +188,7 @@ export const CartItem = ({
       return SimpleToast.show('최소 주문 수량은 1개입니다.');
     } else {
       setCount(prev => prev - 1);
+      setTotalPrice(prev => count * price);
     }
   };
 
@@ -172,7 +199,7 @@ export const CartItem = ({
       style={{
         flexDirection: 'row',
         borderBottomWidth: 1,
-        borderBottomColor: theme.colors.GRAY_200,
+        borderBottomColor: theme.colors.GRAY_300,
         paddingVertical: 20,
       }}>
       <Image

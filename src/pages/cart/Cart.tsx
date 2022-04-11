@@ -28,10 +28,40 @@ const Cart = () => {
   const [totalPrice, setTotalPrice] = React.useState<number>(0);
   const initData = async () => {
     const res = await getStorage(CART_DATA);
-    console.log('장바구니의 데이터 res :::::', JSON.parse(res));
+    // console.log('장바구니의 데이터 res :::::', JSON.parse(res));
     setCartData([JSON.parse(res)]);
   };
-  console.log('cartData :::::', cartData);
+  // console.log('cartData :::::', cartData);
+
+  const onDelete = (id: string) => {
+    // SimpleToast.show(`${id}삭제`);
+    const ids = cartData?.map(item => item?.id);
+    console.log('ids아이디들은???', ids);
+    const arr = cartData?.map((v: any, i: number) => {
+      // if (i > 14) return;
+      if (v?.id != ids) {
+        return v;
+      } else {
+        return;
+      }
+    });
+    const newArr = arr.filter((v: any) => v);
+    SimpleToast.show(`아이디면 달라서 남고,아무것도 없으면 지워진다:::${arr}`);
+
+    console.log('newArr:::', newArr);
+    setCartData(newArr);
+    // console.log('새로운 배열:::', newArr);
+  };
+  // const onDelete = (id: string) => {
+  //   SimpleToast.show(`${id}삭제`);
+  //   let newArray = [...cartData];
+  //   newArray.filter(item => {
+  //     item?.id != id;
+  //   });
+  //   // setCartData(newArray);
+  //   console.log('기존 배열:::', cartData);
+  //   console.log('새로운 배열:::', newArray);
+  // };
 
   const saveStorage = async () => {
     SimpleToast.show('스토리지에 저장 후 결제 페이지로 이동');
@@ -100,6 +130,7 @@ const Cart = () => {
                   key={index}
                   {...item}
                   setTotalPrice={setTotalPrice}
+                  onDelete={() => onDelete(item?.id)}
 
                   // size={size}
                   // setSize={setSize}
@@ -141,7 +172,7 @@ const Cart = () => {
       </View>
     </ScrollView>
   );
-};
+};;
 
 export default Cart;
 
@@ -153,6 +184,7 @@ export const CartItem = ({
   size,
   price,
   setTotalPrice,
+  onDelete,
 }: // setSize,
 // count,
 // setCount,
@@ -162,6 +194,8 @@ export const CartItem = ({
   id: string;
   size: string;
   setTotalPrice: Dispatch<SetStateAction<number>>;
+  onDelete: any;
+  // onDelete: (id: string) => void;
   // setSize: Dispatch<SetStateAction<string>>;
   // count: number;
   // setCount: Dispatch<SetStateAction<number>>;
@@ -192,7 +226,7 @@ export const CartItem = ({
     }
   };
 
-  console.log('count * price =======', count * price);
+  // console.log('count * price =======', count * price);
 
   return (
     <View
@@ -235,7 +269,7 @@ export const CartItem = ({
             </StyledText>
             <StyledText type="h3_BOLD">{name}</StyledText>
           </View>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={onDelete}>
             <Image source={assets.icon_close} style={{width: 15, height: 15}} />
           </TouchableOpacity>
         </View>

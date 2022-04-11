@@ -24,25 +24,8 @@ const CART_DATA = 'cart_data';
 
 const Cart = () => {
   const [cartData, setCartData] = React.useState<cartDataType[]>([]);
-  // const [size, setSize] = React.useState<string>('55');
-  const [count, setCount] = React.useState<number>(1);
   const [totalPrice, setTotalPrice] = React.useState(0);
 
-  const onCountUp = () => {
-    if (count === 9) {
-      return SimpleToast.show('9개까지 주문 가능합니다.');
-    } else {
-      setCount(prev => prev + 1);
-    }
-  };
-  const onCountDown = () => {
-    if (count === 1) {
-      return SimpleToast.show('최소 주문 수량은 1개입니다.');
-    } else {
-      setCount(prev => prev - 1);
-    }
-  };
-  //   {
   const initData = async () => {
     const res = await getStorage(CART_DATA);
     console.log('장바구니의 데이터 res :::::', JSON.parse(res));
@@ -50,15 +33,8 @@ const Cart = () => {
   };
   console.log('cartData :::::', cartData);
 
-  const totalCalculator = () => {
-    SimpleToast.show('합계가 업데이트 되었습니다');
-  };
+  const handleTotal = () => {};
 
-  React.useEffect(() => {
-    totalCalculator();
-  }, [count]);
-
-  console.log(cartData?.length);
   const saveStorage = async () => {
     // const result = await getStorage(CART_DATA);
     // console.log(result && 'result ::::', result);
@@ -112,10 +88,10 @@ const Cart = () => {
                 {...item}
                 // size={size}
                 // setSize={setSize}
-                count={count}
-                setCount={setCount}
-                onCountUp={() => onCountUp()}
-                onCountDown={() => onCountDown()}
+                // count={count}
+                // setCount={setCount}
+                // onCountUp={() => onCountUp()}
+                // onCountDown={() => onCountDown()}
               />
             );
           })
@@ -156,21 +132,41 @@ export const CartItem = ({
   en_name,
   name,
   size,
-  // setSize,
-  count,
-  setCount,
-  onCountUp,
-  onCountDown,
-}: {
+  price,
+}: // setSize,
+// count,
+// setCount,
+// onCountUp,
+// onCountDown,
+{
   id: string;
   size: string;
   // setSize: Dispatch<SetStateAction<string>>;
-  count: number;
-  setCount: Dispatch<SetStateAction<number>>;
-  onCountUp: () => void;
-  onCountDown: () => void;
+  // count: number;
+  // setCount: Dispatch<SetStateAction<number>>;
+  // onCountUp: () => void;
+  // onCountDown: () => void;
 } & detailProps) => {
   const [sizeState, setSizeState] = React.useState(size);
+  const [count, setCount] = React.useState<number>(1);
+
+  const onCountUp = () => {
+    if (count === 9) {
+      return SimpleToast.show('9개까지 주문 가능합니다.');
+    } else {
+      setCount(prev => prev + 1);
+    }
+  };
+  const onCountDown = () => {
+    if (count === 1) {
+      return SimpleToast.show('최소 주문 수량은 1개입니다.');
+    } else {
+      setCount(prev => prev - 1);
+    }
+  };
+
+  console.log('count * price =======', count * price);
+
   return (
     <View
       style={{

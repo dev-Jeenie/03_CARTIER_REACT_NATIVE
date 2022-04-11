@@ -21,7 +21,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import SimpleToast from 'react-native-simple-toast';
 import {useCartContext} from '../../contexts/CartProvider';
 import PickerSelect from '../../components/PickerSelect';
-import {setStorage} from '../../libs/AsyncStorageManager';
+import {getStorage, setStorage} from '../../libs/AsyncStorageManager';
 
 export type ProductDetailRouteProp = RouteProp<
   HomeStackParamList,
@@ -34,6 +34,7 @@ const ProductDetail = () => {
   const {width} = useWindowDimensions();
   const [tab, setTab] = React.useState(0);
   const [size, setSize] = React.useState<string>('55');
+  // const [cartData, setCartData] = React.useState([]);
 
   // const {cartInfo} = useCartContext();
   // console.log('cartInfo ::::::', cartInfo);
@@ -48,12 +49,19 @@ const ProductDetail = () => {
   };
 
   const onAddToCart = async () => {
+    // const res = await getStorage('cart_data');
+    // console.log('장바구니의 데이터 res :::::', JSON.parse(cartData));
+    // setCartData(JSON.parse(res));
+
     if (size === 'none') {
       SimpleToast.show('사이즈를 선택해주세요');
     } else {
       await setStorage(
         'cart_data',
-        JSON.stringify({id: route.params.id, size: size, ...data}),
+        JSON.stringify([
+          {id: route.params.id, size: size, ...data},
+          // ...cartData,
+        ]),
       );
       SimpleToast.show('쇼핑백에 추가하였습니다');
     }

@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {Dispatch, SetStateAction} from 'react';
 import {
   Image,
@@ -28,12 +29,13 @@ const Cart = () => {
   const [totalPrice, setTotalPrice] = React.useState<number>(0);
   const initData = async () => {
     const res = await getStorage(CART_DATA);
-    // console.log('장바구니의 데이터 res :::::', JSON.parse(res));
-    setCartData([JSON.parse(res)]);
+    console.log('장바구니의 데이터 res :::::', JSON.parse(res));
+    setCartData(JSON.parse(res));
   };
+  const {navigate} = useNavigation();
   // console.log('cartData :::::', cartData);
 
-  const onDelete = (id: string) => {
+  const onDelete = async (id: string) => {
     // 나중에 여러개를 추가할 수 있게 되면 로직을 수정해야함. (완료)
     // 지금은 받아온 id를 쓰고있지 않고 그냥 현재 배열안에 있는 아이디들을 배열로 만들어서 쓰고있음. id로 비교하게 해야함 (완료)
     // const ids = cartData?.map(item => item?.id);
@@ -47,13 +49,15 @@ const Cart = () => {
     });
     const newArr = arr.filter((v: any) => v);
     setCartData(newArr);
+    await setStorage('cart_data', JSON.stringify(newArr));
     SimpleToast.show(`${id}를 내 쇼핑백에서 삭제했습니다.`);
   };
 
-  // 페이지 나갈 때 storage 호출해서 setStorage하기
-
   const saveStorage = async () => {
-    SimpleToast.show('스토리지에 저장 후 결제 페이지로 이동');
+    // await setStorage('cart_data', JSON.stringify([cartData]));
+    SimpleToast.show(
+      '구매하기 Context 안의 스토리지에 갯수, 사이즈 저장 후 결제 페이지로 이동',
+    );
     // const result = await getStorage(CART_DATA);
     // console.log(result && 'result ::::', result);
     // result && setCartData(result);
@@ -71,6 +75,7 @@ const Cart = () => {
     // } else {
     // await setStorage(CART_DATA, JSON.stringify([cartData]));
     // }
+    navigate('Purchase');
   };
 
   // React.useEffect(() => {
@@ -165,7 +170,7 @@ const Cart = () => {
       </View>
     </ScrollView>
   );
-};;;;;;
+};
 
 export default Cart;
 

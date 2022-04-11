@@ -15,6 +15,10 @@ const fonts = StyleSheet.create({
     fontSize: 28,
     // fontFamily: 'Noto Serif KR',
   },
+  h3_BOLD: {
+    fontSize: 20,
+    // fontFamily: 'Noto Serif KR',
+  },
   collectionTitle: {
     fontSize: 20,
     // fontFamily: 'Noto Serif KR',
@@ -26,6 +30,9 @@ const fonts = StyleSheet.create({
   titleEnglish: {
     fontSize: 18,
     // fontFamily: 'GFS Didot',
+  },
+  h4_normal: {
+    fontSize: 16,
   },
   listTitle: {
     fontSize: 16,

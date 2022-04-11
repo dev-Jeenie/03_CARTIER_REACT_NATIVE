@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 import {
   Image,
   ScrollView,
@@ -6,7 +6,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import SimpleToast from 'react-native-simple-toast';
 import assets from '../../../assets';
+import {detailProps} from '../../apis/main';
 import StyledText from '../../commons/StyledText';
 import theme from '../../commons/theme';
 import CloseButton from '../../components/common/CloseButton';
@@ -15,28 +17,48 @@ import {getStorage, setStorage} from '../../libs/AsyncStorageManager';
 
 type cartDataType = {
   id: string;
-};
+  size: string;
+} & detailProps;
 
 const CART_DATA = 'cart_data';
+
 const Cart = () => {
-  const [cartData, setCartData] = React.useState<cartDataType[] | undefined>(
-    [],
-  );
-  const [size, setSize] = React.useState<string>('55');
+  const [cartData, setCartData] = React.useState<cartDataType[]>([]);
+  // const [size, setSize] = React.useState<string>('55');
+  const [count, setCount] = React.useState<number>(1);
+  const [totalPrice, setTotalPrice] = React.useState(0);
+
+  const onCountUp = () => {
+    if (count === 9) {
+      return SimpleToast.show('9개까지 주문 가능합니다.');
+    } else {
+      setCount(prev => prev + 1);
+    }
+  };
+  const onCountDown = () => {
+    if (count === 1) {
+      return SimpleToast.show('최소 주문 수량은 1개입니다.');
+    } else {
+      setCount(prev => prev - 1);
+    }
+  };
   //   {
-  //   id: '123',
-  // }
+  const initData = async () => {
+    const res = await getStorage(CART_DATA);
+    console.log('장바구니의 데이터 res :::::', JSON.parse(res));
+    setCartData([JSON.parse(res)]);
+  };
+  console.log('cartData :::::', cartData);
 
-  // const initData = () => {
-  //   // const res = await getStorage(id);
-  //   setCartData(cartData);
-  // };
+  const totalCalculator = () => {
+    SimpleToast.show('합계가 업데이트 되었습니다');
+  };
 
-  // const onClickToAddCart = (key: string) => {
-  //   console.log();
-  //   setStorage(key, cartData);
-  // };
+  React.useEffect(() => {
+    totalCalculator();
+  }, [count]);
 
+  console.log(cartData?.length);
   const saveStorage = async () => {
     // const result = await getStorage(CART_DATA);
     // console.log(result && 'result ::::', result);
@@ -57,27 +79,71 @@ const Cart = () => {
     // }
   };
 
-  React.useEffect(() => {
-    saveStorage();
-  }, [cartData]);
-
   // React.useEffect(() => {
-  //   initData();
-  // }, []);
+  //   saveStorage();
+  // }, [cartData]);
+
+  React.useEffect(() => {
+    initData();
+  }, []);
 
   return (
     <ScrollView contentContainerStyle={[theme.styles.globalPaddingVertical30]}>
-      <View style={{alignItems: 'center'}}>
+      <View style={{alignItems: 'center', marginBottom: 30}}>
         <StyledText type="pageTitle">쇼핑백</StyledText>
       </View>
       <View style={styles.cartBody}>
-        <CartItem id={'0'} size={size} setSize={setSize} />
-        {/* {cartData &&
-          cartData?.map((item: cartDataType) => {
-            return <CartItem id={item?.id} size={size} setSize={setSize} />;
-          })} */}
+        {cartData?.length < 1 ? (
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: 100,
+            }}>
+            <StyledText type="contentTitle" color="GRAY_200">
+              아직 추가된 상품이 없습니다
+            </StyledText>
+          </View>
+        ) : (
+          cartData?.map((item: cartDataType, index: number) => {
+            return (
+              <CartItem
+                key={index}
+                {...item}
+                // size={size}
+                // setSize={setSize}
+                count={count}
+                setCount={setCount}
+                onCountUp={() => onCountUp()}
+                onCountDown={() => onCountDown()}
+              />
+            );
+          })
+        )}
       </View>
-      <View style={styles.totalWrapper}></View>
+      <View style={styles.totalWrapper}>
+        <StyledText type="h3_BOLD" isBold style={{marginBottom: 20}}>
+          주문정보
+        </StyledText>
+        <View style={styles.totalList}>
+          <StyledText color="GRAY_100">주문번호</StyledText>
+          <StyledText type="h4_normal">{Date.now()}</StyledText>
+        </View>
+        <View>
+          <View style={styles.totalList}>
+            <StyledText color="GRAY_100">합계(세금 포함)</StyledText>
+            <StyledText type="h4_normal">{totalPrice || '0'}원</StyledText>
+          </View>
+          <View style={styles.totalList}>
+            <StyledText color="GRAY_100">기타(선물 포장 등)</StyledText>
+            <StyledText type="h4_normal">{totalPrice || '0'}원</StyledText>
+          </View>
+          <View style={styles.totalList}>
+            <StyledText color="GRAY_100">총 주문금액</StyledText>
+            <StyledText type="h4_normal">{totalPrice || '0'}원</StyledText>
+          </View>
+        </View>
+      </View>
     </ScrollView>
   );
 };
@@ -86,36 +152,79 @@ export default Cart;
 
 export const CartItem = ({
   id,
+  images,
+  en_name,
+  name,
   size,
-  setSize,
+  // setSize,
+  count,
+  setCount,
+  onCountUp,
+  onCountDown,
 }: {
   id: string;
   size: string;
-  setSize: any;
-}) => {
+  // setSize: Dispatch<SetStateAction<string>>;
+  count: number;
+  setCount: Dispatch<SetStateAction<number>>;
+  onCountUp: () => void;
+  onCountDown: () => void;
+} & detailProps) => {
+  const [sizeState, setSizeState] = React.useState(size);
   return (
-    <View style={{flexDirection: 'row'}}>
+    <View
+      style={{
+        flexDirection: 'row',
+        borderBottomWidth: 1,
+        borderBottomColor: theme.colors.GRAY_200,
+        paddingVertical: 20,
+      }}>
       <Image
-        source={assets.juste_r_wg_2}
-        style={{width: 130}}
+        source={images?.length > 0 ? images[0] : assets.juste_r_wg_2}
+        style={{
+          width: 130,
+          height: 130,
+          marginRight: 15,
+        }}
         resizeMode="contain"
       />
-      <View style={{backgroundColor: 'pink', flex: 1}}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <View>
-            <StyledText>JUSTE UN CLOU RING</StyledText>
-            <StyledText>저스트 앵 끌루 링</StyledText>
+      <View
+        style={{
+          flex: 1,
+        }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+          }}>
+          <View
+            style={{
+              flex: 1,
+            }}>
+            <StyledText
+              type="h3_BOLD"
+              lineBreakMode="tail"
+              numberOfLines={2}
+              style={{}}>
+              {id || '--'}
+              {en_name}
+            </StyledText>
+            <StyledText type="h3_BOLD">{name}</StyledText>
           </View>
-          <TouchableOpacity style={{}} onPress={() => {}}>
+          <TouchableOpacity onPress={() => {}}>
             <Image source={assets.icon_close} style={{width: 15, height: 15}} />
           </TouchableOpacity>
         </View>
         <View>
           <View style={styles.list}>
-            <StyledText>옵션 : 사이즈 (55)</StyledText>
+            <StyledText color="GRAY_200">
+              옵션 : 사이즈 ({sizeState})
+            </StyledText>
             <PickerSelect
-              onValueChange={value => setSize(value)}
-              value={size}
+              onValueChange={value => setSizeState(value)}
+              value={sizeState}
+              isSmall
               items={[
                 {label: '55', value: '55'},
                 {label: '56', value: '56'},
@@ -125,26 +234,16 @@ export const CartItem = ({
                 {label: '60', value: '60'},
                 {label: '61', value: '61'},
                 {label: '62', value: '62'},
-                {label: '전화문의', value: 'inquiry'},
+                {label: '전화문의', value: 'A'},
               ]}
             />
           </View>
           <View style={styles.list}>
-            <StyledText>수량</StyledText>
-            <PickerSelect
-              onValueChange={value => setSize(value)}
-              value={size}
-              items={[
-                {label: '55', value: '55'},
-                {label: '56', value: '56'},
-                {label: '57', value: '57'},
-                {label: '58', value: '58'},
-                {label: '59', value: '59'},
-                {label: '60', value: '60'},
-                {label: '61', value: '61'},
-                {label: '62', value: '62'},
-                {label: '전화문의', value: 'inquiry'},
-              ]}
+            <StyledText color="GRAY_200">수량</StyledText>
+            <CountBox
+              count={count}
+              onCountUp={onCountUp}
+              onCountDown={onCountDown}
             />
           </View>
         </View>
@@ -158,18 +257,71 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   totalWrapper: {
-    backgroundColor: theme.colors.GRAY_100,
+    backgroundColor: theme.colors.GRAY_300,
     borderTopColor: theme.colors.MAIN_RED,
     borderTopWidth: 3,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
   },
   list: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderColor: 'red',
-    borderWidth: 1,
     justifyContent: 'space-between',
+    marginVertical: 5,
+  },
+  totalList: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 10,
   },
 });
+
+export const CountBox = ({
+  count,
+  onCountUp,
+  onCountDown,
+}: {
+  count: number;
+  onCountUp: () => void;
+  onCountDown: () => void;
+}) => {
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: theme.colors.GRAY_200,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        width: 100,
+      }}>
+      <TouchableOpacity onPress={onCountDown}>
+        <Image
+          source={assets.icon_ChevronLeft}
+          style={{
+            width: 15,
+            height: 15,
+          }}
+        />
+      </TouchableOpacity>
+      <StyledText>{count}</StyledText>
+      <TouchableOpacity onPress={onCountUp}>
+        <Image
+          source={assets.icon_ChevronLeft}
+          style={{
+            width: 15,
+
+            height: 15,
+            transform: [{rotate: '180deg'}],
+          }}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 // {
 //   id: 'br_02',
@@ -178,3 +330,10 @@ const styles = StyleSheet.create({
 //   price: '12500000',
 //   image: assets.juste_r_wg_2,
 // },
+
+// name: string;
+// en_name: string;
+// des: string;
+// price: number;
+// images: ImageSourcePropType[];
+// info: string;

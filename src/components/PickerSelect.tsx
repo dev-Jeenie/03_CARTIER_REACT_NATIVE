@@ -7,13 +7,12 @@ const PickerSelect = ({
   onValueChange,
   value,
   items,
-  style,
+  isSmall,
 }: {
   onValueChange: (value: string) => void;
-  value: string;
+  value: string | number;
   items: {label: string; value: string}[];
-  // style?: PickerStyle{};
-  style?: ViewStyle;
+  isSmall?: boolean;
 }) => {
   return (
     <RNPickerSelect
@@ -21,26 +20,23 @@ const PickerSelect = ({
       value={value}
       placeholder={{label: '선택하세요', value: 'none'}}
       items={items}
-      style={[
-        {
-          placeholder: {color: theme.colors.GRAY_100},
-          iconContainer: {},
-          inputIOSContainer: {
-            flex: 1,
-            borderRadius: 5,
-            borderWidth: 1,
-            borderColor: theme.colors.GRAY_200,
-            paddingHorizontal: 10,
-            paddingVertical: 5,
-            width: 100,
-            alignItems: 'center',
-          },
-          inputAndroidContainer: {
-            backgroundColor: 'pink',
-          },
+      style={{
+        placeholder: {color: theme.colors.GRAY_100},
+        iconContainer: {},
+        inputIOSContainer: {
+          flex: 1,
+          borderRadius: 5,
+          borderWidth: 1,
+          borderColor: theme.colors.GRAY_200,
+          paddingHorizontal: 10,
+          paddingVertical: 5,
+          width: isSmall ? 70 : 100,
+          alignItems: 'center',
         },
-        style,
-      ]}
+        inputAndroidContainer: {
+          backgroundColor: 'pink',
+        },
+      }}
     />
   );
 };

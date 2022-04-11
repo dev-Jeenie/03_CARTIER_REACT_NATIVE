@@ -21,6 +21,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import SimpleToast from 'react-native-simple-toast';
 import {useCartContext} from '../../contexts/CartProvider';
 import PickerSelect from '../../components/PickerSelect';
+import {setStorage} from '../../libs/AsyncStorageManager';
 
 export type ProductDetailRouteProp = RouteProp<
   HomeStackParamList,
@@ -34,8 +35,8 @@ const ProductDetail = () => {
   const [tab, setTab] = React.useState(0);
   const [size, setSize] = React.useState<string>('55');
 
-  const {cartInfo} = useCartContext();
-  console.log('cartInfo ::::::', cartInfo);
+  // const {cartInfo} = useCartContext();
+  // console.log('cartInfo ::::::', cartInfo);
 
   React.useEffect(() => {
     initData();
@@ -43,22 +44,22 @@ const ProductDetail = () => {
 
   const initData = async () => {
     const res = await onGetProductDetail(route.params.id);
-    console.log('route.params.id =======', route.params.id);
     setData(res);
   };
 
-  const onAddToCart = () => {
-    console.log(size);
+  const onAddToCart = async () => {
     if (size === 'none') {
       SimpleToast.show('사이즈를 선택해주세요');
     } else {
+      await setStorage(
+        'cart_data',
+        JSON.stringify({id: route.params.id, size: size, ...data}),
+      );
       SimpleToast.show('쇼핑백에 추가하였습니다');
-      // 장바구니 Context 호출
     }
   };
 
   const _renderTabBody = (tab: number, data: any) => {
-    console.log('data ========', data);
     if (tab === 0)
       return (
         <>
@@ -99,7 +100,7 @@ const ProductDetail = () => {
   return (
     <ScrollView contentContainerStyle={theme.styles.globalPaddingVertical}>
       <FlatList
-        data={[assets.juste_r_yg, assets.juste_r_yg, assets.juste_r_yg]}
+        data={data?.images}
         horizontal
         showsHorizontalScrollIndicator={false}
         snapToAlignment={'start'}

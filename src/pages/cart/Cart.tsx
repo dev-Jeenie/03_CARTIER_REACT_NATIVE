@@ -34,34 +34,23 @@ const Cart = () => {
   // console.log('cartData :::::', cartData);
 
   const onDelete = (id: string) => {
-    // SimpleToast.show(`${id}삭제`);
-    const ids = cartData?.map(item => item?.id);
-    console.log('ids아이디들은???', ids);
+    // 나중에 여러개를 추가할 수 있게 되면 로직을 수정해야함. (완료)
+    // 지금은 받아온 id를 쓰고있지 않고 그냥 현재 배열안에 있는 아이디들을 배열로 만들어서 쓰고있음. id로 비교하게 해야함 (완료)
+    // const ids = cartData?.map(item => item?.id);
     const arr = cartData?.map((v: any, i: number) => {
-      // if (i > 14) return;
-      if (v?.id != ids) {
+      if (v?.id != id) {
+        // if (v?.id != ids) {
         return v;
       } else {
         return;
       }
     });
     const newArr = arr.filter((v: any) => v);
-    SimpleToast.show(`아이디면 달라서 남고,아무것도 없으면 지워진다:::${arr}`);
-
-    console.log('newArr:::', newArr);
     setCartData(newArr);
-    // console.log('새로운 배열:::', newArr);
+    SimpleToast.show(`${id}를 내 쇼핑백에서 삭제했습니다.`);
   };
-  // const onDelete = (id: string) => {
-  //   SimpleToast.show(`${id}삭제`);
-  //   let newArray = [...cartData];
-  //   newArray.filter(item => {
-  //     item?.id != id;
-  //   });
-  //   // setCartData(newArray);
-  //   console.log('기존 배열:::', cartData);
-  //   console.log('새로운 배열:::', newArray);
-  // };
+
+  // 페이지 나갈 때 storage 호출해서 setStorage하기
 
   const saveStorage = async () => {
     SimpleToast.show('스토리지에 저장 후 결제 페이지로 이동');
@@ -150,12 +139,16 @@ const Cart = () => {
         </StyledText>
         <View style={styles.totalList}>
           <StyledText color="GRAY_100">주문번호</StyledText>
-          <StyledText type="h4_normal">{_renderOrderId}</StyledText>
+          <StyledText type="h4_normal">
+            {cartData?.length > 0 ? _renderOrderId : 0}
+          </StyledText>
         </View>
         <View>
           <View style={styles.totalList}>
             <StyledText color="GRAY_100">합계(세금 포함)</StyledText>
-            <StyledText type="h4_normal">{totalPrice || '0'} 원</StyledText>
+            <StyledText type="h4_normal">
+              {cartData?.length > 0 ? totalPrice : '0'} 원
+            </StyledText>
           </View>
           <View style={styles.totalList}>
             <StyledText color="GRAY_100">기타(선물 포장 등)</StyledText>
@@ -164,7 +157,7 @@ const Cart = () => {
           <View style={styles.totalList}>
             <StyledText color="GRAY_100">총 주문금액</StyledText>
             <StyledText type="h4_normal">
-              {totalPrice?.toLocaleString() || '0'} 원
+              {cartData?.length > 0 ? totalPrice?.toLocaleString() : '0'} 원
             </StyledText>
           </View>
         </View>
@@ -172,7 +165,7 @@ const Cart = () => {
       </View>
     </ScrollView>
   );
-};;
+};;;;;;
 
 export default Cart;
 

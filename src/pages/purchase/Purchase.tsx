@@ -52,9 +52,9 @@ export const DetailItem = () => {
     <View style={{flexDirection: 'row'}}>
       <Image source={assets.juste_r_wg} style={{width: 130, height: 130}} />
       <View>
-        <StyledText>탱크 머스트 워치</StyledText>
+        {/* <StyledText>탱크 머스트 워치</StyledText>
         <StyledText>125,000,000 원</StyledText>
-        <StyledText>X 1</StyledText>
+        <StyledText>X 1</StyledText> */}
       </View>
     </View>
   );

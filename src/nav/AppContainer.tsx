@@ -6,7 +6,10 @@ import {
   NavigationContainerRef,
   useNavigation,
 } from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from '@react-navigation/stack';
 import React from 'react';
 import {
   Dimensions,
@@ -33,6 +36,7 @@ import EntryStackNavigator, {
 } from '../pages/EntryStackNavigator';
 import Home from '../pages/home/Home';
 import Login from '../pages/Login';
+import SignUp from '../pages/login/SignUp';
 import SubmitIdPassword from '../pages/login/SubmitIdPassword';
 import Collections from '../pages/main/Collections';
 import Mypage from '../pages/mypage/Mypage';
@@ -249,8 +253,19 @@ const MainDrawerNavigator = () => {
   );
 };
 
+export type AuthStackParamList = {
+  Login: undefined;
+  SubmitIdPassword: undefined;
+  SignUp: undefined;
+  MainDrawerNavigator: undefined;
+};
+export type AuthStackNavigationProp = StackNavigationProp<AuthStackParamList>;
+
 const AuthStack = () => {
-  const Stack = React.useMemo(() => createStackNavigator(), []);
+  const Stack = React.useMemo(
+    () => createStackNavigator<AuthStackParamList>(),
+    [],
+  );
   const inset = useSafeAreaInsets();
   const navigation = useNavigation();
 
@@ -258,7 +273,7 @@ const AuthStack = () => {
     <Stack.Navigator
       initialRouteName="Login"
       screenOptions={{
-        headerTransparent: true,
+        // headerTransparent: true,
         headerTitleStyle: {color: theme.colors.DEFAULT_WHITE},
         header: () => {
           return (
@@ -288,6 +303,8 @@ const AuthStack = () => {
         component={SubmitIdPassword}
         options={
           {
+            // headerShown: false,
+            // headerTransparent: false,
             // headerBackgroundContainerStyle: {
             //   backgroundColor: theme.colors.GRAY_300,
             //   height: 50,
@@ -332,6 +349,7 @@ const AuthStack = () => {
           }
         }
       />
+      <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen
         name="MainDrawerNavigator"
         component={MainDrawerNavigator}
@@ -345,7 +363,7 @@ const AppContainer = () => {
     React.useRef<NavigationContainerRef<EntryStackParamList>>(null);
   const Stack = React.useMemo(() => createStackNavigator(), []);
   // const {principal} = useSelector(selector => selector.auth, shallowEqual);
-  const principal = true;
+  const principal = false;
 
   return (
     <NavigationContainer

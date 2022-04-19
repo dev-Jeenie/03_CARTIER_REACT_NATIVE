@@ -1,10 +1,12 @@
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
 import {
   Dimensions,
   Image,
   ScrollView,
   StyleSheet,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -15,7 +17,9 @@ import StyledText from '../../commons/StyledText';
 import theme from '../../commons/theme';
 import BigButton from '../../components/common/BigButton';
 import InputForm from '../../components/common/InputForm';
+import LoadingView from '../../components/common/LoadingView';
 import MyInput from '../../components/common/MyInput';
+import {AuthStackParamList} from '../../nav/AppContainer';
 
 const {width} = Dimensions.get('window');
 
@@ -92,11 +96,41 @@ const styles = StyleSheet.create({
   },
 });
 
-const SubmitIdPassword = () => {
-  const navigation = useNavigation<any>();
-  const inset = useSafeAreaInsets();
+// type SubmitIdPasswordRouteProp = RouteProp<
+//   AuthStackParamList,
+//   'SubmitIdPassword'
+// >;
 
-  return (
+const SubmitIdPassword = () => {
+  const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
+  const inset = useSafeAreaInsets();
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
+  const emailRef = React.useRef<TextInput | null>(null); // generic type
+  const passwordRef = React.useRef<TextInput | null>(null);
+
+  const checkIdPw = () => {
+    const result = email?.length > 0 && password?.length > 0;
+    if (email?.length < 1) {
+      SimpleToast.show('이메일을 입력하세요');
+    } else if (password?.length < 1) {
+      SimpleToast.show('비밀번호를 입력하세요.');
+    }
+    return result;
+  };
+
+  const onPressLogin = () => {
+    SimpleToast.show('로그인시도');
+    // setIsLoading(true);
+    // setIsLoading(false);
+  };
+  const onPressSignUp = () => {
+    SimpleToast.show('회원가입으로 이동');
+  };
+  return isLoading ? (
+    <LoadingView />
+  ) : (
     <ScrollView
       style={{
         backgroundColor: theme.colors.GRAY_300,
@@ -134,25 +168,44 @@ const SubmitIdPassword = () => {
           }}>
           <InputForm title="이메일" style={{marginBottom: 20}}>
             <MyInput
+              value={email}
+              onChangeText={value => setEmail(value)}
               placeholder="이메일을 입력하세요"
               placeholderTextColor={theme.colors.GRAY_000}
               keyboardType="email-address"
+              returnKeyType="next"
               autoCapitalize="none"
+              textContentType="emailAddress"
+              importantForAutofill="yes"
+              autoComplete="email"
+              onSubmitEditing={() => {
+                passwordRef.current?.focus();
+              }}
+              blurOnSubmit={false}
+              ref={emailRef}
+              clearButtonMode="while-editing"
             />
           </InputForm>
           <InputForm title="비밀번호" style={{marginBottom: 40}}>
             <MyInput
+              value={password}
+              onChangeText={value => setPassword(value)}
               placeholder="비밀번호를 입력하세요"
               placeholderTextColor={theme.colors.GRAY_000}
               secureTextEntry
               textContentType="newPassword"
               autoCapitalize="none"
+              autoComplete="password"
+              importantForAutofill="yes"
+              onSubmitEditing={onPressLogin}
+              ref={passwordRef}
+              clearButtonMode="while-editing"
             />
           </InputForm>
           <View style={{alignItems: 'center'}}>
             <BigButton
               text="로그인"
-              onPress={() => SimpleToast.show('로그인 시도')}
+              onPress={() => checkIdPw() && onPressLogin()}
             />
             <TouchableOpacity onPress={() => {}}>
               <StyledText
@@ -173,7 +226,7 @@ const SubmitIdPassword = () => {
         </View>
         <BigButton
           text="회원가입"
-          onPress={() => SimpleToast.show('회원가입으로 이동')}
+          onPress={() => navigation.navigate('SignUp')}
           style={{backgroundColor: theme.colors.DARK_GRAY}}
         />
       </View>

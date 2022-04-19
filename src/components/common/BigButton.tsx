@@ -15,11 +15,13 @@ const BigButton = ({
   onPress,
   style,
   isWhite,
+  disabled,
 }: {
   text: string;
   onPress: () => void;
   style?: StyleProp<ViewStyle>;
   isWhite?: boolean;
+  disabled?: boolean;
 }) => {
   const {width} = Dimensions.get('window');
 
@@ -43,7 +45,8 @@ const BigButton = ({
           borderWidth: 1,
         },
       ]}
-      onPress={onPress}>
+      onPress={onPress}
+      disabled={disabled}>
       <StyledText
         color={!isWhite ? 'DEFAULT_WHITE' : 'DARK_GRAY'}
         type="contentTitle">

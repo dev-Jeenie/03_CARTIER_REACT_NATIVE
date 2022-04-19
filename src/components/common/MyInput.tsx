@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ClassAttributes, Ref} from 'react';
 import {
   StyleProp,
   StyleSheet,
@@ -15,7 +15,9 @@ type MyInputProps = {
   placeholder?: string;
   placeholderTextColor?: string;
   inputStyle?: StyleProp<ViewStyle>;
-} & TextInputProps;
+  // } & TextInputProps;
+} & TextInputProps &
+  ClassAttributes<TextInput>;
 
 const MyInput = ({
   style,
@@ -24,6 +26,7 @@ const MyInput = ({
   inputStyle,
   onFocus,
   onBlur,
+  ref,
   ...props
 }: MyInputProps) => {
   const [focused, setFocused] = React.useState(false);
@@ -40,6 +43,7 @@ const MyInput = ({
         placeholderTextColor={placeholderTextColor}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        ref={ref}
         {...props}
       />
     </View>

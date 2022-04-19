@@ -1,4 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
 import {
   Animated,
@@ -18,6 +19,7 @@ import StyledText from '../commons/StyledText';
 import theme from '../commons/theme';
 import BigButton from '../components/common/BigButton';
 import HeaderContainer from '../components/common/HeaderContainer';
+import {AuthStackParamList} from '../nav/AppContainer';
 
 const {width} = Dimensions.get('window');
 
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
 });
 
 const Login = () => {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
   const inset = useSafeAreaInsets();
 
   const scrollX = React.useRef<any>(new Animated.Value(0)).current;
@@ -361,7 +363,7 @@ const Login = () => {
           marginBottom: inset.bottom + 20,
         }}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('HomeStackNavigator')}
+          onPress={() => navigation.navigate('MainDrawerNavigator')}
           style={{marginBottom: 20}}>
           <StyledText color="DEFAULT_WHITE" type="contentTitle">
             비회원으로 이용하기

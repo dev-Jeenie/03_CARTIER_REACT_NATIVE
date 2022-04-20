@@ -120,14 +120,33 @@ const SubmitIdPassword = () => {
     return result;
   };
 
+  // const onPressLogin = async () => {
+  //   setIsLoading(true);
+  //   const res = await setTimeout(() => {
+  //     return true;
+  //   }, 1500);
+  //   (await res) && navigation.navigate('MainDrawerNavigator'),
+  //     SimpleToast.show('로그인되었습니다.');
+  //   // try {
+  //   //   const res = await setTimeout(() => {
+  //   //     return true;
+  //   //   }, 1500);
+  //   //   res && navigation.navigate('MainDrawerNavigator'),
+  //   //     SimpleToast.show('로그인되었습니다.');
+  //   // } catch (error) {
+  //   //   console.log(error);
+  //   //   SimpleToast.show('잠시후 다시 시도해주세요.');
+  //   // }
+  // };
+
   const onPressLogin = () => {
-    SimpleToast.show('로그인시도');
-    // setIsLoading(true);
-    // setIsLoading(false);
+    setIsLoading(true);
+    setTimeout(() => {
+      navigation.navigate('MainDrawerNavigator');
+      SimpleToast.show('로그인되었습니다.');
+    }, 1500);
   };
-  const onPressSignUp = () => {
-    SimpleToast.show('회원가입으로 이동');
-  };
+
   return isLoading ? (
     <LoadingView />
   ) : (

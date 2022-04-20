@@ -59,4 +59,5 @@ export default {
   icon_cart: require('./src/assets/icon_cart.png'),
   icon_close: require('./src/assets/icon_close.png'),
   icon_menu: require('./src/assets/icon_menu.png'),
+  icon_check_red: require('./src/assets/icon_check_red.png'),
 };

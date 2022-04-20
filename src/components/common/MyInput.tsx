@@ -8,6 +8,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+import StyledText from '../../commons/StyledText';
 import theme from '../../commons/theme';
 
 type MyInputProps = {
@@ -15,6 +16,9 @@ type MyInputProps = {
   placeholder?: string;
   placeholderTextColor?: string;
   inputStyle?: StyleProp<ViewStyle>;
+  isValidCheck?: boolean;
+  state?: boolean;
+  validText?: string;
   // } & TextInputProps;
 } & TextInputProps &
   ClassAttributes<TextInput>;
@@ -27,6 +31,9 @@ const MyInput = ({
   onFocus,
   onBlur,
   ref,
+  isValidCheck,
+  state,
+  validText,
   ...props
 }: MyInputProps) => {
   const [focused, setFocused] = React.useState(false);
@@ -36,17 +43,26 @@ const MyInput = ({
   const handleBlur = () => {};
 
   return (
-    <View style={[styles.container, style]}>
-      <TextInput
-        placeholder={placeholder}
-        style={[styles.input, inputStyle]}
-        placeholderTextColor={placeholderTextColor}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        ref={ref}
-        {...props}
-      />
-    </View>
+    <>
+      <View style={[styles.container, style]}>
+        <TextInput
+          placeholder={placeholder}
+          style={[styles.input, inputStyle]}
+          placeholderTextColor={placeholderTextColor}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          ref={ref}
+          {...props}
+        />
+      </View>
+      {isValidCheck && (
+        <View style={{marginTop: 10}}>
+          <StyledText color={state ? 'SUB_BLUE' : 'MAIN_RED'}>
+            {validText || '--'}
+          </StyledText>
+        </View>
+      )}
+    </>
   );
 };
 

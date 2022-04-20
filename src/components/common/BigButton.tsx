@@ -45,8 +45,7 @@ const BigButton = ({
           borderWidth: 1,
         },
       ]}
-      onPress={onPress}
-      disabled={disabled}>
+      onPress={onPress}>
       <StyledText
         color={!isWhite ? 'DEFAULT_WHITE' : 'DARK_GRAY'}
         type="contentTitle">

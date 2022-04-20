@@ -1,11 +1,15 @@
 import React from 'react';
-import {ScrollView, StyleSheet} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import StyledText from '../../commons/StyledText';
+import theme from '../../commons/theme';
 
 const Mypage = () => {
   return (
-    <ScrollView>
-      <StyledText>마이페이지</StyledText>
+    <ScrollView contentContainerStyle={theme.styles.globalPaddingVertical30}>
+      <View style={{alignItems: 'center'}}>
+        <StyledText type="pageTitle">내 계정</StyledText>
+        <StyledText type="contentTitle">주문내역</StyledText>
+      </View>
     </ScrollView>
   );
 };

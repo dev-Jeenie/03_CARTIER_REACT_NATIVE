@@ -8,6 +8,7 @@ const colors = {
   GRAY_200: 'rgb(153,153,153)',
   GRAY_300: 'rgb(230,230,230)',
   MAIN_RED: '#880B16',
+  SUB_BLUE: '#3498ff',
 } as const;
 
 const fonts = StyleSheet.create({

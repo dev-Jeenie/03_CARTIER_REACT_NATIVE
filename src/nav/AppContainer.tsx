@@ -37,7 +37,9 @@ import EntryStackNavigator, {
 import Home from '../pages/home/Home';
 import Login from '../pages/Login';
 import SignUp from '../pages/login/SignUp';
+import SignUpComplete from '../pages/login/SignUpComplete';
 import SubmitIdPassword from '../pages/login/SubmitIdPassword';
+import UserInfo from '../pages/login/UserInfo';
 import Collections from '../pages/main/Collections';
 import Mypage from '../pages/mypage/Mypage';
 import ProductDetail from '../pages/product/ProductDetail';
@@ -257,6 +259,8 @@ export type AuthStackParamList = {
   Login: undefined;
   SubmitIdPassword: undefined;
   SignUp: undefined;
+  UserInfo: undefined;
+  SignUpComplete: undefined;
   MainDrawerNavigator: undefined;
 };
 export type AuthStackNavigationProp = StackNavigationProp<AuthStackParamList>;
@@ -272,32 +276,62 @@ const AuthStack = () => {
   return (
     <Stack.Navigator
       initialRouteName="Login"
-      screenOptions={{
-        // headerTransparent: true,
-        headerTitleStyle: {color: theme.colors.DEFAULT_WHITE},
-        header: () => {
-          return (
-            <View
-              style={{
-                height: 100,
-                position: 'absolute',
-                left: width / 2 - 80,
-                zIndex: 3,
-                marginTop: inset.top,
-                justifyContent: 'center',
-              }}>
-              <Image
-                source={assets.logo_w}
+      screenOptions={
+        {
+          // headerTransparent: true,
+          // headerTitleStyle: {color: theme.colors.DEFAULT_WHITE},
+          // header: () => {
+          //   return (
+          //     <View
+          //       style={{
+          //         height: 100,
+          //         position: 'absolute',
+          //         left: width / 2 - 80,
+          //         zIndex: 3,
+          //         marginTop: inset.top,
+          //         justifyContent: 'center',
+          //       }}>
+          //       <Image
+          //         source={assets.logo_w}
+          //         style={{
+          //           width: 160,
+          //         }}
+          //         resizeMode={'contain'}
+          //       />
+          //     </View>
+          //   );
+          // },
+        }
+      }>
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{
+          headerTransparent: true,
+          // title: '',
+          header: () => {
+            return (
+              <View
                 style={{
-                  width: 160,
-                }}
-                resizeMode={'contain'}
-              />
-            </View>
-          );
-        },
-      }}>
-      <Stack.Screen name="Login" component={Login} />
+                  height: 100,
+                  position: 'absolute',
+                  left: width / 2 - 80,
+                  zIndex: 3,
+                  marginTop: inset.top,
+                  justifyContent: 'center',
+                }}>
+                <Image
+                  source={assets.logo_w}
+                  style={{
+                    width: 160,
+                  }}
+                  resizeMode={'contain'}
+                />
+              </View>
+            );
+          },
+        }}
+      />
       <Stack.Screen
         name="SubmitIdPassword"
         component={SubmitIdPassword}
@@ -350,9 +384,14 @@ const AuthStack = () => {
         }
       />
       <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen name="UserInfo" component={UserInfo} />
+      <Stack.Screen name="SignUpComplete" component={SignUpComplete} />
       <Stack.Screen
         name="MainDrawerNavigator"
         component={MainDrawerNavigator}
+        options={{
+          header: () => <></>,
+        }}
       />
     </Stack.Navigator>
   );

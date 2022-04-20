@@ -18,14 +18,17 @@ const styles = StyleSheet.create({
   checkboxWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomColor: theme.colors.GRAY_200,
+    borderBottomColor: theme.colors.GRAY_300,
     borderBottomWidth: 1,
+    paddingVertical: 12,
   },
   checkIcon: {
     borderRadius: 50,
-    backgroundColor: theme.colors.GRAY_200,
-    width: 25,
-    height: 25,
+    // backgroundColor: theme.colors.GRAY_200,
+    borderColor: theme.colors.GRAY_200,
+    borderWidth: 1,
+    width: 20,
+    height: 20,
     alignContent: 'center',
     justifyContent: 'center',
     textAlign: 'center',
@@ -46,7 +49,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   checkedBorderBottom: {
-    borderBottomColor: theme.colors.DEFAULT_WHITE,
+    borderBottomColor: theme.colors.MAIN_RED,
   },
   checkedTextColor: {
     color: theme.colors.DEFAULT_WHITE,
@@ -55,66 +58,26 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
   },
 });
-interface ICallBack {
-  ok: boolean;
-  status: number;
-}
+
 type CheckBoxProps = {
-  checkSize?: FlexStyle['width'];
   style?: StyleProp<ViewStyle>;
   text: string;
-  hideBorderBottom?: boolean;
   checked?: boolean;
-  onCheck: (isChecked: boolean) => void;
-  callBackApi: () => Promise<ICallBack | undefined>;
 } & TouchableOpacityProps;
 
-const CheckBox: React.FunctionComponent<CheckBoxProps> = ({
-  checkSize,
-  onPress,
-  callBackApi,
-  ...props
-}) => {
-  const [checked, setChecked] = useState<boolean>(props.checked ?? false);
-
-  React.useEffect(() => {
-    setChecked(Boolean(props.checked));
-  }, [props.checked]);
-
-  React.useEffect(() => {
-    props?.onCheck(checked);
-  }, [checked]);
-
-  const handlePress: TouchableOpacityProps['onPress'] = React.useCallback(
-    async (event: GestureResponderEvent) => {
-      const ok = await callBackApi();
-      if (ok) {
-        setChecked(prev => !prev);
-        onPress?.(event);
-      }
-    },
-    [onPress, callBackApi],
-  );
-
+const CheckBox = ({onPress, style, text, checked}: CheckBoxProps) => {
   return (
     <TouchableOpacity
-      {...props}
-      style={[
-        styles.checkboxWrapper,
-        checked && styles.checkedBorderBottom,
-        props.hideBorderBottom && styles.hideBorderBottom,
-        props.style,
-      ]}
-      onPress={handlePress}>
-      <View
-        style={[
-          styles.checkIcon,
-          checked && styles.checkedBackground,
-          {width: checkSize ?? 25, height: checkSize ?? 25},
-        ]}>
-        <Image style={styles.checkImage} source={assets.icon_close} />
+      style={[styles.checkboxWrapper, checked && styles.checkedBorderBottom]}
+      onPress={onPress}>
+      <View style={[styles.checkIcon, style]}>
+        {checked && (
+          <Image style={styles.checkImage} source={assets.icon_check_red} />
+        )}
       </View>
-      <StyledText type="h4_normal">{props.text}</StyledText>
+      <StyledText type="h4_normal" color={checked ? 'DARK_GRAY' : 'GRAY_100'}>
+        {text || '--'}
+      </StyledText>
     </TouchableOpacity>
   );
 };

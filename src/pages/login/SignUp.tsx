@@ -56,6 +56,10 @@ export type AgreeForm = {
   isMarketing: boolean;
 };
 
+
+
+
+
 export type JoinForm = AgreeForm & {
   userId: string;
   email: string;

@@ -1,18 +1,28 @@
 import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
-import {Image, ScrollView, StyleSheet, View} from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native';
 import SimpleToast from 'react-native-simple-toast';
 import assets from '../../../assets';
 import StyledText from '../../commons/StyledText';
 import theme from '../../commons/theme';
 import BigButton from '../../components/common/BigButton';
 import {useOrderContext} from '../../contexts/OrderProvider';
+import {HomeStackParamList} from '../../nav/AppContainer';
 
 const Purchase = () => {
   const [data, setData] = React.useState([]);
   const user_name = 'Jeenie';
   const orderInfo = useOrderContext();
-  const {navigate} = useNavigation();
+  const {navigate, push} =
+    useNavigation<StackNavigationProp<HomeStackParamList>>();
 
   console.log('orderInfo', orderInfo);
 
@@ -38,7 +48,7 @@ const Purchase = () => {
           text="주문내역 확인하기"
           onPress={() => {
             SimpleToast.show('마이페이지의 주문내역 페이지로 이동'),
-              navigate('Mypage');
+              push('Mypage');
           }}
         />
       </View>
@@ -79,20 +89,30 @@ const styles = StyleSheet.create({
   },
 });
 
-export const DetailItem = () => {
+export const DetailItem = ({
+  style,
+  id,
+}: {
+  style?: StyleProp<ViewStyle>;
+  id?: string;
+}) => {
   return (
     <View
-      style={{
-        flexDirection: 'row',
-        borderBottomWidth: 1,
-        borderTopWidth: 1,
-        paddingVertical: 20,
-        borderColor: theme.colors.GRAY_200,
-      }}>
+      style={[
+        {
+          flexDirection: 'row',
+          borderBottomWidth: 1,
+          borderTopWidth: 1,
+          paddingVertical: 20,
+          borderColor: theme.colors.GRAY_200,
+        },
+        style,
+      ]}>
       <Image
         source={assets.juste_r_wg}
         style={{width: 130, height: 130, marginRight: 10}}
       />
+      {/* <View> */}
       <View style={{flex: 1}}>
         <View
           style={{
@@ -103,7 +123,7 @@ export const DetailItem = () => {
           <StyledText type="h4_normal" isBold>
             탱크 머스트 워치
           </StyledText>
-          <StyledText>상품번호 : 12323</StyledText>
+          <StyledText>상품번호 : {id} </StyledText>
           <View
             style={{
               justifyContent: 'space-between',

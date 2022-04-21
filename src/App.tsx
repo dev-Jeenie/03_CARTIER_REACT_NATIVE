@@ -1,13 +1,16 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
+import {LikedProvider} from './contexts/LikedProvider';
 import {OrderProvider} from './contexts/OrderProvider';
 import AppContainer from './nav/AppContainer';
 
 const App = () => {
   return (
-    <OrderProvider>
-      <AppContainer />
-    </OrderProvider>
+    <LikedProvider>
+      <OrderProvider>
+        <AppContainer />
+      </OrderProvider>
+    </LikedProvider>
   );
 };
 

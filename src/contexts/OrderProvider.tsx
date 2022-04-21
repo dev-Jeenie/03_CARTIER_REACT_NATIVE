@@ -7,22 +7,25 @@ type orderInfo = {
 } & detailProps;
 
 export interface IOrderContext {
-  orderInfo: orderInfo;
-  setOrder: (type: orderInfo | undefined) => void;
+  orderInfo: orderInfo[];
+  setOrder: (type: orderInfo[] | undefined) => void;
 }
 
-const defaultValue = {
-  name: '',
-  en_name: '',
-  des: '',
-  price: 0,
-  images: [],
-  info: '',
-};
+const defaultValue = [
+  {
+    id: '',
+    name: '',
+    en_name: '',
+    des: '',
+    price: 0,
+    images: [],
+    info: '',
+  },
+];
 
 const defaultOrderContext: IOrderContext = {
   orderInfo: defaultValue,
-  setOrder: (info: orderInfo | undefined) => {},
+  setOrder: (info: orderInfo[] | undefined) => {},
 };
 
 const OrderContext = createContext(defaultOrderContext);
@@ -32,16 +35,16 @@ interface Iprops {
 }
 
 const OrderProvider = ({children}: Iprops) => {
-  const [orderInfo, setOrderInfo] = React.useState<orderInfo>(defaultValue);
-  const setOrder = (info: orderInfo | undefined) =>
+  const [orderInfo, setOrderInfo] = React.useState<orderInfo[]>(defaultValue);
+  const setOrder = (info: orderInfo[] | undefined) =>
     setOrderInfo(info ? info : defaultValue);
 
   const initData = async () => {
     const res = await getStorage('cart_data');
-    console.log('OrderProvider의 데이터 res :::::', JSON.parse(res));
+    console.log('!!!!!!!!!!!OrderProvider의 데이터 res :::::', JSON.parse(res));
     setOrderInfo(JSON.parse(res));
   };
-
+  console.log('길이!@#!!##!##@', orderInfo?.length);
   React.useEffect(() => {
     initData();
   }, []);

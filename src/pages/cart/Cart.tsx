@@ -1,4 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import React, {Dispatch, SetStateAction} from 'react';
 import {
   Image,
@@ -16,13 +17,14 @@ import BigButton from '../../components/common/BigButton';
 import CloseButton from '../../components/common/CloseButton';
 import PickerSelect from '../../components/PickerSelect';
 import {getStorage, setStorage} from '../../libs/AsyncStorageManager';
+import {HomeStackParamList} from '../../nav/AppContainer';
 
-type cartDataType = {
+export type cartDataType = {
   id: string;
   size: string;
 } & detailProps;
 
-const CART_DATA = 'cart_data';
+export const CART_DATA = 'cart_data';
 
 const Cart = () => {
   const [cartData, setCartData] = React.useState<cartDataType[]>([]);
@@ -32,13 +34,10 @@ const Cart = () => {
     console.log('장바구니의 데이터 res :::::', JSON.parse(res));
     setCartData(JSON.parse(res));
   };
-  const {navigate} = useNavigation();
+  const {navigate} = useNavigation<StackNavigationProp<HomeStackParamList>>();
   // console.log('cartData :::::', cartData);
 
   const onDelete = async (id: string) => {
-    // 나중에 여러개를 추가할 수 있게 되면 로직을 수정해야함. (완료)
-    // 지금은 받아온 id를 쓰고있지 않고 그냥 현재 배열안에 있는 아이디들을 배열로 만들어서 쓰고있음. id로 비교하게 해야함 (완료)
-    // const ids = cartData?.map(item => item?.id);
     const arr = cartData?.map((v: any, i: number) => {
       if (v?.id != id) {
         // if (v?.id != ids) {

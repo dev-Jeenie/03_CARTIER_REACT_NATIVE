@@ -15,6 +15,7 @@ import {
   Dimensions,
   Image,
   Platform,
+  TouchableOpacity,
   useWindowDimensions,
   View,
 } from 'react-native';
@@ -188,10 +189,12 @@ const HomeStackNavigator = () => {
 
 type MainDrawerParamList = {
   HomeStackNavigator: undefined;
+  Mypage: undefined;
+  Cart: undefined;
 };
 
 const MainDrawerNavigator = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<MainDrawerParamList>>();
 
   const MainDrawer = React.useMemo(
     () => createDrawerNavigator<MainDrawerParamList>(),
@@ -218,13 +221,17 @@ const MainDrawerNavigator = () => {
                   left: 20,
                 }}
               />
-              <Image
-                source={assets.logo_r}
-                style={{
-                  width: 130,
-                }}
-                resizeMode={'contain'}
-              />
+              <TouchableOpacity
+              // onPress={() => navigation.navigate('HomeStackNavigator')}
+              >
+                <Image
+                  source={assets.logo_r}
+                  style={{
+                    width: 130,
+                  }}
+                  resizeMode={'contain'}
+                />
+              </TouchableOpacity>
 
               <View
                 style={{

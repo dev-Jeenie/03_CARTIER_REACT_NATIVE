@@ -6,6 +6,7 @@ import assets from '../../assets';
  */
 
 export type detailProps = {
+  id?: string;
   name: string;
   en_name: string;
   des: string;

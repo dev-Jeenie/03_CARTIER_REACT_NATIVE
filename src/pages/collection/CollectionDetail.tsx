@@ -4,6 +4,7 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
 import {
   Image,
@@ -21,8 +22,10 @@ import StyledText from '../../commons/StyledText';
 import theme from '../../commons/theme';
 import CollectionCard from '../../components/CollectionCard';
 import AddCartButton from '../../components/common/AddCartButton';
+import BigButton from '../../components/common/BigButton';
 import {collectionMap} from '../../components/common/collectionMap';
 import LikeButton from '../../components/common/LikeButton';
+import {setStorage} from '../../libs/AsyncStorageManager';
 import {
   collectionDetailType,
   collection_data,
@@ -70,9 +73,24 @@ const ListButton = ({
   );
 };
 
-const ListItem = ({id, name, image, des, price}: productType) => {
+export const ListItem = ({id, name, image, des, price}: productType) => {
   const {width} = useWindowDimensions();
-  const {navigate} = useNavigation();
+  const {navigate} = useNavigation<StackNavigationProp<HomeStackParamList>>();
+
+  const onAddToCart = async () => {
+    // const res = await getStorage('cart_data');
+    // console.log('장바구니의 데이터 res :::::', JSON.parse(cartData));
+    // setCartData(JSON.parse(res));
+
+    await setStorage(
+      'cart_data',
+      JSON.stringify([
+        {id: id, size: '55', name: name, image: image, price: price, des: des},
+        // ...cartData,
+      ]),
+    );
+    SimpleToast.show('쇼핑백에 추가하였습니다');
+  };
 
   return (
     <View
@@ -94,7 +112,14 @@ const ListItem = ({id, name, image, des, price}: productType) => {
               height: width / 2 - 40,
             }}
           />
-          <LikeButton id={id} isCoverImage />
+          <LikeButton
+            isCoverImage
+            id={id}
+            name={name}
+            image={image}
+            des={des}
+            price={price}
+          />
         </View>
         <View style={[styles.textWrapper, {}]}>
           <StyledText type="contentTitle" numberOfLines={1}>
@@ -108,12 +133,17 @@ const ListItem = ({id, name, image, des, price}: productType) => {
           </StyledText>
         </View>
       </TouchableOpacity>
-      <AddCartButton id={id} />
+      {/* <AddCartButton id={id} /> */}
+      <BigButton
+        text="쇼핑백에 추가하기"
+        onPress={onAddToCart}
+        style={{borderRadius: 0}}
+      />
     </View>
   );
 };
 
-const _renderBody = (tab: number, data: productsType) => {
+const _renderBody = (tab: number, data?: productsType) => {
   return (
     <View
       style={{
@@ -145,7 +175,7 @@ const CollectionDeatail = () => {
   const {navigate} = useNavigation<NavigationProp<HomeStackParamList>>();
   const [tab, setTab] = React.useState(0);
   const route = useRoute<CollectionDetailRouteProp>();
-  const [data, setData] = React.useState<collectionDetailType>();
+  const [data, setData] = React.useState<collectionDetailType | undefined>();
 
   const initData = async () => {
     const res = await onGetCollectionDetailDeta(route.params.collection_id);
@@ -154,33 +184,6 @@ const CollectionDeatail = () => {
   React.useEffect(() => {
     initData();
   }, []);
-
-  // route.params.title
-  // const title =
-  //   route.params.title === 'juste'
-  //     ? 'JUSTE UN CLU'
-  //     : route.params.title === 'panthere'
-  //     ? 'PHANTHERE DE CARTIER'
-  //     : route.params.title === 'love'
-  //     ? 'LOVE'
-  //     : route.params.title === 'trinity'
-  //     ? 'TRINITY'
-  //     : route.params.title === 'ecrou'
-  //     ? 'ECORU DE CARTIER'
-  //     : '';
-
-  // const image =
-  //   route.params.title === 'juste'
-  //     ? assets.collection_juste
-  //     : route.params.title === 'panthere'
-  //     ? assets.collection_panthere
-  //     : route.params.title === 'love'
-  //     ? assets.collection_love
-  //     : route.params.title === 'trinity'
-  //     ? assets.collection_trinity
-  //     : route.params.title === 'ecrou'
-  //     ? assets.collection_ecrou
-  //     : '';
 
   return (
     <ScrollView contentContainerStyle={theme.styles.globalPaddingVertical30}>
@@ -242,7 +245,7 @@ const CollectionDeatail = () => {
       <View style={styles.body}>{_renderBody(tab, data?.products)}</View>
     </ScrollView>
   );
-};;;
+};
 export default CollectionDeatail;
 
 const styles = StyleSheet.create({

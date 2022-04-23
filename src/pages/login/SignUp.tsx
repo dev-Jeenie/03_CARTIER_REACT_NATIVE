@@ -4,6 +4,7 @@ import {
   Image,
   ScrollView,
   StyleSheet,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -17,7 +18,6 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {AuthStackParamList} from '../../nav/AppContainer';
 import SimpleToast from 'react-native-simple-toast';
 import BigButton from '../../components/common/BigButton';
-import {TextInput} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import InputForm from '../../components/common/InputForm';
 import MyInput from '../../components/common/MyInput';

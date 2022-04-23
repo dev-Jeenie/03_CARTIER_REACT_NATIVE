@@ -3,6 +3,7 @@ import React from 'react';
 import {
   Animated,
   Dimensions,
+  FlatList,
   Image,
   SafeAreaView,
   ScrollView,
@@ -11,7 +12,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import SimpleToast from 'react-native-simple-toast';
 import SwiperFlatList from 'react-native-swiper-flatlist';
@@ -103,15 +103,15 @@ const Home = () => {
 
   const [bannerIndex, setBannerIndex] = React.useState(0);
 
-  const handleScroll = Animated.event([
-    {
-      nativeEvent: {
-        contentOffset: {
-          x: scrollX,
-        },
-      },
-    },
-  ]);
+  // const handleScroll = Animated.event([
+  //   {
+  //     nativeEvent: {
+  //       contentOffset: {
+  //         x: scrollX,
+  //       },
+  //     },
+  //   },
+  // ]);
 
   const imgTranslateX_1 = scrollX.interpolate({
     inputRange: [0, 100, 100 * 2, 100 * 3],

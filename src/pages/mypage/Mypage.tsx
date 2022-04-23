@@ -1,6 +1,7 @@
 import React from 'react';
+import {Image} from 'react-native';
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import Animated from 'react-native-reanimated';
+import assets from '../../../assets';
 import {detailProps} from '../../apis/main';
 import StyledText from '../../commons/StyledText';
 import theme from '../../commons/theme';
@@ -21,10 +22,11 @@ type liked = {id: string};
 export const LIKE_DATA = 'liked_data';
 
 const Mypage = () => {
-  const {orderInfo} = useOrderContext();
-  const {LikedInfo} = useLikedContext();
+  const {orderInfo, setOrderInfo} = useOrderContext();
+  const {LikedInfo, setLikedInfo} = useLikedContext();
   // const [orderData, setOrderData] = React.useState<orderInfo | undefined>([]);
-  const [likedData, setLikedData] = React.useState<liked | undefined>([]);
+  // const [orderData, setOrderData] = React.useState<any>(orderInfo);
+  // const [likedData, setLikedData] = React.useState<any>(LikedInfo);
   const [data, setData] = React.useState<{
     userInfo: {name: string};
     orderInfo: {id: string}[];
@@ -90,6 +92,8 @@ const Mypage = () => {
     initData();
   }, [orderInfo]);
 
+  console.log('orderInfo :::', orderInfo);
+
   // const onDelete = async (id: string) => {
   //   const arr = cartData?.map((v: any, i: number) => {
   //     if (v?.id != id) {
@@ -119,7 +123,8 @@ const Mypage = () => {
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              backgroundColor: 'pink',
+              alignItems: 'center',
+              // backgroundColor: 'pink',
             }}
             onPress={() => {
               setIsOpen(!isOpen);
@@ -127,13 +132,26 @@ const Mypage = () => {
             <StyledText type="contentTitle" style={{marginVertical: 10}}>
               주문내역
             </StyledText>
+            <Image
+              source={assets.icon_ChevronDown}
+              style={[
+                {width: 25, height: 25},
+                isOpen && {transform: [{rotate: '180deg'}]},
+              ]}
+            />
           </TouchableOpacity>
-          {isOpen && (
+          {orderInfo?.length < 1 ? (
             <View style={[styles.contents]}>
-              {orderInfo?.map((item: detailProps) => (
-                <DetailItem {...item} />
-              ))}
+              <StyledText>아직 주문내역이 없습니다</StyledText>
             </View>
+          ) : (
+            isOpen && (
+              <View style={[styles.contents]}>
+                {orderInfo?.map((item: detailProps) => (
+                  <DetailItem key={item?.id} {...item} />
+                ))}
+              </View>
+            )
           )}
         </View>
         <View style={styles.listWrapper}>
@@ -141,7 +159,8 @@ const Mypage = () => {
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              backgroundColor: 'pink',
+              alignItems: 'center',
+              // backgroundColor: 'pink',
             }}
             onPress={() => {
               setIsOpenLiked(!isOpenLiked);
@@ -149,6 +168,13 @@ const Mypage = () => {
             <StyledText type="contentTitle" style={{marginVertical: 10}}>
               찜한 상품
             </StyledText>
+            <Image
+              source={assets.icon_ChevronDown}
+              style={[
+                {width: 25, height: 25},
+                isOpenLiked && {transform: [{rotate: '180deg'}]},
+              ]}
+            />
           </TouchableOpacity>
           {isOpenLiked && (
             <View
@@ -158,13 +184,19 @@ const Mypage = () => {
                   flexDirection: 'row',
                   flexWrap: 'wrap',
                   // justifyContent: 'center',
-                  backgroundColor: 'pink',
+                  // backgroundColor: 'pink',
                   alignItems: 'center',
                 },
               ]}>
-              {LikedInfo?.map((item: detailProps) => (
-                <ListItem {...item} />
-              ))}
+              {LikedInfo?.length < 1 ? (
+                <View style={[styles.contents]}>
+                  <StyledText>아직 주문내역이 없습니다</StyledText>
+                </View>
+              ) : (
+                LikedInfo?.map((item: detailProps) => (
+                  <ListItem key={item?.id} {...item} />
+                ))
+              )}
             </View>
           )}
           <View>

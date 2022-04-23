@@ -152,13 +152,13 @@ const _renderBody = (tab: number, data?: productsType) => {
         justifyContent: 'center',
       }}>
       {tab === 0 ? (
-        data?.br?.map(item => <ListItem {...item} />)
+        data?.br?.map(item => <ListItem key={item?.id} {...item} />)
       ) : tab === 1 ? (
-        data?.er?.map(item => <ListItem {...item} />)
+        data?.er?.map(item => <ListItem key={item?.id} {...item} />)
       ) : tab === 2 ? (
-        data?.r?.map(item => <ListItem {...item} />)
+        data?.r?.map(item => <ListItem key={item?.id} {...item} />)
       ) : tab === 3 ? (
-        data?.nk?.map(item => <ListItem {...item} />)
+        data?.nk?.map(item => <ListItem key={item?.id} {...item} />)
       ) : (
         <></>
       )}

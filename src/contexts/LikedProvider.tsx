@@ -9,7 +9,7 @@ type LikedInfo = {
 
 export interface ILikedContext {
   LikedInfo: LikedInfo[];
-  setLiked: (type: LikedInfo[] | undefined) => void;
+  setLikedInfo: (type: LikedInfo[] | undefined) => void;
 }
 
 const defaultValue = [
@@ -26,7 +26,7 @@ const defaultValue = [
 
 const defaultLikedContext: ILikedContext = {
   LikedInfo: defaultValue,
-  setLiked: (info: LikedInfo[] | undefined) => {},
+  setLikedInfo: (info: LikedInfo[] | undefined) => {},
 };
 
 const LikedContext = createContext(defaultLikedContext);
@@ -36,14 +36,15 @@ interface Iprops {
 }
 
 const LikedProvider = ({children}: Iprops) => {
-  const [LikedInfo, setLikedInfo] = React.useState<LikedInfo[]>(defaultValue);
-  const setLiked = (info: LikedInfo[] | undefined) =>
-    setLikedInfo(info ? info : defaultValue);
+  const [LikedInfo, setLikedInfoState] =
+    React.useState<LikedInfo[]>(defaultValue);
+  const setLikedInfo = (info: LikedInfo[] | undefined) =>
+    setLikedInfoState(info ? info : defaultValue);
 
   const initData = async () => {
     const res = await getStorage(LIKE_DATA);
     console.log('!!!!!!!!!!!LikedProvider의 데이터 res :::::', JSON.parse(res));
-    setLikedInfo(JSON.parse(res));
+    setLikedInfoState(JSON.parse(res));
   };
   console.log('길이!@#!!##!##@', LikedInfo?.length);
   React.useEffect(() => {
@@ -51,7 +52,7 @@ const LikedProvider = ({children}: Iprops) => {
   }, []);
 
   return (
-    <LikedContext.Provider value={{LikedInfo, setLiked}}>
+    <LikedContext.Provider value={{LikedInfo, setLikedInfo}}>
       {children}
     </LikedContext.Provider>
   );

@@ -1,5 +1,9 @@
 #import "AppDelegate.h"
-
+// ---- Code to add
+#if RCT_DEV
+#import <React/RCTDevLoadingView.h>
+#endif
+// ---
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
@@ -32,6 +36,12 @@ static void InitializeFlipper(UIApplication *application) {
 #endif
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
+
+    // 중간에 추가할 코드 - 시작
+  #if RCT_DEV
+    [bridge moduleForClass:[RCTDevLoadingView class]];
+  #endif // 끝
+  
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"cartier_react_native"
                                             initialProperties:nil];

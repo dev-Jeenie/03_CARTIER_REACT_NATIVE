@@ -16,6 +16,7 @@ import theme from '../../commons/theme';
 import BigButton from '../../components/common/BigButton';
 import CloseButton from '../../components/common/CloseButton';
 import PickerSelect from '../../components/PickerSelect';
+import {useOrderContext} from '../../contexts/OrderProvider';
 import {getStorage, setStorage} from '../../libs/AsyncStorageManager';
 import {HomeStackParamList} from '../../nav/AppContainer';
 
@@ -28,6 +29,7 @@ export const CART_DATA = 'cart_data';
 
 const Cart = () => {
   const [cartData, setCartData] = React.useState<cartDataType[]>([]);
+  const {orderInfo, setOrderInfo} = useOrderContext();
   const [totalPrice, setTotalPrice] = React.useState<number>(0);
   const initData = async () => {
     const res = await getStorage(CART_DATA);
@@ -50,6 +52,16 @@ const Cart = () => {
     setCartData(newArr);
     await setStorage('cart_data', JSON.stringify(newArr));
     SimpleToast.show(`${id}를 내 쇼핑백에서 삭제했습니다.`);
+  };
+
+  // cart_data는 그냥 asyncStorage로 관리할 거고
+  // orderInfo는 Context가 들고있는 상태값으로 관리할 것.
+
+  const onPressOrder = () => {
+    if (cartData?.length < 1) {
+      return SimpleToast.show('장바구니에 담긴 상품이 없습니다.');
+    }
+    setOrderInfo(cartData), navigate('Purchase');
   };
 
   const saveStorage = async () => {
@@ -165,7 +177,7 @@ const Cart = () => {
             </StyledText>
           </View>
         </View>
-        <BigButton text="주문하기" onPress={() => saveStorage()} />
+        <BigButton text="주문하기" onPress={() => onPressOrder()} />
       </View>
     </ScrollView>
   );

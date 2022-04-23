@@ -1,6 +1,7 @@
 import {RouteProp, useRoute} from '@react-navigation/native';
 import React from 'react';
 import {
+  FlatList,
   Image,
   ScrollView,
   StyleSheet,
@@ -8,7 +9,6 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
 import assets from '../../../assets';
 import {detailProps, onGetProductDetail} from '../../apis/main';
 import StyledText from '../../commons/StyledText';

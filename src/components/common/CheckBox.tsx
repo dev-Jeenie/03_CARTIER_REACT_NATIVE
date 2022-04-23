@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {
   FlexStyle,
-  GestureResponderEvent,
   Image,
   StyleProp,
   StyleSheet,

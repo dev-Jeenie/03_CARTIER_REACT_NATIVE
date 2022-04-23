@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native';
 import SimpleToast from 'react-native-simple-toast';
 import StyledText from '../../commons/StyledText';
 import theme from '../../commons/theme';

@@ -15,16 +15,32 @@ import StyledText from '../../commons/StyledText';
 import theme from '../../commons/theme';
 import BigButton from '../../components/common/BigButton';
 import {useOrderContext} from '../../contexts/OrderProvider';
+import {getStorage, setStorage} from '../../libs/AsyncStorageManager';
 import {HomeStackParamList} from '../../nav/AppContainer';
 
 const Purchase = () => {
   const [data, setData] = React.useState([]);
   const user_name = 'Jeenie';
-  const orderInfo = useOrderContext();
+  const {orderInfo, setOrderInfo} = useOrderContext();
   const {navigate, push} =
     useNavigation<StackNavigationProp<HomeStackParamList>>();
 
-  console.log('orderInfo', orderInfo);
+  const initData = async () => {
+    // const res = await getStorage('order_data');
+    // order_data로 들어있는 데이터 불러오기
+    // 아니다 이거 context에서 꺼내와야겠구나 이거 아니고 orderInfo임...
+    // 아니 그러면 애초에 React.useEffect를 돌릴 필요가 없네
+  };
+
+  React.useEffect(() => {
+    initData();
+  }, []);
+
+  console.log('구매페이지의 orderInfo', orderInfo);
+
+  const onPressOrderDetail = () => {
+    SimpleToast.show('마이페이지의 주문내역 페이지로 이동'), push('Mypage');
+  };
 
   return (
     <ScrollView>
@@ -46,10 +62,7 @@ const Purchase = () => {
         </StyledText>
         <BigButton
           text="주문내역 확인하기"
-          onPress={() => {
-            SimpleToast.show('마이페이지의 주문내역 페이지로 이동'),
-              push('Mypage');
-          }}
+          onPress={() => onPressOrderDetail()}
         />
       </View>
       <View style={styles.infoWrapper}>

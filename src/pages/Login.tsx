@@ -101,17 +101,20 @@ const Login = () => {
   const inset = useSafeAreaInsets();
 
   const scrollX = React.useRef<any>(new Animated.Value(0)).current;
-  const scrollY = React.useRef<any>(new Animated.Value(0)).current;
+  // const scrollY = React.useRef<any>(new Animated.Value(0)).current;
 
-  const handleScroll = Animated.event([
-    {
-      nativeEvent: {
-        contentOffset: {
-          x: scrollX,
+  const handleScroll = Animated.event(
+    [
+      {
+        nativeEvent: {
+          contentOffset: {
+            x: scrollX,
+          },
         },
       },
-    },
-  ]);
+    ],
+    {useNativeDriver: false},
+  );
 
   const imgTranslateX_1 = scrollX.interpolate({
     inputRange: [0, width, width * 2, width * 3],
@@ -169,15 +172,15 @@ const Login = () => {
     extrapolate: 'clamp',
   });
 
-  const textTranslateY_1 = scrollY.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 100],
-    extrapolate: 'clamp',
-    // inputRange: [0, width, width * 2, width * 3],
-    // // inputRange: [0, SLIDE_W, SLIDE_W * 2, SLIDE_W * 3],
-    // outputRange: [0, 0, 0, 100],
-    // extrapolate: 'clamp',
-  });
+  // const textTranslateY_1 = scrollY.interpolate({
+  //   inputRange: [0, 1],
+  //   outputRange: [0, 100],
+  //   extrapolate: 'clamp',
+  //   // inputRange: [0, width, width * 2, width * 3],
+  //   // // inputRange: [0, SLIDE_W, SLIDE_W * 2, SLIDE_W * 3],
+  //   // outputRange: [0, 0, 0, 100],
+  //   // extrapolate: 'clamp',
+  // });
 
   return (
     <View
@@ -218,8 +221,20 @@ const Login = () => {
       <View style={styles.imageWrap}>
         <SwiperFlatList
           onScroll={handleScroll}
+          // onScroll={Animated.event(
+          //   [
+          //     {
+          //       nativeEvent: {
+          //         contentOffset: {
+          //           x: scrollX,
+          //         },
+          //       },
+          //     },
+          //   ],
+          //   {useNativeDriver: false}, // React Native Error: "Animated.event now requires a second argument for options" 오류 메시지를 없애기 위해
+          // )}
           showPagination={false}
-          onEndReached={() => {}}
+          // onEndReached={() => {}}
           style={styles.slideImage}
           autoplay
           autoplayDelay={4}
@@ -237,9 +252,11 @@ const Login = () => {
             <Image style={styles.slideImage} source={assets.banner_pic} />
             <View style={styles.imageBackground}>
               <Animated.View
-                style={{
-                  transform: [{translateY: textTranslateY_1}],
-                }}>
+                style={
+                  {
+                    // transform: [{translateY: textTranslateY_1}],
+                  }
+                }>
                 <StyledText
                   color="DEFAULT_WHITE"
                   type="contentTitle"
@@ -268,9 +285,11 @@ const Login = () => {
             <Image style={styles.slideImage} source={assets.banner_hall} />
             <View style={styles.imageBackground}>
               <Animated.View
-                style={{
-                  transform: [{translateY: textTranslateY_1}],
-                }}>
+                style={
+                  {
+                    // transform: [{translateY: textTranslateY_1}],
+                  }
+                }>
                 <StyledText
                   color="DEFAULT_WHITE"
                   type="contentTitle"
@@ -299,9 +318,11 @@ const Login = () => {
             <Image style={styles.slideImage} source={assets.banner_odyssee} />
             <View style={styles.imageBackground}>
               <Animated.View
-                style={{
-                  transform: [{translateY: textTranslateY_1}],
-                }}>
+                style={
+                  {
+                    // transform: [{translateY: textTranslateY_1}],
+                  }
+                }>
                 <StyledText
                   color="DEFAULT_WHITE"
                   type="contentTitle"
@@ -330,9 +351,11 @@ const Login = () => {
             <Image style={styles.slideImage} source={assets.banner_2} />
             <View style={styles.imageBackground}>
               <Animated.View
-                style={{
-                  transform: [{translateY: textTranslateY_1}],
-                }}>
+                style={
+                  {
+                    // transform: [{translateY: textTranslateY_1}],
+                  }
+                }>
                 <StyledText
                   color="DEFAULT_WHITE"
                   type="contentTitle"
@@ -376,6 +399,6 @@ const Login = () => {
       </View>
     </View>
   );
-};
+};;
 
 export default Login;

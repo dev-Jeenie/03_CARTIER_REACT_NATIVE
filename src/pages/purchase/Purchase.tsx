@@ -25,12 +25,7 @@ const Purchase = () => {
   const {navigate, push} =
     useNavigation<StackNavigationProp<HomeStackParamList>>();
 
-  const initData = async () => {
-    // const res = await getStorage('order_data');
-    // order_data로 들어있는 데이터 불러오기
-    // 아니다 이거 context에서 꺼내와야겠구나 이거 아니고 orderInfo임...
-    // 아니 그러면 애초에 React.useEffect를 돌릴 필요가 없네
-  };
+  const initData = async () => {};
 
   React.useEffect(() => {
     initData();

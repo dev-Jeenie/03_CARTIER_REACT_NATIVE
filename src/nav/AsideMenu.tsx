@@ -16,41 +16,31 @@ import CloseButton from '../components/common/CloseButton';
 import {DrawerActions, useNavigation} from '@react-navigation/native';
 import HeaderContainer from '../components/common/HeaderContainer';
 import {useWindowDimensions} from 'react-native';
+import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
+import {HomeStackParamList} from './AppContainer';
 
 type AsideMenuProps = DrawerContentComponentProps & {};
 
 type MenuListProps = {
   style?: StyleProp<ViewStyle>;
   title: string;
-  subTitle: string[];
-  onPressTitle: () => void;
-  onPressSubTitle: () => void;
+  subTitles?: string[];
+  onPressTitle?: () => void;
+  onPressSubTitle?: () => void;
+  children: JSX.Element | Array<JSX.Element>;
 };
 
 type SubMenuProps = {
   list: string[];
 };
 
-const SubMenuList = ({list}: SubMenuProps) => {
-  return (
-    <>
-      {list?.map(item => (
-        <TouchableOpacity style={{paddingVertical: 10}}>
-          <StyledText type="normal" color="GRAY_200">
-            {item}
-          </StyledText>
-        </TouchableOpacity>
-      ))}
-    </>
-  );
-};
-
 const MenuList = ({
   style,
   title,
-  subTitle,
+  subTitles,
   onPressTitle,
   onPressSubTitle,
+  children,
 }: MenuListProps) => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
@@ -67,15 +57,49 @@ const MenuList = ({
         ]}
         onPress={() => setIsOpen(!isOpen)}>
         <StyledText type="listTitle">{title}</StyledText>
-        {isOpen && (
-          <View style={{paddingLeft: 20, marginTop: 20}}>
-            <SubMenuList list={subTitle} />
-          </View>
-        )}
+        {isOpen && children}
       </TouchableOpacity>
     </>
   );
 };
+// const MenuList = ({
+//   style,
+//   title,
+//   subTitles,
+//   onPressTitle,
+//   onPressSubTitle,
+// }: MenuListProps) => {
+//   const [isOpen, setIsOpen] = React.useState<boolean>(false);
+
+//   return (
+//     <>
+//       <TouchableOpacity
+//         style={[
+//           {
+//             paddingVertical: 20,
+//             borderBottomColor: theme.colors.GRAY_300,
+//             borderBottomWidth: 1,
+//           },
+//           theme.styles.globalPaddingLeft,
+//         ]}
+//         onPress={() => setIsOpen(!isOpen)}>
+//         <StyledText type="listTitle">{title}</StyledText>
+//         {isOpen && (
+//           <View style={{paddingLeft: 20, marginTop: 20}}>
+//             {subTitles &&
+//               subTitles?.map((item, index) => (
+//                 <TouchableOpacity style={{paddingVertical: 10}} key={index}>
+//                   <StyledText type="normal" color="GRAY_200">
+//                     {item}
+//                   </StyledText>
+//                 </TouchableOpacity>
+//               ))}
+//           </View>
+//         )}
+//       </TouchableOpacity>
+//     </>
+//   );
+// };
 
 const BottomList = ({text, onPress}: {text: string; onPress: () => void}) => {
   return (
@@ -90,14 +114,15 @@ const BottomList = ({text, onPress}: {text: string; onPress: () => void}) => {
 };
 
 const AsideMenu = ({}: AsideMenuProps) => {
-  const navigation = useNavigation();
+  const {navigate, dispatch} =
+    useNavigation<StackNavigationProp<HomeStackParamList>>();
   const {width} = useWindowDimensions();
 
   return (
     <>
       <HeaderContainer>
         <CloseButton
-          onPress={() => navigation.dispatch(DrawerActions.closeDrawer())}
+          onPress={() => dispatch(DrawerActions.closeDrawer())}
           style={{position: 'absolute', left: 20}}
         />
         <Image
@@ -108,57 +133,94 @@ const AsideMenu = ({}: AsideMenuProps) => {
       </HeaderContainer>
 
       <ScrollView>
-        <MenuList
-          title={'Collections'}
-          subTitle={['전체 컬렉션']}
-          onPressTitle={() => {}}
-          onPressSubTitle={() => {}}
-        />
-        <MenuList
-          title={'주얼리'}
-          subTitle={[
-            '모두보기',
-            '팔찌',
-            '반지',
-            '목걸이 / 귀걸이',
-            '하이 주얼리',
+        <TouchableOpacity
+          style={[
+            {
+              paddingVertical: 20,
+              borderBottomColor: theme.colors.GRAY_300,
+              borderBottomWidth: 1,
+            },
+            theme.styles.globalPaddingLeft,
           ]}
-          onPressTitle={() => {}}
-          onPressSubTitle={() => {}}
-        />
-        <MenuList
-          title={'워치'}
-          subTitle={['여성', '남성']}
-          onPressTitle={() => {}}
-          onPressSubTitle={() => {}}
-        />
-        <MenuList
-          title={'웨딩 & 다이아몬드'}
-          subTitle={['ENGAGEMENT RINGS', 'WEDDING RINGS']}
-          onPressTitle={() => {}}
-          onPressSubTitle={() => {}}
-        />
-        <MenuList
-          title={'라이프스타일'}
-          subTitle={['가죽제품', '액세서리', '안경']}
-          onPressTitle={() => {}}
-          onPressSubTitle={() => {}}
-        />
-        <MenuList
-          title={'서비스'}
-          subTitle={['']}
-          onPressTitle={() => {}}
-          onPressSubTitle={() => {}}
-        />
+          onPress={() => {}}>
+          <StyledText type="listTitle">Collections</StyledText>
+        </TouchableOpacity>
+        <MenuList title="주얼리">
+          <View style={{paddingLeft: 20, marginTop: 20}}>
+            <TouchableOpacity style={{paddingVertical: 10}}>
+              <StyledText type="normal" color="GRAY_200">
+                모두보기
+              </StyledText>
+            </TouchableOpacity>
+            <TouchableOpacity style={{paddingVertical: 10}}>
+              <StyledText type="normal" color="GRAY_200">
+                팔찌
+              </StyledText>
+            </TouchableOpacity>
+            <TouchableOpacity style={{paddingVertical: 10}}>
+              <StyledText type="normal" color="GRAY_200">
+                반지
+              </StyledText>
+            </TouchableOpacity>
+            <TouchableOpacity style={{paddingVertical: 10}}>
+              <StyledText type="normal" color="GRAY_200">
+                목걸이/귀걸이
+              </StyledText>
+            </TouchableOpacity>
+            <TouchableOpacity style={{paddingVertical: 10}}>
+              <StyledText type="normal" color="GRAY_200">
+                하이주얼리
+              </StyledText>
+            </TouchableOpacity>
+          </View>
+        </MenuList>
+        <TouchableOpacity
+          style={[
+            {
+              paddingVertical: 20,
+              borderBottomColor: theme.colors.GRAY_300,
+              borderBottomWidth: 1,
+            },
+            theme.styles.globalPaddingLeft,
+          ]}
+          onPress={() => navigate('Mypage')}>
+          <StyledText type="listTitle">워치</StyledText>
+        </TouchableOpacity>
+        <MenuList title={`웨딩 ${'&'} 다이아몬드`}>
+          <View style={{paddingLeft: 20, marginTop: 20}}>
+            <TouchableOpacity style={{paddingVertical: 10}}>
+              <StyledText type="normal" color="GRAY_200">
+                ENGAGEMENT RINGS
+              </StyledText>
+            </TouchableOpacity>
+            <TouchableOpacity style={{paddingVertical: 10}}>
+              <StyledText type="normal" color="GRAY_200">
+                WEDDING RINGS
+              </StyledText>
+            </TouchableOpacity>
+          </View>
+        </MenuList>
+        <TouchableOpacity
+          style={[
+            {
+              paddingVertical: 20,
+              borderBottomColor: theme.colors.GRAY_300,
+              borderBottomWidth: 1,
+            },
+            theme.styles.globalPaddingLeft,
+          ]}
+          onPress={() => navigate('Mypage')}>
+          <StyledText type="listTitle">서비스</StyledText>
+        </TouchableOpacity>
         <View
           style={[
             theme.styles.globalPaddingLeft,
             theme.styles.globalPaddingVertical,
             {backgroundColor: theme.colors.MAIN_RED},
           ]}>
-          <BottomList text="나의 계정" onPress={() => {}} />
-          <BottomList text="쇼핑백" onPress={() => {}} />
-          <BottomList text="Contact us" onPress={() => {}} />
+          <BottomList text="나의 계정" onPress={() => navigate('Mypage')} />
+          <BottomList text="쇼핑백" onPress={() => navigate('Cart')} />
+          <BottomList text="Contact us" onPress={() => navigate('Mypage')} />
         </View>
       </ScrollView>
     </>

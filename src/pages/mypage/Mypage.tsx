@@ -1,16 +1,17 @@
 import React from 'react';
 import {Image} from 'react-native';
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import SimpleToast from 'react-native-simple-toast';
 import assets from '../../../assets';
 import {detailProps} from '../../apis/main';
 import StyledText from '../../commons/StyledText';
 import theme from '../../commons/theme';
 import {useLikedContext} from '../../contexts/LikedProvider';
 import {useOrderContext} from '../../contexts/OrderProvider';
-import {getStorage} from '../../libs/AsyncStorageManager';
+import {getStorage, setStorage} from '../../libs/AsyncStorageManager';
 import {cartDataType, CART_DATA} from '../cart/Cart';
 import {ListItem} from '../collection/CollectionDetail';
-import {DetailItem} from '../purchase/Purchase';
+import {DetailItem} from '../purchase/PurchaseComplete';
 
 type orderInfo = {
   orderInfo: [{id: string}, {id: string}, {id: string}];
@@ -38,6 +39,9 @@ const Mypage = () => {
   });
   const [isOpen, setIsOpen] = React.useState<boolean>(true);
   const [isOpenLiked, setIsOpenLiked] = React.useState<boolean>(true);
+
+  const [orderedData, setOrderedData] = React.useState<detailProps[]>([]);
+
   // const scrollY = React.useRef<any>(new Animated.Value(0)).current;
 
   // const translateY_1 = scrollY.interpolate({
@@ -74,8 +78,6 @@ const Mypage = () => {
     // const likedRes = await getStorage(LIKE_DATA);
     // const res = await getStorage(LIKE_DATA);
     // console.log('좋아요한 목록 :::', JSON?.parse(likedRes));
-    console.log('주문한 목록 :::', typeof orderInfo);
-    console.log('주문한 목록 :::', orderInfo);
     // setData(prev => ({...prev}));
     // setData(prev => ({
     //   userInfo: {name: prev.userInfo.name},
@@ -84,15 +86,24 @@ const Mypage = () => {
     // }));
     // setLikedData(LikedInfo);
     // setOrderData(orderInfo);
+    const res = await getStorage('order_data');
+    console.log('초기데이터!!!!!!!!!!!!!', res);
+    setOrderedData(JSON.parse(res));
   };
 
   // console.log(likedData);
 
   React.useEffect(() => {
     initData();
-  }, [orderInfo]);
+  }, []);
 
-  console.log('orderInfo :::', orderInfo);
+  const onDeleteOrderedData = async () => {
+    setOrderedData([]),
+      await setStorage('order_data', JSON.stringify([])),
+      SimpleToast.show('주문내역을 모두 삭제했습니다.');
+  };
+
+  // console.log('orderInfo :::', orderInfo);
 
   // const onDelete = async (id: string) => {
   //   const arr = cartData?.map((v: any, i: number) => {
@@ -140,18 +151,38 @@ const Mypage = () => {
               ]}
             />
           </TouchableOpacity>
-          {orderInfo?.length < 1 ? (
-            <View style={[styles.contents]}>
-              <StyledText>아직 주문내역이 없습니다</StyledText>
+          {orderedData?.length < 1 ? (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: 100,
+              }}>
+              <StyledText type="contentTitle" color="GRAY_200">
+                아직 주문한 상품이 없습니다
+              </StyledText>
             </View>
           ) : (
-            isOpen && (
-              <View style={[styles.contents]}>
-                {orderInfo?.map((item: detailProps) => (
-                  <DetailItem key={item?.id} {...item} />
-                ))}
-              </View>
-            )
+            <>
+              {isOpen && (
+                <View style={[styles.contents]}>
+                  {orderedData?.map((item: detailProps) => (
+                    <DetailItem key={item?.id} {...item} />
+                  ))}
+                </View>
+              )}
+              <TouchableOpacity
+                onPress={() => onDeleteOrderedData()}
+                style={{
+                  height: 50,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: theme.colors.GRAY_300,
+                  marginVertical: 10,
+                }}>
+                <StyledText>주문내역 모두 삭제하기</StyledText>
+              </TouchableOpacity>
+            </>
           )}
         </View>
         <View style={styles.listWrapper}>

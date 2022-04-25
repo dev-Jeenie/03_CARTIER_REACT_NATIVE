@@ -61,8 +61,20 @@ const Cart = () => {
     if (cartData?.length < 1) {
       return SimpleToast.show('장바구니에 담긴 상품이 없습니다.');
     }
-    setOrderInfo(cartData), navigate('Purchase');
-  };
+    setOrderInfo({
+      user_name: undefined,
+      payMethod: undefined,
+      totalPrice: undefined,
+      products: [...cartData],
+    }),
+      navigate('Purchase');
+    // setOrderInfo(cartData), navigate('Purchase');
+    // 1. 주문하기 버튼을 누르면
+    // 2. setOrderInfo로 현재 cart에 담긴 데이터를 넘겨주고,
+    // 3. 결제하기 페이지에서는 orderInfo로 데이터를 불러오고,
+    // 4. 마지막에 최종 결제하기 버튼을 누르면
+    // 5. purchase 페이지로 넘어가면서 setStorage로 현재의 orderInfo를 넘겨준다
+  };;
 
   const saveStorage = async () => {
     // await setStorage('cart_data', JSON.stringify([cartData]));
@@ -86,7 +98,7 @@ const Cart = () => {
     // } else {
     // await setStorage(CART_DATA, JSON.stringify([cartData]));
     // }
-    navigate('Purchase');
+    navigate('PurchaseComplete');
   };
 
   // React.useEffect(() => {
@@ -181,7 +193,7 @@ const Cart = () => {
       </View>
     </ScrollView>
   );
-};
+};;
 
 export default Cart;
 

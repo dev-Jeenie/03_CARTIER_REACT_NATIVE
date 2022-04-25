@@ -60,4 +60,9 @@ export default {
   icon_close: require('./src/assets/icon_close.png'),
   icon_menu: require('./src/assets/icon_menu.png'),
   icon_check_red: require('./src/assets/icon_check_red.png'),
+  apple_pay: require('./src/assets/apple-pay.png'),
+  google_pay: require('./src/assets/google-pay.png'),
+  kakaopay: require('./src/assets/kakaopay.png'),
+  naverpay: require('./src/assets/naverpay.png'),
+  paypal: require('./src/assets/paypal.png'),
 };

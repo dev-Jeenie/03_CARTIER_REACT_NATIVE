@@ -45,6 +45,7 @@ import Collections from '../pages/main/Collections';
 import Mypage from '../pages/mypage/Mypage';
 import ProductDetail from '../pages/product/ProductDetail';
 import Purchase from '../pages/purchase/Purchase';
+import PurchaseComplete from '../pages/purchase/PurchaseComplete';
 import AsideMenu from './AsideMenu';
 // import MainDrawerNavigator from '../pages/main/MainDrawerNavigator';
 
@@ -60,6 +61,7 @@ export type HomeStackParamList = {
   Mypage: undefined;
   Cart: undefined;
   Purchase: undefined;
+  PurchaseComplete: undefined;
   ProductDetail: {id: string};
 };
 
@@ -116,9 +118,10 @@ const HomeStackNavigator = () => {
           },
         }}
       />
+      <Stack.Screen name="Purchase" component={Purchase} />
       <Stack.Screen
-        name="Purchase"
-        component={Purchase}
+        name="PurchaseComplete"
+        component={PurchaseComplete}
         // options={{
         //   headerBackImage: () => {
         //     return <BackButton onPress={() => navigation.goBack()} />;

@@ -76,12 +76,8 @@ const ListButton = ({
 export const ListItem = ({id, name, image, des, price}: productType) => {
   const {width} = useWindowDimensions();
   const {navigate} = useNavigation<StackNavigationProp<HomeStackParamList>>();
-
+  console.log(image);
   const onAddToCart = async () => {
-    // const res = await getStorage('cart_data');
-    // console.log('장바구니의 데이터 res :::::', JSON.parse(cartData));
-    // setCartData(JSON.parse(res));
-
     await setStorage(
       'cart_data',
       JSON.stringify([
@@ -184,6 +180,7 @@ const CollectionDeatail = () => {
   React.useEffect(() => {
     initData();
   }, []);
+  console.log('data!!@!@!@', data?.products);
 
   return (
     <ScrollView contentContainerStyle={theme.styles.globalPaddingVertical30}>

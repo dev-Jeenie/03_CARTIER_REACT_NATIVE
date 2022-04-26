@@ -12,6 +12,7 @@ export type detailProps = {
   des: string;
   price: number;
   images: ImageSourcePropType[];
+  image?: ImageSourcePropType;
   info?: string;
 };
 
@@ -33,4 +34,3 @@ export const onGetProductDetail = (id: string) => {
   console.log('api로 전달된 id ======', id);
   return detail_data;
 };
-

@@ -22,6 +22,7 @@ import SimpleToast from 'react-native-simple-toast';
 import {useCartContext} from '../../contexts/CartProvider';
 import PickerSelect from '../../components/PickerSelect';
 import {getStorage, setStorage} from '../../libs/AsyncStorageManager';
+import {CART_DATA} from '../cart/Cart';
 
 export type ProductDetailRouteProp = RouteProp<
   HomeStackParamList,
@@ -34,7 +35,7 @@ const ProductDetail = () => {
   const {width} = useWindowDimensions();
   const [tab, setTab] = React.useState(0);
   const [size, setSize] = React.useState<string>('55');
-  // const [cartData, setCartData] = React.useState([]);
+  const [cartData, setCartData] = React.useState([]);
 
   // const {cartInfo} = useCartContext();
   // console.log('cartInfo ::::::', cartInfo);
@@ -45,7 +46,9 @@ const ProductDetail = () => {
 
   const initData = async () => {
     const res = await onGetProductDetail(route.params.id);
+    const res_cart = await getStorage(CART_DATA);
     setData(res);
+    setCartData(JSON.parse(res_cart));
   };
 
   const onAddToCart = async () => {
@@ -56,6 +59,7 @@ const ProductDetail = () => {
     if (size === 'none') {
       SimpleToast.show('사이즈를 선택해주세요');
     } else {
+      const newArr = [...cartData];
       await setStorage(
         'cart_data',
         JSON.stringify([

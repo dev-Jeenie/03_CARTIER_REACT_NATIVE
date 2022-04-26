@@ -123,13 +123,8 @@ type detailItemProp = {
   style?: StyleProp<ViewStyle>;
 } & detailProps;
 
-export const DetailItem = ({
-  id,
-  name,
-  images,
-  price,
-  style,
-}: detailItemProp) => {
+export const DetailItem = ({id, name, image, price, style}: detailItemProp) => {
+  console.log(image);
   return (
     <View
       style={[
@@ -143,7 +138,7 @@ export const DetailItem = ({
         style,
       ]}>
       <Image
-        source={images && images[0]}
+        source={(image && image) || assets.juste_r_wg_2}
         style={{width: 130, height: 130, marginRight: 10}}
       />
       <View style={{flex: 1}}>

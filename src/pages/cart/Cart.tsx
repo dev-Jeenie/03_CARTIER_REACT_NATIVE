@@ -3,6 +3,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React, {Dispatch, SetStateAction} from 'react';
 import {
   Image,
+  ImageSourcePropType,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -23,6 +24,7 @@ import {HomeStackParamList} from '../../nav/AppContainer';
 export type cartDataType = {
   id: string;
   size: string;
+  image?: ImageSourcePropType;
 } & detailProps;
 
 export const CART_DATA = 'cart_data';
@@ -31,6 +33,7 @@ const Cart = () => {
   const [cartData, setCartData] = React.useState<cartDataType[]>([]);
   const {orderInfo, setOrderInfo} = useOrderContext();
   const [totalPrice, setTotalPrice] = React.useState<number>(0);
+
   const initData = async () => {
     const res = await getStorage(CART_DATA);
     console.log('장바구니의 데이터 res :::::', JSON.parse(res));
@@ -38,6 +41,7 @@ const Cart = () => {
   };
   const {navigate} = useNavigation<StackNavigationProp<HomeStackParamList>>();
   // console.log('cartData :::::', cartData);
+  console.log('카트데이터', cartData);
 
   const onDelete = async (id: string) => {
     const arr = cartData?.map((v: any, i: number) => {
@@ -54,13 +58,11 @@ const Cart = () => {
     SimpleToast.show(`${id}를 내 쇼핑백에서 삭제했습니다.`);
   };
 
-  // cart_data는 그냥 asyncStorage로 관리할 거고
-  // orderInfo는 Context가 들고있는 상태값으로 관리할 것.
-
   const onPressOrder = () => {
     if (cartData?.length < 1) {
       return SimpleToast.show('장바구니에 담긴 상품이 없습니다.');
     }
+    console.log('눌렀을때 카트데이터', cartData);
     setOrderInfo({
       user_name: undefined,
       payMethod: undefined,
@@ -74,7 +76,7 @@ const Cart = () => {
     // 3. 결제하기 페이지에서는 orderInfo로 데이터를 불러오고,
     // 4. 마지막에 최종 결제하기 버튼을 누르면
     // 5. purchase 페이지로 넘어가면서 setStorage로 현재의 orderInfo를 넘겨준다
-  };;
+  };
 
   const saveStorage = async () => {
     // await setStorage('cart_data', JSON.stringify([cartData]));
@@ -144,6 +146,10 @@ const Cart = () => {
             cartData?.map((item: cartDataType, index: number) => {
               return (
                 <CartItem
+                  // image={item?.image || assets.juste_r_wg_2}
+                  thumbnail={item?.image || assets.juste_r_wg_2}
+                  // thumbnail={item?.thumbnail || assets.juste_r_wg_2}
+                  // image={item?.images[0]}
                   key={index}
                   {...item}
                   setTotalPrice={setTotalPrice}
@@ -193,13 +199,14 @@ const Cart = () => {
       </View>
     </ScrollView>
   );
-};;
+};
 
 export default Cart;
 
 export const CartItem = ({
   id,
   images,
+  thumbnail,
   en_name,
   name,
   size,
@@ -213,6 +220,7 @@ export const CartItem = ({
 // onCountDown,
 {
   id: string;
+  thumbnail: ImageSourcePropType;
   size: string;
   setTotalPrice: Dispatch<SetStateAction<number>>;
   onDelete: any;
@@ -223,6 +231,7 @@ export const CartItem = ({
   // onCountUp: () => void;
   // onCountDown: () => void;
 } & detailProps) => {
+  console.log('images', id, images, thumbnail);
   const [sizeState, setSizeState] = React.useState(size);
   const [count, setCount] = React.useState<number>(1);
 
@@ -258,7 +267,8 @@ export const CartItem = ({
         paddingVertical: 20,
       }}>
       <Image
-        source={images?.length > 0 ? images[0] : assets.juste_r_wg_2}
+        source={thumbnail}
+        // source={images?.length > 0 ? images[0] : assets.juste_r_wg_2}
         style={{
           width: 130,
           height: 130,

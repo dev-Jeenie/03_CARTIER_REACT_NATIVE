@@ -66,12 +66,15 @@ const Purchase = () => {
       totalPrice: totalPrice,
       products: orderInfo?.products,
     });
-    const res = setTimeout(async () => {
-      await setStorage('order_data', JSON.stringify(orderInfo?.products));
-    }, 3000);
-    res && push('PurchaseComplete'), SimpleToast.show('결제가 완료되었습니다.');
+    await setStorage('order_data', JSON.stringify(orderInfo?.products));
+    push('PurchaseComplete'), SimpleToast.show('결제가 완료되었습니다.');
+    // const res = setTimeout(async () => {
+    //   await setStorage('order_data', JSON.stringify(orderInfo?.products));
+    // }, 3000);
+    // res && push('PurchaseComplete'), SimpleToast.show('결제가 완료되었습니다.');
     setIsLoading(false);
-  };
+  };;
+  console.log('adsdsa', orderInfo?.products);
 
   const PaymentIcon = ({
     icon,
@@ -291,7 +294,8 @@ export const PurchaseItem = ({
   en_name,
   des,
   price,
-  images,
+  thumbnail,
+  image,
   info,
   style,
 }: purchaseProp) => {
@@ -309,7 +313,7 @@ export const PurchaseItem = ({
         style,
       ]}>
       <Image
-        source={assets.juste_r_wg}
+        source={image}
         style={{width: 100, height: 100, marginRight: 10}}
       />
       {/* <View> */}

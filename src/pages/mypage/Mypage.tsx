@@ -23,7 +23,6 @@ type liked = {id: string};
 export const LIKE_DATA = 'liked_data';
 
 const Mypage = () => {
-  const {orderInfo, setOrderInfo} = useOrderContext();
   const {LikedInfo, setLikedInfo} = useLikedContext();
   // const [orderData, setOrderData] = React.useState<orderInfo | undefined>([]);
   // const [orderData, setOrderData] = React.useState<any>(orderInfo);
@@ -41,7 +40,8 @@ const Mypage = () => {
   const [isOpenLiked, setIsOpenLiked] = React.useState<boolean>(true);
 
   const [orderedData, setOrderedData] = React.useState<detailProps[]>([]);
-
+  const [likedData, setLikedData] = React.useState<detailProps[]>([]);
+  console.log('orderedData:::', orderedData);
   // const scrollY = React.useRef<any>(new Animated.Value(0)).current;
 
   // const translateY_1 = scrollY.interpolate({
@@ -86,13 +86,15 @@ const Mypage = () => {
     // }));
     // setLikedData(LikedInfo);
     // setOrderData(orderInfo);
-    const res = await getStorage('order_data');
-    console.log('초기데이터!!!!!!!!!!!!!', res);
-    setOrderedData(JSON.parse(res));
+    const res_order = await getStorage('order_data');
+    const res_like = await getStorage(LIKE_DATA);
+    console.log('초기데이터!!!!!!!!!!!!!', res_like);
+    setOrderedData(JSON.parse(res_order));
+    setLikedData(JSON.parse(res_like));
   };
 
-  // console.log(likedData);
-
+  console.log('주문내역', orderedData);
+  console.log('좋아요한 내역', likedData);
   React.useEffect(() => {
     initData();
   }, []);
@@ -152,12 +154,7 @@ const Mypage = () => {
             />
           </TouchableOpacity>
           {orderedData?.length < 1 ? (
-            <View
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: 100,
-              }}>
+            <View style={styles.empty}>
               <StyledText type="contentTitle" color="GRAY_200">
                 아직 주문한 상품이 없습니다
               </StyledText>
@@ -167,7 +164,11 @@ const Mypage = () => {
               {isOpen && (
                 <View style={[styles.contents]}>
                   {orderedData?.map((item: detailProps) => (
-                    <DetailItem key={item?.id} {...item} />
+                    <DetailItem
+                      key={item?.id}
+                      {...item}
+                      images={item?.images}
+                    />
                   ))}
                 </View>
               )}
@@ -214,17 +215,27 @@ const Mypage = () => {
                 {
                   flexDirection: 'row',
                   flexWrap: 'wrap',
-                  // justifyContent: 'center',
-                  // backgroundColor: 'pink',
                   alignItems: 'center',
+                  // justifyContent: 'center',
                 },
               ]}>
-              {LikedInfo?.length < 1 ? (
+              {/* {LikedInfo?.length < 1 ? (
                 <View style={[styles.contents]}>
                   <StyledText>아직 주문내역이 없습니다</StyledText>
                 </View>
               ) : (
                 LikedInfo?.map((item: detailProps) => (
+                  <ListItem key={item?.id} {...item} />
+                ))
+              )} */}
+              {likedData?.length < 1 ? (
+                <View style={styles.empty}>
+                  <StyledText type="contentTitle" color="GRAY_200">
+                    아직 찜한 내역이 없습니다
+                  </StyledText>
+                </View>
+              ) : (
+                likedData?.map((item: detailProps) => (
                   <ListItem key={item?.id} {...item} />
                 ))
               )}
@@ -252,7 +263,7 @@ const Mypage = () => {
       </View>
     </ScrollView>
   );
-};;
+};
 
 export default Mypage;
 
@@ -269,5 +280,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     // alignItems: 'center',
     // ...theme.styles.globalPaddingHorizontal,
+  },
+  empty: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 100,
   },
 });

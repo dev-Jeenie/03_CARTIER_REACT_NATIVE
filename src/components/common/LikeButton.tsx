@@ -4,6 +4,7 @@ import SimpleToast from 'react-native-simple-toast';
 import assets from '../../../assets';
 import {productType} from '../../apis/collection';
 import {setStorage} from '../../libs/AsyncStorageManager';
+import {LIKE_DATA} from '../../pages/mypage/Mypage';
 
 type likeButtonProp = {
   isCoverImage?: boolean;
@@ -25,7 +26,7 @@ const LikeButton = ({
     // 좋아요 전송 API 호출 코드
     setIsSeletcted(!isSelected);
     await setStorage(
-      'liked_data',
+      LIKE_DATA,
       JSON.stringify([
         {id: id, size: '55', name: name, image: image, price: price, des: des},
         // ...cartData,

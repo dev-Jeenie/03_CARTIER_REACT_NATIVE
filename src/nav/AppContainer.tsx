@@ -20,6 +20,7 @@ import {
   View,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Provider, shallowEqual, useSelector} from 'react-redux';
 import assets from '../../assets';
 import StyledText from '../commons/StyledText';
 import theme from '../commons/theme';
@@ -46,6 +47,8 @@ import Mypage from '../pages/mypage/Mypage';
 import ProductDetail from '../pages/product/ProductDetail';
 import Purchase from '../pages/purchase/Purchase';
 import PurchaseComplete from '../pages/purchase/PurchaseComplete';
+import store from '../store';
+import {Rootstate} from '../store/reducer';
 import AsideMenu from './AsideMenu';
 // import MainDrawerNavigator from '../pages/main/MainDrawerNavigator';
 
@@ -411,8 +414,10 @@ const AppContainer = () => {
   const navRef =
     React.useRef<NavigationContainerRef<EntryStackParamList>>(null);
   const Stack = React.useMemo(() => createStackNavigator(), []);
-  // const {principal} = useSelector(selector => selector.auth, shallowEqual);
-  const principal = false;
+  // const {principal} = useSelector((state: any) => state.auth, shallowEqual);
+  // const principal = false;
+  const isLoggedIn = useSelector((state: Rootstate) => !!state.user.email);
+  // 전체상태인 rootReducer의 state 안에서 email을 꺼낸 것.
 
   return (
     <NavigationContainer
@@ -427,7 +432,7 @@ const AppContainer = () => {
         },
       }}>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        {!principal ? (
+        {!isLoggedIn ? (
           <Stack.Screen name="AuthStack" component={AuthStack} />
         ) : (
           <Stack.Screen

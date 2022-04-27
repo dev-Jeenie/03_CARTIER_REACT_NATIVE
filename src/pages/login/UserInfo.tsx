@@ -1,7 +1,10 @@
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import axios, {AxiosError} from 'axios';
 import React from 'react';
 import {
+  ActivityIndicator,
+  Alert,
   Dimensions,
   Image,
   ScrollView,
@@ -10,6 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Config from 'react-native-config';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import SimpleToast from 'react-native-simple-toast';
 import assets from '../../../assets';
@@ -45,6 +49,9 @@ const UserInfo = () => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const [joinForm, setJoinForm] = React.useState<JoinFormType>(initJoinForm);
+  const [name, setname] = React.useState('myname1');
+  const [email, setemail] = React.useState('myname1');
+  const [password, setPassword] = React.useState('myname1');
   const [phoneNumberVerified, setPhoneNumberVerified] =
     React.useState<boolean>(false);
 
@@ -53,6 +60,83 @@ const UserInfo = () => {
   const passwordRef = React.useRef<TextInput | null>(null);
   const passwordConfirmRef = React.useRef<TextInput | null>(null);
 
+  const onSubmit = React.useCallback(async () => {
+    if (isLoading) {
+      return;
+    }
+    if (!joinForm?.name || !joinForm?.name.trim()) {
+      return SimpleToast.show('이름을 입력하세요');
+    }
+    if (!joinForm?.email || !joinForm?.email.trim()) {
+      return SimpleToast.show('이메일을 입력하세요');
+    }
+    if (!joinForm?.phoneNumber || !joinForm?.phoneNumber.trim()) {
+      return SimpleToast.show('전화번호를 입력하세요');
+    }
+    if (!joinForm?.password || !joinForm?.password.trim()) {
+      return SimpleToast.show('비밀번호를 입력하세요');
+    }
+    try {
+      setIsLoading(true);
+      console.log(Config.API_URL);
+      const res = await axios.post('http://192.168.0.167:3105/user', {
+        // name,
+        // email,
+        // password,
+        ...joinForm,
+      });
+      // const res = await axios.post(`http://222.237.193.154:3105/user`, {
+      //   // name,
+      //   // email,
+      //   // password,
+      //   joinForm,
+      // });
+      // const res = await axios.post(
+      //   // `${
+      //   //   process.env.MODE_ENV === 'production'
+      //   //     ? '실서버주소'
+      //   //     : 'localhost:3105'
+      //   // }/user`,
+      //   // `${__DEV__ ? 'localhost:3105' : '실서버주소'}/user`,
+      //   // `${__DEV__ ? '10.0.2.2:3105' : '실서버주소'}/user`,
+      //   // `${__DEV__ ? '222.237.193.154:3105' : '실서버주소'}/user`,
+      //   // `${__DEV__ ? Config.API_URL : '실서버주소'}/user`,
+      //   // `${Config.API_URL}/user`,
+      //   // `192.168.0.167/user`,
+      //   `http://222.237.193.154:3105/user`,
+      //   {name, email, password},
+      // );
+      //   {
+      //     headers: {
+      //       token: '나만의 고유한 값',
+      //       // 이 고유한 값을 통해서 이 사람의 요청이 방금 들어왔다는 것을 체크함
+      //     },
+      //   },
+      // ); // 서버개발자와의 약속
+      // 이 요청을 보낼 권한이 있는지를 header에 담는다
+      console.log(res);
+      // 비동기, promise이기 때문에 앞에 await를 붙여야한다
+      Alert.alert('회원가입이 완료되었습니다.');
+      navigation.navigate('SubmitIdPassword');
+    } catch (error) {
+      const errorRes = (error as AxiosError).response;
+      console.error(errorRes);
+      // 네트워크 에러인지 문법에러인지 알 수 없다. 무슨 에러인지도 모르는데 error.response가 있을거라고 TS가 확신할 수 없어!
+      // TS가 타입추론을 못할 때에는 as로 직접 이렇게 네트워크에러로 타입을 변경시킬 수 있다
+      if (errorRes) {
+        Alert.alert(`${errorRes.data.message}`); // 서버개발자와의 약속
+      } // 이건 네트워크 에러만 잡는거라 문법에러는 잡지 못한다.
+    } finally {
+      setIsLoading(false);
+    }
+  }, [
+    joinForm?.name,
+    joinForm?.email,
+    joinForm?.phoneNumber,
+    joinForm?.password,
+  ]);
+
+  // useEffect는 async를 사용할 수 없음. return 값이 () => {} clean up 함수이기 때문에(clean up 함수는 promise가 아니라 함수여야한다!)
   const checkInfo = () => {
     const result =
       joinForm?.name?.length > 0 &&
@@ -86,9 +170,7 @@ const UserInfo = () => {
     }, 1500);
   };
 
-  return isLoading ? (
-    <LoadingView />
-  ) : (
+  return (
     <ScrollView
       style={{
         backgroundColor: theme.colors.GRAY_300,
@@ -233,7 +315,8 @@ const UserInfo = () => {
               autoCapitalize="none"
               autoComplete="password"
               importantForAutofill="yes"
-              onSubmitEditing={onPressSignUp}
+              onSubmitEditing={onSubmit}
+              // onSubmitEditing={onPressSignUp}
               ref={passwordRef}
               clearButtonMode="while-editing"
               isValidCheck
@@ -246,15 +329,21 @@ const UserInfo = () => {
             />
           </InputForm>
         </View>
-        <BigButton
-          text="회원가입"
-          onPress={() => checkInfo() && onPressSignUp()}
-          style={{backgroundColor: theme.colors.DARK_GRAY}}
-        />
+        {isLoading ? (
+          <ActivityIndicator color={theme.colors.MAIN_RED} />
+        ) : (
+          <BigButton
+            text="회원가입"
+            onPress={() => onSubmit()}
+            // onPress={() => checkInfo() && onPressSignUp()}
+            style={{backgroundColor: theme.colors.DARK_GRAY}}
+            disabled={isLoading}
+          />
+        )}
       </View>
     </ScrollView>
   );
-};
+};;;;;
 export default UserInfo;
 
 const styles = StyleSheet.create({

@@ -191,6 +191,7 @@ const Signup = ({}) => {
   //   }
   // };
 
+
   const onPressNextButton = () => {
     if (
       agreeForm.isOverFourteen &&
@@ -429,6 +430,6 @@ const Signup = ({}) => {
       </View>
     </ScrollView>
   );
-};;;;;;
+};;;;
 
 export default Signup;

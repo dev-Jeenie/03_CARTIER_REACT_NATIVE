@@ -1,7 +1,9 @@
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import axios, {AxiosError} from 'axios';
 import React from 'react';
 import {
+  Alert,
   Dimensions,
   Image,
   ScrollView,
@@ -10,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Config from 'react-native-config';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import SimpleToast from 'react-native-simple-toast';
 import assets from '../../../assets';
@@ -120,6 +123,36 @@ const SubmitIdPassword = () => {
     return result;
   };
 
+  const onSubmit = React.useCallback(async () => {
+    if (isLoading) {
+      return;
+    }
+    if (!email || !email.trim()) {
+      return SimpleToast.show('이메일을 입력하세요');
+    }
+    if (!password || !password.trim()) {
+      return SimpleToast.show('비밀번호를 입력하세요');
+    }
+    try {
+      setIsLoading(true);
+      console.log(Config.API_URL);
+      const res = await axios.post(`${Config.API_URL}/login`, {
+        email,
+        password,
+      });
+      console.log(res);
+      navigation.navigate('MainDrawerNavigator');
+      SimpleToast.show('로그인되었습니다.');
+    } catch (error) {
+      const errorRes = (error as AxiosError).response;
+      console.error(errorRes);
+      if (errorRes) {
+        Alert.alert(`${errorRes.data.message}`);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, [email, password]);
   // const onPressLogin = async () => {
   //   setIsLoading(true);
   //   const res = await setTimeout(() => {
@@ -147,9 +180,7 @@ const SubmitIdPassword = () => {
     }, 1500);
   };
 
-  return isLoading ? (
-    <LoadingView />
-  ) : (
+  return (
     <ScrollView
       style={{
         backgroundColor: theme.colors.GRAY_300,
@@ -216,7 +247,8 @@ const SubmitIdPassword = () => {
               autoCapitalize="none"
               autoComplete="password"
               importantForAutofill="yes"
-              onSubmitEditing={onPressLogin}
+              onSubmitEditing={onSubmit}
+              // onSubmitEditing={onPressLogin}
               ref={passwordRef}
               clearButtonMode="while-editing"
             />
@@ -224,7 +256,8 @@ const SubmitIdPassword = () => {
           <View style={{alignItems: 'center'}}>
             <BigButton
               text="로그인"
-              onPress={() => checkIdPw() && onPressLogin()}
+              onPress={() => onSubmit()}
+              // onPress={() => checkIdPw() && onPressLogin()}
             />
             <TouchableOpacity onPress={() => {}}>
               <StyledText

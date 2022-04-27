@@ -73,7 +73,7 @@ const Purchase = () => {
     // }, 3000);
     // res && push('PurchaseComplete'), SimpleToast.show('결제가 완료되었습니다.');
     setIsLoading(false);
-  };;
+  };
   console.log('adsdsa', orderInfo?.products);
 
   const PaymentIcon = ({
@@ -296,9 +296,11 @@ export const PurchaseItem = ({
   price,
   thumbnail,
   image,
+  images,
   info,
   style,
 }: purchaseProp) => {
+  console.log(image, images, thumbnail);
   return (
     <View
       style={[
@@ -313,7 +315,7 @@ export const PurchaseItem = ({
         style,
       ]}>
       <Image
-        source={image}
+        source={image || images[0]}
         style={{width: 100, height: 100, marginRight: 10}}
       />
       {/* <View> */}

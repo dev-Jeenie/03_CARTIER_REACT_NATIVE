@@ -1,7 +1,11 @@
+import axios from 'axios';
 import React from 'react';
 import {Image} from 'react-native';
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import Config from 'react-native-config';
+import EncryptedStorage from 'react-native-encrypted-storage';
 import SimpleToast from 'react-native-simple-toast';
+import {useSelector} from 'react-redux';
 import assets from '../../../assets';
 import {detailProps} from '../../apis/main';
 import StyledText from '../../commons/StyledText';
@@ -9,6 +13,9 @@ import theme from '../../commons/theme';
 import {useLikedContext} from '../../contexts/LikedProvider';
 import {useOrderContext} from '../../contexts/OrderProvider';
 import {getStorage, setStorage} from '../../libs/AsyncStorageManager';
+import userSlice from '../../slices/user';
+import {useAppDispatch} from '../../store';
+import {Rootstate} from '../../store/reducer';
 import {cartDataType, CART_DATA} from '../cart/Cart';
 import {ListItem} from '../collection/CollectionDetail';
 import {DetailItem} from '../purchase/PurchaseComplete';
@@ -23,25 +30,39 @@ type liked = {id: string};
 export const LIKE_DATA = 'liked_data';
 
 const Mypage = () => {
-  const {LikedInfo, setLikedInfo} = useLikedContext();
-  // const [orderData, setOrderData] = React.useState<orderInfo | undefined>([]);
-  // const [orderData, setOrderData] = React.useState<any>(orderInfo);
-  // const [likedData, setLikedData] = React.useState<any>(LikedInfo);
-  const [data, setData] = React.useState<{
-    userInfo: {name: string};
-    orderInfo: {id: string}[];
-    likedInfo: {id: string}[];
-  }>({
-    userInfo: {name: '유저이름'},
-    orderInfo: [{id: '주문한 아이디'}],
-    likedInfo: [{id: '찜한 아이디'}],
-  });
+  const accessToken = useSelector((state: Rootstate) => state.user.accessToken);
+  const user_name = useSelector((state: Rootstate) => state.user.name);
+  const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = React.useState<boolean>(true);
   const [isOpenLiked, setIsOpenLiked] = React.useState<boolean>(true);
-
   const [orderedData, setOrderedData] = React.useState<detailProps[]>([]);
   const [likedData, setLikedData] = React.useState<detailProps[]>([]);
-  console.log('orderedData:::', orderedData);
+
+  const onLogout = React.useCallback(async () => {
+    try {
+      await axios.post(
+        `${Config.API_URL}/logout`,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${accessToken}`,
+          },
+        },
+      );
+      SimpleToast.show('로그아웃 되었습니다.');
+      dispatch(
+        userSlice.actions.setUser({
+          name: '',
+          email: '',
+          accessToken: '',
+          refreshToken: '',
+        }),
+      );
+      await EncryptedStorage.removeItem('refreshToken');
+    } catch (error) {
+    } finally {
+    }
+  }, []);
   // const scrollY = React.useRef<any>(new Animated.Value(0)).current;
 
   // const translateY_1 = scrollY.interpolate({
@@ -131,6 +152,22 @@ const Mypage = () => {
         <StyledText type="pageTitle">내 계정</StyledText>
       </View>
       <View style={styles.bodyWrapper}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <StyledText type="h3_BOLD">
+            <StyledText type="h3_BOLD" isBold>
+              {user_name || '--'}
+            </StyledText>{' '}
+            님, 안녕하세요.
+          </StyledText>
+          <TouchableOpacity onPress={onLogout} style={[styles.grayButton]}>
+            <StyledText>로그아웃</StyledText>
+          </TouchableOpacity>
+        </View>
         <View style={styles.listWrapper}>
           <TouchableOpacity
             style={{
@@ -174,13 +211,7 @@ const Mypage = () => {
               )}
               <TouchableOpacity
                 onPress={() => onDeleteOrderedData()}
-                style={{
-                  height: 50,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: theme.colors.GRAY_300,
-                  marginVertical: 10,
-                }}>
+                style={styles.grayButton}>
                 <StyledText>주문내역 모두 삭제하기</StyledText>
               </TouchableOpacity>
             </>
@@ -285,5 +316,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: 100,
+  },
+  grayButton: {
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: theme.colors.GRAY_300,
+    marginVertical: 10,
+    paddingHorizontal: 30,
   },
 });

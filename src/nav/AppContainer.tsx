@@ -10,8 +10,10 @@ import {
   createStackNavigator,
   StackNavigationProp,
 } from '@react-navigation/stack';
+import axios, {AxiosError} from 'axios';
 import React from 'react';
 import {
+  Alert,
   Dimensions,
   Image,
   Platform,
@@ -19,7 +21,10 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
+import Config from 'react-native-config';
+import EncryptedStorage from 'react-native-encrypted-storage';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import SimpleToast from 'react-native-simple-toast';
 import {Provider, shallowEqual, useSelector} from 'react-redux';
 import assets from '../../assets';
 import StyledText from '../commons/StyledText';
@@ -47,7 +52,8 @@ import Mypage from '../pages/mypage/Mypage';
 import ProductDetail from '../pages/product/ProductDetail';
 import Purchase from '../pages/purchase/Purchase';
 import PurchaseComplete from '../pages/purchase/PurchaseComplete';
-import store from '../store';
+import userSlice from '../slices/user';
+import store, {useAppDispatch} from '../store';
 import {Rootstate} from '../store/reducer';
 import AsideMenu from './AsideMenu';
 // import MainDrawerNavigator from '../pages/main/MainDrawerNavigator';
@@ -417,7 +423,57 @@ const AppContainer = () => {
   // const {principal} = useSelector((state: any) => state.auth, shallowEqual);
   // const principal = false;
   const isLoggedIn = useSelector((state: Rootstate) => !!state.user.email);
+  const dispatch = useAppDispatch();
   // 전체상태인 rootReducer의 state 안에서 email을 꺼낸 것.
+  // 앱을 껐다가 켰을 때 refreshToken이 만료되었을수도 있으니 다시 서버로 보내서 검증을해야함
+  // 검증을 통과하면 다시 dispatch해서 accessToken을 재발급 받게하고
+  // 만료되어서 검증을 통과하지못했으면 다시 로그인하라고 보내야함
+
+  const initLogin = () => {
+    // refreshToken이 있는지없는지 확인하는 사이, 유저는 잠깐동안 로그인화면을 보게된다. 그럼 헷갈릴 수도 있으니 일단 앱을 시작하면 무조건 splash 화면을 띄운다
+    // splash가 떠있는 사이에 얼른 로그인되어있는 상태인지 아닌지를 체크한다.
+    const getTokenAndRefresh = async () => {
+      try {
+        const token = await EncryptedStorage.getItem('refreshToken');
+        if (!token) {
+          // refreshToken이 만료되었으면
+          return SimpleToast.show('토큰없어'); // 로그인안하고 끝내버리고
+        }
+        const res = await axios.post(
+          `${Config.API_URL}/refreshToken`,
+          {},
+          {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        // refreshToken은 token이 올바르다면, 응답에다가 name, email, refreshToken을 보내줌
+        SimpleToast.show('로그인되었습니다.');
+        dispatch(
+          userSlice.actions.setUser({
+            name: res.data.data.name,
+            email: res.data.data.email,
+            refreshToken: res.data.data.refreshToken,
+          }),
+        );
+      } catch (error) {
+        console.error(error);
+        if ((error as AxiosError).response?.data.code === 'expired') {
+          Alert.alert('로그인 만료', '다시 로그인 해주세요');
+        }
+      } finally {
+        // TODO : 상태검사가 끝났으면 splash 스크린을 없앤다
+      }
+    };
+    getTokenAndRefresh();
+  };
+
+  React.useEffect(() => {
+    initLogin();
+    // useEffect에서 async를 못써서 이렇게 하고 실행시킴
+  }, [dispatch]);
+  // dispatch는 불변하지만, 이게 불변하다는 걸 esLint가 모르기때문에 넣어줌(navigation도 동일). 사실상 빈배열이라 앱 실행할 때만 한번 실행됨
 
   return (
     <NavigationContainer

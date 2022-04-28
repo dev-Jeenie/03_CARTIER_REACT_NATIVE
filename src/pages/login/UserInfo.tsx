@@ -14,8 +14,10 @@ import {
   View,
 } from 'react-native';
 import Config from 'react-native-config';
+import EncryptedStorage from 'react-native-encrypted-storage';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import SimpleToast from 'react-native-simple-toast';
+import {useDispatch} from 'react-redux';
 import assets from '../../../assets';
 import StyledText from '../../commons/StyledText';
 import theme from '../../commons/theme';
@@ -24,6 +26,8 @@ import InputForm from '../../components/common/InputForm';
 import LoadingView from '../../components/common/LoadingView';
 import MyInput from '../../components/common/MyInput';
 import {AuthStackParamList} from '../../nav/AppContainer';
+import userSlice from '../../slices/user';
+import {useAppDispatch} from '../../store';
 
 const {width} = Dimensions.get('window');
 
@@ -79,53 +83,19 @@ const UserInfo = () => {
     try {
       setIsLoading(true);
       console.log(Config.API_URL);
-      const res = await axios.post('http://192.168.0.167:3105/user', {
-        // name,
-        // email,
-        // password,
+      const res = await axios.post(`${Config.API_URL}/user`, {
         ...joinForm,
       });
-      // const res = await axios.post(`http://222.237.193.154:3105/user`, {
-      //   // name,
-      //   // email,
-      //   // password,
-      //   joinForm,
-      // });
-      // const res = await axios.post(
-      //   // `${
-      //   //   process.env.MODE_ENV === 'production'
-      //   //     ? '실서버주소'
-      //   //     : 'localhost:3105'
-      //   // }/user`,
-      //   // `${__DEV__ ? 'localhost:3105' : '실서버주소'}/user`,
-      //   // `${__DEV__ ? '10.0.2.2:3105' : '실서버주소'}/user`,
-      //   // `${__DEV__ ? '222.237.193.154:3105' : '실서버주소'}/user`,
-      //   // `${__DEV__ ? Config.API_URL : '실서버주소'}/user`,
-      //   // `${Config.API_URL}/user`,
-      //   // `192.168.0.167/user`,
-      //   `http://222.237.193.154:3105/user`,
-      //   {name, email, password},
-      // );
-      //   {
-      //     headers: {
-      //       token: '나만의 고유한 값',
-      //       // 이 고유한 값을 통해서 이 사람의 요청이 방금 들어왔다는 것을 체크함
-      //     },
-      //   },
-      // ); // 서버개발자와의 약속
-      // 이 요청을 보낼 권한이 있는지를 header에 담는다
+      // dispatch(userSlice.actions.setName(res.data.data.name));
       console.log(res);
-      // 비동기, promise이기 때문에 앞에 await를 붙여야한다
       Alert.alert('회원가입이 완료되었습니다.');
       navigation.navigate('SubmitIdPassword');
     } catch (error) {
       const errorRes = (error as AxiosError).response;
       console.error(errorRes);
-      // 네트워크 에러인지 문법에러인지 알 수 없다. 무슨 에러인지도 모르는데 error.response가 있을거라고 TS가 확신할 수 없어!
-      // TS가 타입추론을 못할 때에는 as로 직접 이렇게 네트워크에러로 타입을 변경시킬 수 있다
       if (errorRes) {
-        Alert.alert(`${errorRes.data.message}`); // 서버개발자와의 약속
-      } // 이건 네트워크 에러만 잡는거라 문법에러는 잡지 못한다.
+        Alert.alert(`${errorRes.data.message}`);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -136,7 +106,6 @@ const UserInfo = () => {
     joinForm?.password,
   ]);
 
-  // useEffect는 async를 사용할 수 없음. return 값이 () => {} clean up 함수이기 때문에(clean up 함수는 promise가 아니라 함수여야한다!)
   const checkInfo = () => {
     const result =
       joinForm?.name?.length > 0 &&
@@ -343,7 +312,7 @@ const UserInfo = () => {
       </View>
     </ScrollView>
   );
-};;;;;
+};
 export default UserInfo;
 
 const styles = StyleSheet.create({

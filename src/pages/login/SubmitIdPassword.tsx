@@ -13,6 +13,7 @@ import {
   View,
 } from 'react-native';
 import Config from 'react-native-config';
+import EncryptedStorage from 'react-native-encrypted-storage';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import SimpleToast from 'react-native-simple-toast';
 import assets from '../../../assets';
@@ -23,6 +24,8 @@ import InputForm from '../../components/common/InputForm';
 import LoadingView from '../../components/common/LoadingView';
 import MyInput from '../../components/common/MyInput';
 import {AuthStackParamList} from '../../nav/AppContainer';
+import userSlice from '../../slices/user';
+import {useAppDispatch} from '../../store';
 
 const {width} = Dimensions.get('window');
 
@@ -112,6 +115,7 @@ const SubmitIdPassword = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const emailRef = React.useRef<TextInput | null>(null); // generic type
   const passwordRef = React.useRef<TextInput | null>(null);
+  const dispatch = useAppDispatch();
 
   const checkIdPw = () => {
     const result = email?.length > 0 && password?.length > 0;
@@ -143,6 +147,17 @@ const SubmitIdPassword = () => {
       console.log(res);
       navigation.navigate('MainDrawerNavigator');
       SimpleToast.show('로그인되었습니다.');
+      dispatch(
+        userSlice.actions.setUser({
+          name: res.data.data.name,
+          email: res.data.data.email,
+          accessToken: res.data.data.accessToken,
+        }),
+      );
+      await EncryptedStorage.setItem(
+        'refreshToken',
+        res.data.data.refreshToken,
+      );
     } catch (error) {
       const errorRes = (error as AxiosError).response;
       console.error(errorRes);

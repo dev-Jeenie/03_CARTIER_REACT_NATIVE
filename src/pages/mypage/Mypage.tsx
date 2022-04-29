@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
 import React from 'react';
-import {Image} from 'react-native';
+import {Alert, Image} from 'react-native';
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Config from 'react-native-config';
 import EncryptedStorage from 'react-native-encrypted-storage';
@@ -45,24 +45,24 @@ const Mypage = () => {
         {},
         {
           headers: {
-            authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         },
       );
-      SimpleToast.show('로그아웃 되었습니다.');
+      Alert.alert('알림', '로그아웃 되었습니다.');
       dispatch(
         userSlice.actions.setUser({
           name: '',
           email: '',
           accessToken: '',
-          refreshToken: '',
         }),
       );
       await EncryptedStorage.removeItem('refreshToken');
     } catch (error) {
-    } finally {
+      const errorResponse = (error as AxiosError).response;
+      console.error(errorResponse);
     }
-  }, []);
+  }, [accessToken, dispatch]);
   // const scrollY = React.useRef<any>(new Animated.Value(0)).current;
 
   // const translateY_1 = scrollY.interpolate({

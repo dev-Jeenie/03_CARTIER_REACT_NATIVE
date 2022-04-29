@@ -453,31 +453,30 @@ const AppContainer = () => {
     // splash가 떠있는 사이에 얼른 로그인되어있는 상태인지 아닌지를 체크한다.
     const getTokenAndRefresh = async () => {
       try {
-        SimpleToast.show('로그인 확인 중입니다...');
-        // const token = await EncryptedStorage.getItem('refreshToken');
-        // if (!token) {
-        //   // refreshToken이 만료되었으면
-        //   SplashScreen.hide();
-        //   return;
-        // }
-        // const res = await axios.post(
-        //   `${Config.API_URL}/refreshToken`,
-        //   {},
-        //   {
-        //     headers: {
-        //       authorization: `Bearer ${token}`,
-        //     },
-        //   },
-        // );
+        const token = await EncryptedStorage.getItem('refreshToken');
+        if (!token) {
+          // refreshToken이 만료되었으면
+          SplashScreen.hide();
+          return;
+        }
+        const res = await axios.post(
+          `${Config.API_URL}/refreshToken`,
+          {},
+          {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          },
+        );
         // refreshToken은 token이 올바르다면, 응답에다가 name, email, refreshToken을 보내줌
         SimpleToast.show('로그인되었습니다.');
-        // dispatch(
-        //   userSlice.actions.setUser({
-        //     name: res.data.data.name,
-        //     email: res.data.data.email,
-        //     refreshToken: res.data.data.refreshToken,
-        //   }),
-        // );
+        dispatch(
+          userSlice.actions.setUser({
+            name: res.data.data.name,
+            email: res.data.data.email,
+            refreshToken: res.data.data.refreshToken,
+          }),
+        );
       } catch (error) {
         console.error(error);
         if ((error as AxiosError).response?.data.code === 'expired') {

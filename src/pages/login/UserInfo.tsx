@@ -58,12 +58,6 @@ const UserInfo = () => {
   const [password, setPassword] = React.useState('myname1');
   const [phoneNumberVerified, setPhoneNumberVerified] =
     React.useState<boolean>(false);
-
-  const nameRef = React.useRef<TextInput | null>(null); // generic type
-  const emailRef = React.useRef<TextInput | null>(null); // generic type
-  const passwordRef = React.useRef<TextInput | null>(null);
-  const passwordConfirmRef = React.useRef<TextInput | null>(null);
-
   const onSubmit = React.useCallback(async () => {
     if (isLoading) {
       return;
@@ -89,7 +83,7 @@ const UserInfo = () => {
       // dispatch(userSlice.actions.setName(res.data.data.name));
       console.log(res);
       Alert.alert('회원가입이 완료되었습니다.');
-      navigation.navigate('SubmitIdPassword');
+      navigation.push('SubmitIdPassword');
     } catch (error) {
       const errorRes = (error as AxiosError).response;
       console.error(errorRes);
@@ -186,11 +180,7 @@ const UserInfo = () => {
               autoCapitalize="none"
               textContentType="name"
               importantForAutofill="yes"
-              onSubmitEditing={() => {
-                emailRef.current?.focus();
-              }}
               blurOnSubmit={false}
-              ref={nameRef}
               clearButtonMode="while-editing"
             />
           </InputForm>
@@ -206,11 +196,7 @@ const UserInfo = () => {
               textContentType="emailAddress"
               importantForAutofill="yes"
               autoComplete="email"
-              onSubmitEditing={() => {
-                passwordRef.current?.focus();
-              }}
               blurOnSubmit={false}
-              ref={emailRef}
               clearButtonMode="while-editing"
             />
           </InputForm>
@@ -227,11 +213,7 @@ const UserInfo = () => {
               autoCapitalize="none"
               textContentType="telephoneNumber"
               importantForAutofill="yes"
-              onSubmitEditing={() => {
-                passwordRef.current?.focus();
-              }}
               blurOnSubmit={false}
-              ref={emailRef}
               clearButtonMode="while-editing"
             />
             <TouchableOpacity
@@ -264,10 +246,6 @@ const UserInfo = () => {
               autoCapitalize="none"
               autoComplete="password"
               importantForAutofill="yes"
-              onSubmitEditing={() => {
-                passwordConfirmRef.current?.focus();
-              }}
-              ref={passwordRef}
               clearButtonMode="while-editing"
             />
           </InputForm>
@@ -285,8 +263,6 @@ const UserInfo = () => {
               autoComplete="password"
               importantForAutofill="yes"
               onSubmitEditing={onSubmit}
-              // onSubmitEditing={onPressSignUp}
-              ref={passwordRef}
               clearButtonMode="while-editing"
               isValidCheck
               state={joinForm?.password === joinForm?.passwordConfirm}

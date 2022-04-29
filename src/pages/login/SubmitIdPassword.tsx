@@ -113,8 +113,8 @@ const SubmitIdPassword = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
-  const emailRef = React.useRef<TextInput | null>(null); // generic type
-  const passwordRef = React.useRef<TextInput | null>(null);
+  // const emailRef = React.useRef<any>(null); // generic type
+  // const passwordRef = React.useRef<any>(null);
   const dispatch = useAppDispatch();
 
   const checkIdPw = () => {
@@ -243,11 +243,7 @@ const SubmitIdPassword = () => {
               textContentType="emailAddress"
               importantForAutofill="yes"
               autoComplete="email"
-              onSubmitEditing={() => {
-                passwordRef.current?.focus();
-              }}
               blurOnSubmit={false}
-              ref={emailRef}
               clearButtonMode="while-editing"
             />
           </InputForm>
@@ -264,7 +260,6 @@ const SubmitIdPassword = () => {
               importantForAutofill="yes"
               onSubmitEditing={onSubmit}
               // onSubmitEditing={onPressLogin}
-              ref={passwordRef}
               clearButtonMode="while-editing"
             />
           </InputForm>

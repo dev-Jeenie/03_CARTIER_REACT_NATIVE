@@ -56,6 +56,8 @@ import userSlice from '../slices/user';
 import store, {useAppDispatch} from '../store';
 import {Rootstate} from '../store/reducer';
 import AsideMenu from './AsideMenu';
+import {LogBox} from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 // import MainDrawerNavigator from '../pages/main/MainDrawerNavigator';
 
 const {width} = Dimensions.get('window');
@@ -354,57 +356,73 @@ const AuthStack = () => {
       <Stack.Screen
         name="SubmitIdPassword"
         component={SubmitIdPassword}
-        options={
-          {
-            // headerShown: false,
-            // headerTransparent: false,
-            // headerBackgroundContainerStyle: {
-            //   backgroundColor: theme.colors.GRAY_300,
-            //   height: 50,
-            // },
-            //   header: () => {
-            //     return (
-            //       <HeaderContainer style={{borderBottomWidth: 0}}>
-            //         <BackButton onPress={() => navigation.goBack()} />
-            //         <Image
-            //           source={assets.logo_w}
-            //           style={{
-            //             width: 140,
-            //             position: 'absolute',
-            //             left: width / 2 - 70,
-            //           }}
-            //           resizeMode={'contain'}
-            //         />
-            //         <View
-            //           style={{
-            //             flexDirection: 'row',
-            //           }}>
-            //           <View
-            //             style={{
-            //               backgroundColor: theme.colors.DEFAULT_WHITE,
-            //               width: 25,
-            //               height: 25,
-            //               marginLeft: 10,
-            //             }}
-            //           />
-            //           <View
-            //             style={{
-            //               backgroundColor: theme.colors.DEFAULT_WHITE,
-            //               width: 25,
-            //               height: 25,
-            //               marginLeft: 10,
-            //             }}
-            //           />
-            //         </View>
-            //       </HeaderContainer>
-            //     );
-            //   },
-          }
-        }
+        options={{
+          headerShown: false,
+          // headerTransparent: false,
+          // headerBackgroundContainerStyle: {
+          //   backgroundColor: theme.colors.GRAY_300,
+          //   height: 50,
+          // },
+          //   header: () => {
+          //     return (
+          //       <HeaderContainer style={{borderBottomWidth: 0}}>
+          //         <BackButton onPress={() => navigation.goBack()} />
+          //         <Image
+          //           source={assets.logo_w}
+          //           style={{
+          //             width: 140,
+          //             position: 'absolute',
+          //             left: width / 2 - 70,
+          //           }}
+          //           resizeMode={'contain'}
+          //         />
+          //         <View
+          //           style={{
+          //             flexDirection: 'row',
+          //           }}>
+          //           <View
+          //             style={{
+          //               backgroundColor: theme.colors.DEFAULT_WHITE,
+          //               width: 25,
+          //               height: 25,
+          //               marginLeft: 10,
+          //             }}
+          //           />
+          //           <View
+          //             style={{
+          //               backgroundColor: theme.colors.DEFAULT_WHITE,
+          //               width: 25,
+          //               height: 25,
+          //               marginLeft: 10,
+          //             }}
+          //           />
+          //         </View>
+          //       </HeaderContainer>
+          //     );
+          //   },
+        }}
       />
-      <Stack.Screen name="SignUp" component={SignUp} />
-      <Stack.Screen name="UserInfo" component={UserInfo} />
-      <Stack.Screen name="SignUpComplete" component={SignUpComplete} />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUp}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="UserInfo"
+        component={UserInfo}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="SignUpComplete"
+        component={SignUpComplete}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="MainDrawerNavigator"
         component={MainDrawerNavigator}
@@ -415,6 +433,7 @@ const AuthStack = () => {
     </Stack.Navigator>
   );
 };
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const AppContainer = () => {
   const navRef =
@@ -434,36 +453,38 @@ const AppContainer = () => {
     // splash가 떠있는 사이에 얼른 로그인되어있는 상태인지 아닌지를 체크한다.
     const getTokenAndRefresh = async () => {
       try {
-        const token = await EncryptedStorage.getItem('refreshToken');
-        if (!token) {
-          // refreshToken이 만료되었으면
-          return SimpleToast.show('토큰없어'); // 로그인안하고 끝내버리고
-        }
-        const res = await axios.post(
-          `${Config.API_URL}/refreshToken`,
-          {},
-          {
-            headers: {
-              authorization: `Bearer ${token}`,
-            },
-          },
-        );
+        SimpleToast.show('로그인 확인 중입니다...');
+        // const token = await EncryptedStorage.getItem('refreshToken');
+        // if (!token) {
+        //   // refreshToken이 만료되었으면
+        //   SplashScreen.hide();
+        //   return;
+        // }
+        // const res = await axios.post(
+        //   `${Config.API_URL}/refreshToken`,
+        //   {},
+        //   {
+        //     headers: {
+        //       authorization: `Bearer ${token}`,
+        //     },
+        //   },
+        // );
         // refreshToken은 token이 올바르다면, 응답에다가 name, email, refreshToken을 보내줌
         SimpleToast.show('로그인되었습니다.');
-        dispatch(
-          userSlice.actions.setUser({
-            name: res.data.data.name,
-            email: res.data.data.email,
-            refreshToken: res.data.data.refreshToken,
-          }),
-        );
+        // dispatch(
+        //   userSlice.actions.setUser({
+        //     name: res.data.data.name,
+        //     email: res.data.data.email,
+        //     refreshToken: res.data.data.refreshToken,
+        //   }),
+        // );
       } catch (error) {
         console.error(error);
         if ((error as AxiosError).response?.data.code === 'expired') {
           Alert.alert('로그인 만료', '다시 로그인 해주세요');
         }
       } finally {
-        // TODO : 상태검사가 끝났으면 splash 스크린을 없앤다
+        SplashScreen.hide();
       }
     };
     getTokenAndRefresh();

@@ -35,7 +35,7 @@ const PurchaseComplete = () => {
   console.log('구매페이지의 orderInfo', orderInfo);
 
   const onPressOrderDetail = () => {
-    SimpleToast.show('마이페이지의 주문내역 페이지로 이동'), push('Mypage');
+    push('Mypage');
   };
 
   const _renderDate = () => {

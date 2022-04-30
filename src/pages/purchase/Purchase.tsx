@@ -58,8 +58,6 @@ const Purchase = () => {
   }, []);
 
   const onPressToPay = async () => {
-    setIsLoading(true);
-    SimpleToast.show('결제 중입니다. 잠시 기다려주세요.');
     setOrderInfo({
       user_name: user_name,
       payMethod: paymentMap[payMethod],
@@ -68,11 +66,6 @@ const Purchase = () => {
     });
     await setStorage('order_data', JSON.stringify(orderInfo?.products));
     push('PurchaseComplete'), SimpleToast.show('결제가 완료되었습니다.');
-    // const res = setTimeout(async () => {
-    //   await setStorage('order_data', JSON.stringify(orderInfo?.products));
-    // }, 3000);
-    // res && push('PurchaseComplete'), SimpleToast.show('결제가 완료되었습니다.');
-    setIsLoading(false);
   };
   console.log('adsdsa', orderInfo?.products);
 

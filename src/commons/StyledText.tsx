@@ -32,14 +32,7 @@ const StyledText = ({
   );
   return (
     <Text
-      style={[
-        // theme.fonts[type] ?? theme.fonts.normal,
-        // {color: theme.colors[color] ?? theme.colors.GRAY_000},
-        colorStyle,
-        textStyle,
-        style,
-        isBold && {fontWeight: 'bold'},
-      ]}>
+      style={[colorStyle, textStyle, style, isBold && {fontWeight: 'bold'}]}>
       {children}
     </Text>
   );

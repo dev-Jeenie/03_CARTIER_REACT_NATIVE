@@ -19,7 +19,7 @@ import StyledText from '../../commons/StyledText';
 import theme from '../../commons/theme';
 import BigButton from '../../components/common/BigButton';
 import {useOrderContext} from '../../contexts/OrderProvider';
-import {getStorage, setStorage} from '../../libs/AsyncStorageManager';
+import {setStorage} from '../../libs/AsyncStorageManager';
 import {HomeStackParamList} from '../../nav/AppContainer';
 
 type paymentType = 'apple' | 'google' | 'kakao' | 'naver';
@@ -32,25 +32,13 @@ const paymentMap: {[key: string]: string} = {
 };
 
 const Purchase = () => {
-  const [data, setData] = React.useState([]);
-  const insets = useSafeAreaInsets();
   const user_name = 'Jeenie';
   const {orderInfo, setOrderInfo} = useOrderContext();
-  const {navigate, push} =
-    useNavigation<StackNavigationProp<HomeStackParamList>>();
+  const {push} = useNavigation<StackNavigationProp<HomeStackParamList>>();
   const [payMethod, setPayMethod] = React.useState<paymentType>('apple');
-  const [isLoading, setIsLoading] = React.useState(false);
-  // const priceArr = orderInfo?.map(item => item?.price);
-  // console.log('가격 배열', priceArr);
-  // const totalPrice = orderInfo
-  //   ?.reduce((prev, curr) => prev + curr.price, 0)
-  //   ?.toLocaleString();
-  // console.log('result결과', totalPrice);
   const totalPrice = orderInfo?.products
     ?.reduce((prev, curr) => prev + curr.price, 0)
     ?.toLocaleString();
-  console.log('result결과', totalPrice);
-  console.log('orderInfo', orderInfo);
   const initData = async () => {};
 
   React.useEffect(() => {
@@ -67,7 +55,6 @@ const Purchase = () => {
     await setStorage('order_data', JSON.stringify(orderInfo?.products));
     push('PurchaseComplete'), SimpleToast.show('결제가 완료되었습니다.');
   };
-  console.log('adsdsa', orderInfo?.products);
 
   const PaymentIcon = ({
     icon,
@@ -161,42 +148,6 @@ const Purchase = () => {
           </View>
         </View>
       </View>
-      {/* <View
-        style={{
-          backgroundColor: theme.colors.GRAY_300,
-          paddingBottom: insets.bottom + 30,
-          paddingHorizontal: 20,
-          paddingTop: 30,
-        }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <StyledText>소계</StyledText>
-          <StyledText>125,000,000원</StyledText>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <StyledText>배송비</StyledText>
-          <StyledText>0원</StyledText>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <StyledText>총 금액</StyledText>
-          <StyledText>125,000,000원</StyledText>
-        </View>
-        <BigButton text="결제하기" onPress={() => onPressToPay()} />
-      </View> */}
       <View style={[styles.totalWrapper]}>
         <StyledText type="h3_BOLD" isBold style={{marginBottom: 20}}>
           주문정보
@@ -242,22 +193,14 @@ const Purchase = () => {
 export default Purchase;
 
 const styles = StyleSheet.create({
-  infoWrapper: {
-    // marginVertical: 20,
-    // flex: 1,
-    // backgroundColor: 'pink',
-  },
+  infoWrapper: {},
   infoHeader: {
-    // backgroundColor: theme.colors.MAIN_RED,
     alignItems: 'center',
     paddingVertical: 10,
   },
   infoBody: {
     paddingHorizontal: 20,
     paddingVertical: 20,
-    // backgroundColor: theme.colors.GRAY_300,
-    // borderWidth: 1,
-    // borderColor: theme.colors.GRAY_200,
   },
   totalWrapper: {
     backgroundColor: theme.colors.GRAY_300,
@@ -303,7 +246,6 @@ export const PurchaseItem = ({
           paddingVertical: 10,
           alignItems: 'center',
           borderColor: theme.colors.GRAY_200,
-          // backgroundColor: 'pink',
         },
         style,
       ]}>
@@ -311,16 +253,8 @@ export const PurchaseItem = ({
         source={image || images[0]}
         style={{width: 100, height: 100, marginRight: 10}}
       />
-      {/* <View> */}
       <View style={{flex: 1}}>
-        <View
-          style={
-            {
-              // borderBottomColor: theme.colors.GRAY_200,
-              // borderBottomWidth: 1,
-              // paddingBottom: 20,
-            }
-          }>
+        <View style={{}}>
           <StyledText type="h4_normal" isBold>
             {name || '--'}
           </StyledText>

@@ -1,3 +1,6 @@
+import {DrawerContentComponentProps} from '@react-navigation/drawer';
+import {DrawerActions, useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
 import {
   Image,
@@ -5,18 +8,15 @@ import {
   StyleProp,
   StyleSheet,
   TouchableOpacity,
+  useWindowDimensions,
   View,
   ViewStyle,
 } from 'react-native';
-import {DrawerContentComponentProps} from '@react-navigation/drawer';
+import assets from '../../assets';
 import StyledText from '../commons/StyledText';
 import theme from '../commons/theme';
-import assets from '../../assets';
 import CloseButton from '../components/common/CloseButton';
-import {DrawerActions, useNavigation} from '@react-navigation/native';
 import HeaderContainer from '../components/common/HeaderContainer';
-import {useWindowDimensions} from 'react-native';
-import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import {HomeStackParamList} from './AppContainer';
 
 type AsideMenuProps = DrawerContentComponentProps & {};
@@ -30,18 +30,7 @@ type MenuListProps = {
   children: JSX.Element | Array<JSX.Element>;
 };
 
-type SubMenuProps = {
-  list: string[];
-};
-
-const MenuList = ({
-  style,
-  title,
-  subTitles,
-  onPressTitle,
-  onPressSubTitle,
-  children,
-}: MenuListProps) => {
+const MenuList = ({title, children}: MenuListProps) => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
   return (
@@ -62,44 +51,6 @@ const MenuList = ({
     </>
   );
 };
-// const MenuList = ({
-//   style,
-//   title,
-//   subTitles,
-//   onPressTitle,
-//   onPressSubTitle,
-// }: MenuListProps) => {
-//   const [isOpen, setIsOpen] = React.useState<boolean>(false);
-
-//   return (
-//     <>
-//       <TouchableOpacity
-//         style={[
-//           {
-//             paddingVertical: 20,
-//             borderBottomColor: theme.colors.GRAY_300,
-//             borderBottomWidth: 1,
-//           },
-//           theme.styles.globalPaddingLeft,
-//         ]}
-//         onPress={() => setIsOpen(!isOpen)}>
-//         <StyledText type="listTitle">{title}</StyledText>
-//         {isOpen && (
-//           <View style={{paddingLeft: 20, marginTop: 20}}>
-//             {subTitles &&
-//               subTitles?.map((item, index) => (
-//                 <TouchableOpacity style={{paddingVertical: 10}} key={index}>
-//                   <StyledText type="normal" color="GRAY_200">
-//                     {item}
-//                   </StyledText>
-//                 </TouchableOpacity>
-//               ))}
-//           </View>
-//         )}
-//       </TouchableOpacity>
-//     </>
-//   );
-// };
 
 const BottomList = ({text, onPress}: {text: string; onPress: () => void}) => {
   return (

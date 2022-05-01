@@ -53,13 +53,3 @@ const ShareButton = ({id, data}: {id: string; data: any}) => {
 
 export default ShareButton;
 
-{
-  /* <ShareBtn
-    style={{
-      paddingHorizontal: 20,
-    }}
-    shareInfoData={{
-      url: `https://www.myvenus.io/surgery/${detailData?.id}`,
-    }}
-  /> */
-}

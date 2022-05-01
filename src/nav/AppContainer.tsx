@@ -16,31 +16,25 @@ import {
   Alert,
   Dimensions,
   Image,
-  Platform,
+  LogBox,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from 'react-native';
 import Config from 'react-native-config';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import SimpleToast from 'react-native-simple-toast';
-import {Provider, shallowEqual, useSelector} from 'react-redux';
+import SplashScreen from 'react-native-splash-screen';
+import {useSelector} from 'react-redux';
 import assets from '../../assets';
-import StyledText from '../commons/StyledText';
-import theme from '../commons/theme';
 import BackButton from '../components/common/BackButton';
 import CartButton from '../components/common/CartButton';
 import {collectionType} from '../components/common/collectionMap';
 import HeaderContainer from '../components/common/HeaderContainer';
 import MenuButton from '../components/common/MenuButton';
 import MypageButton from '../components/common/MypageButton';
-import {CartProvider} from '../contexts/CartProvider';
 import Cart from '../pages/cart/Cart';
 import CollectionDetail from '../pages/collection/CollectionDetail';
-import EntryStackNavigator, {
-  EntryStackParamList,
-} from '../pages/EntryStackNavigator';
 import Home from '../pages/home/Home';
 import Login from '../pages/Login';
 import SignUp from '../pages/login/SignUp';
@@ -53,12 +47,9 @@ import ProductDetail from '../pages/product/ProductDetail';
 import Purchase from '../pages/purchase/Purchase';
 import PurchaseComplete from '../pages/purchase/PurchaseComplete';
 import userSlice from '../slices/user';
-import store, {useAppDispatch} from '../store';
+import {useAppDispatch} from '../store';
 import {Rootstate} from '../store/reducer';
 import AsideMenu from './AsideMenu';
-import {LogBox} from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
-// import MainDrawerNavigator from '../pages/main/MainDrawerNavigator';
 
 const {width} = Dimensions.get('window');
 
@@ -67,7 +58,6 @@ export type HomeStackParamList = {
   Collections: undefined;
   CollectionDetail: {
     collection_id: collectionType;
-    // title: 'juste' | 'panthere' | 'love' | 'trinity' | 'ecrou';
   };
   Mypage: undefined;
   Cart: undefined;
@@ -86,39 +76,7 @@ const HomeStackNavigator = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        // headerTitleAlign: 'left',
-        // headerTitleStyle: theme.fonts.pageTitle,
-      }}
-      // screenOptions={
-      //   {
-      // headerTitleStyle: {
-      //   color: theme.colors.grayScale1000,
-      //   fontSize: 16,
-      //   fontWeight: '500',
-      //   fontStyle: 'normal',
-      //   letterSpacing: 0,
-      //   maxWidth: 220,
-      // },
-      // headerStyle: {
-      //   backgroundColor: theme.colors.defaultBackground,
-      //   shadowColor: 'transparent',
-      // },
-      // headerTitleAlign: 'center',
-      // // headerBackTitleVisible: false,
-      // headerBackImage: () => (
-      //   <View
-      //     style={{
-      //       paddingHorizontal: Platform.OS === 'ios' ? 20 : 10,
-      //     }}>
-      //     <Image
-      //       style={{width: 24, height: 24}}
-      //       source={assets.icon_ChevronLeft}
-      //     />
-      //   </View>
-      // ),
-      // }
-      // }
-    >
+      }}>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen
         name="Cart"
@@ -130,62 +88,9 @@ const HomeStackNavigator = () => {
         }}
       />
       <Stack.Screen name="Purchase" component={Purchase} />
-      <Stack.Screen
-        name="PurchaseComplete"
-        component={PurchaseComplete}
-        // options={{
-        //   headerBackImage: () => {
-        //     return <BackButton onPress={() => navigation.goBack()} />;
-        //   },
-        // }}
-      />
+      <Stack.Screen name="PurchaseComplete" component={PurchaseComplete} />
 
-      <Stack.Screen
-        name="Collections"
-        component={Collections}
-        // options={{
-        //   header: () => {
-        //     return (
-        //       <HeaderContainer
-        //         style={{borderBottomWidth: 0, backgroundColor: 'pink'}}>
-        //         <BackButton onPress={() => navigation.goBack()} />
-        //         <Image
-        //           source={assets.logo_w}
-        //           style={{
-        //             width: 140,
-        //             position: 'absolute',
-        //             left: width / 2 - 70,
-        //           }}
-        //           resizeMode={'contain'}
-        //         />
-
-        //         <View
-        //           style={{
-        //             flexDirection: 'row',
-        //           }}>
-        //           {/* <View
-        //             style={{
-        //               backgroundColor: theme.colors.DEFAULT_WHITE,
-        //               width: 25,
-        //               height: 25,
-        //               marginLeft: 10,
-        //             }}
-        //           /> */}
-        //           <MypageButton onPress={() => navigation.navigate('Mypage')} />
-        //           <View
-        //             style={{
-        //               backgroundColor: theme.colors.DEFAULT_WHITE,
-        //               width: 25,
-        //               height: 25,
-        //               marginLeft: 10,
-        //             }}
-        //           />
-        //         </View>
-        //       </HeaderContainer>
-        //     );
-        //   },
-        // }}
-      />
+      <Stack.Screen name="Collections" component={Collections} />
       <Stack.Screen
         name="CollectionDetail"
         component={CollectionDetail}
@@ -215,8 +120,6 @@ const MainDrawerNavigator = () => {
     [],
   );
   return (
-    // <CartProvider>
-    // </CartProvider>
     <MainDrawer.Navigator
       screenOptions={{
         drawerType: 'front',
@@ -224,7 +127,6 @@ const MainDrawerNavigator = () => {
           width: '100%',
         },
         headerTransparent: true,
-        // headerTitleStyle: {color: theme.colors.DEFAULT_WHITE},
         header: () => {
           return (
             <HeaderContainer>
@@ -235,9 +137,7 @@ const MainDrawerNavigator = () => {
                   left: 20,
                 }}
               />
-              <TouchableOpacity
-              // onPress={() => navigation.navigate('HomeStackNavigator')}
-              >
+              <TouchableOpacity>
                 <Image
                   source={assets.logo_r}
                   style={{
@@ -268,7 +168,6 @@ const MainDrawerNavigator = () => {
         name="HomeStackNavigator"
         component={HomeStackNavigator}
         options={{
-          // headerShown: false,
           headerTransparent: false,
         }}
       />
@@ -295,41 +194,12 @@ const AuthStack = () => {
   const navigation = useNavigation();
 
   return (
-    <Stack.Navigator
-      initialRouteName="Login"
-      screenOptions={
-        {
-          // headerTransparent: true,
-          // headerTitleStyle: {color: theme.colors.DEFAULT_WHITE},
-          // header: () => {
-          //   return (
-          //     <View
-          //       style={{
-          //         height: 100,
-          //         position: 'absolute',
-          //         left: width / 2 - 80,
-          //         zIndex: 3,
-          //         marginTop: inset.top,
-          //         justifyContent: 'center',
-          //       }}>
-          //       <Image
-          //         source={assets.logo_w}
-          //         style={{
-          //           width: 160,
-          //         }}
-          //         resizeMode={'contain'}
-          //       />
-          //     </View>
-          //   );
-          // },
-        }
-      }>
+    <Stack.Navigator initialRouteName="Login" screenOptions={{}}>
       <Stack.Screen
         name="Login"
         component={Login}
         options={{
           headerTransparent: true,
-          // title: '',
           header: () => {
             return (
               <View
@@ -358,48 +228,6 @@ const AuthStack = () => {
         component={SubmitIdPassword}
         options={{
           headerShown: false,
-          // headerTransparent: false,
-          // headerBackgroundContainerStyle: {
-          //   backgroundColor: theme.colors.GRAY_300,
-          //   height: 50,
-          // },
-          //   header: () => {
-          //     return (
-          //       <HeaderContainer style={{borderBottomWidth: 0}}>
-          //         <BackButton onPress={() => navigation.goBack()} />
-          //         <Image
-          //           source={assets.logo_w}
-          //           style={{
-          //             width: 140,
-          //             position: 'absolute',
-          //             left: width / 2 - 70,
-          //           }}
-          //           resizeMode={'contain'}
-          //         />
-          //         <View
-          //           style={{
-          //             flexDirection: 'row',
-          //           }}>
-          //           <View
-          //             style={{
-          //               backgroundColor: theme.colors.DEFAULT_WHITE,
-          //               width: 25,
-          //               height: 25,
-          //               marginLeft: 10,
-          //             }}
-          //           />
-          //           <View
-          //             style={{
-          //               backgroundColor: theme.colors.DEFAULT_WHITE,
-          //               width: 25,
-          //               height: 25,
-          //               marginLeft: 10,
-          //             }}
-          //           />
-          //         </View>
-          //       </HeaderContainer>
-          //     );
-          //   },
         }}
       />
       <Stack.Screen
@@ -436,26 +264,16 @@ const AuthStack = () => {
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const AppContainer = () => {
-  const navRef =
-    React.useRef<NavigationContainerRef<EntryStackParamList>>(null);
+  const navRef = React.useRef(null);
   const Stack = React.useMemo(() => createStackNavigator(), []);
-  // const {principal} = useSelector((state: any) => state.auth, shallowEqual);
-  // const principal = false;
   const isLoggedIn = useSelector((state: Rootstate) => !!state.user.email);
   const dispatch = useAppDispatch();
-  // 전체상태인 rootReducer의 state 안에서 email을 꺼낸 것.
-  // 앱을 껐다가 켰을 때 refreshToken이 만료되었을수도 있으니 다시 서버로 보내서 검증을해야함
-  // 검증을 통과하면 다시 dispatch해서 accessToken을 재발급 받게하고
-  // 만료되어서 검증을 통과하지못했으면 다시 로그인하라고 보내야함
 
   const initLogin = () => {
-    // refreshToken이 있는지없는지 확인하는 사이, 유저는 잠깐동안 로그인화면을 보게된다. 그럼 헷갈릴 수도 있으니 일단 앱을 시작하면 무조건 splash 화면을 띄운다
-    // splash가 떠있는 사이에 얼른 로그인되어있는 상태인지 아닌지를 체크한다.
     const getTokenAndRefresh = async () => {
       try {
         const token = await EncryptedStorage.getItem('refreshToken');
         if (!token) {
-          // refreshToken이 만료되었으면
           SplashScreen.hide();
           return;
         }
@@ -468,7 +286,6 @@ const AppContainer = () => {
             },
           },
         );
-        // refreshToken은 token이 올바르다면, 응답에다가 name, email, refreshToken을 보내줌
         SimpleToast.show('로그인되었습니다.');
         dispatch(
           userSlice.actions.setUser({
@@ -491,9 +308,7 @@ const AppContainer = () => {
 
   React.useEffect(() => {
     initLogin();
-    // useEffect에서 async를 못써서 이렇게 하고 실행시킴
   }, [dispatch]);
-  // dispatch는 불변하지만, 이게 불변하다는 걸 esLint가 모르기때문에 넣어줌(navigation도 동일). 사실상 빈배열이라 앱 실행할 때만 한번 실행됨
 
   return (
     <NavigationContainer

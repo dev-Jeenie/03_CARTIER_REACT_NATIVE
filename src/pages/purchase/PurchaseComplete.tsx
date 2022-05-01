@@ -109,8 +109,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 20,
     backgroundColor: theme.colors.GRAY_300,
-    // borderWidth: 1,
-    // borderColor: theme.colors.GRAY_200,
   },
   totalList: {
     flexDirection: 'row',

@@ -5,10 +5,7 @@ import {
   Animated,
   Dimensions,
   Image,
-  SafeAreaView,
-  ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -18,7 +15,6 @@ import assets from '../../assets';
 import StyledText from '../commons/StyledText';
 import theme from '../commons/theme';
 import BigButton from '../components/common/BigButton';
-import HeaderContainer from '../components/common/HeaderContainer';
 import {AuthStackParamList} from '../nav/AppContainer';
 
 const {width} = Dimensions.get('window');
@@ -34,12 +30,9 @@ const styles = StyleSheet.create({
     zIndex: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    // marginTop: '11%',
   },
   slideImage: {
     width: width,
-    // width: SLIDE_W,
-    // height: width < 390 ? 476 : 550,
     height: '100%',
     marginBottom: 0.4,
   },
@@ -101,7 +94,6 @@ const Login = () => {
   const inset = useSafeAreaInsets();
 
   const scrollX = React.useRef<any>(new Animated.Value(0)).current;
-  // const scrollY = React.useRef<any>(new Animated.Value(0)).current;
 
   const handleScroll = Animated.event(
     [
@@ -118,69 +110,27 @@ const Login = () => {
 
   const imgTranslateX_1 = scrollX.interpolate({
     inputRange: [0, width, width * 2, width * 3],
-    // inputRange: [0, SLIDE_W, SLIDE_W * 2, SLIDE_W * 3],
     outputRange: [0, 100, 0, 0],
     extrapolate: 'clamp',
   });
 
   const imgTranslateX_2 = scrollX.interpolate({
     inputRange: [0, width, width * 2, width * 3],
-    // inputRange: [0, SLIDE_W, SLIDE_W * 2, SLIDE_W * 3],
     outputRange: [0, 0, 100, 100],
     extrapolate: 'clamp',
   });
 
   const imgTranslateX_3 = scrollX.interpolate({
     inputRange: [0, width, width * 2, width * 3],
-    // inputRange: [0, SLIDE_W, SLIDE_W * 2, SLIDE_W * 3],
     outputRange: [0, 0, 0, 100],
     extrapolate: 'clamp',
   });
 
   const imgTranslateX_4 = scrollX.interpolate({
     inputRange: [0, width, width * 2, width * 3],
-    // inputRange: [0, SLIDE_W, SLIDE_W * 2, SLIDE_W * 3],
     outputRange: [0, 0, 0, 0],
     extrapolate: 'clamp',
   });
-
-  const imgOpacity_1 = scrollX.interpolate({
-    inputRange: [0, width],
-    // inputRange: [0, SLIDE_W],
-    outputRange: [1, 0],
-    extrapolate: 'clamp',
-  });
-
-  const imgOpacity_2 = scrollX.interpolate({
-    inputRange: [0, width, width * 2],
-    // inputRange: [0, SLIDE_W, SLIDE_W * 2],
-    outputRange: [0, 1, 0],
-    extrapolate: 'clamp',
-  });
-
-  const imgOpacity_3 = scrollX.interpolate({
-    inputRange: [0, width, width * 2, width * 3],
-    // inputRange: [0, SLIDE_W, SLIDE_W * 2, SLIDE_W * 3],
-    outputRange: [0, 0, 1, 0],
-    extrapolate: 'clamp',
-  });
-
-  const imgOpacity_4 = scrollX.interpolate({
-    inputRange: [0, width, width * 2, width * 3],
-    // inputRange: [0, SLIDE_W, SLIDE_W * 2, SLIDE_W * 3],
-    outputRange: [0, 0, 0, 1],
-    extrapolate: 'clamp',
-  });
-
-  // const textTranslateY_1 = scrollY.interpolate({
-  //   inputRange: [0, 1],
-  //   outputRange: [0, 100],
-  //   extrapolate: 'clamp',
-  //   // inputRange: [0, width, width * 2, width * 3],
-  //   // // inputRange: [0, SLIDE_W, SLIDE_W * 2, SLIDE_W * 3],
-  //   // outputRange: [0, 0, 0, 100],
-  //   // extrapolate: 'clamp',
-  // });
 
   return (
     <View
@@ -189,52 +139,10 @@ const Login = () => {
         backgroundColor: theme.colors.DEFAULT_WHITE,
         position: 'relative',
       }}>
-      {/* <View
-        style={{
-          height: 100,
-          position: 'absolute',
-          left: width / 2 - 80,
-          zIndex: 3,
-          marginTop: inset.top,
-          justifyContent: 'center',
-        }}>
-        <Image
-          source={assets.logo_w}
-          style={{
-            width: 160,
-          }}
-          resizeMode={'contain'}
-        />
-      </View> */}
-
-      {/* <ScrollView>
-        <View style={{backgroundColor: 'pink', height: 100}}>
-          <Text>sdflsfkjlkj</Text>
-        </View>
-        <View style={{backgroundColor: 'red', height: 100}}>
-          <Text>sdflsfkjlkj</Text>
-        </View>
-        <View style={{backgroundColor: 'blue', height: 100}}>
-          <Text>sdflsfkjlkj</Text>
-        </View>
-      </ScrollView> */}
       <View style={styles.imageWrap}>
         <SwiperFlatList
           onScroll={handleScroll}
-          // onScroll={Animated.event(
-          //   [
-          //     {
-          //       nativeEvent: {
-          //         contentOffset: {
-          //           x: scrollX,
-          //         },
-          //       },
-          //     },
-          //   ],
-          //   {useNativeDriver: false}, // React Native Error: "Animated.event now requires a second argument for options" 오류 메시지를 없애기 위해
-          // )}
           showPagination={false}
-          // onEndReached={() => {}}
           style={styles.slideImage}
           autoplay
           autoplayDelay={4}
@@ -244,19 +152,13 @@ const Login = () => {
             style={[
               styles.slideImage,
               {
-                // opacity: imgOpacity_1,
                 transform: [{translateX: imgTranslateX_1}],
                 position: 'relative',
               },
             ]}>
             <Image style={styles.slideImage} source={assets.banner_pic} />
             <View style={styles.imageBackground}>
-              <Animated.View
-                style={
-                  {
-                    // transform: [{translateY: textTranslateY_1}],
-                  }
-                }>
+              <Animated.View style={{}}>
                 <StyledText
                   color="DEFAULT_WHITE"
                   type="contentTitle"
@@ -278,18 +180,12 @@ const Login = () => {
             style={[
               styles.slideImage,
               {
-                // opacity: imgOpacity_2,
                 transform: [{translateX: imgTranslateX_2}],
               },
             ]}>
             <Image style={styles.slideImage} source={assets.banner_hall} />
             <View style={styles.imageBackground}>
-              <Animated.View
-                style={
-                  {
-                    // transform: [{translateY: textTranslateY_1}],
-                  }
-                }>
+              <Animated.View style={{}}>
                 <StyledText
                   color="DEFAULT_WHITE"
                   type="contentTitle"
@@ -311,18 +207,12 @@ const Login = () => {
             style={[
               styles.slideImage,
               {
-                // opacity: imgOpacity_3,
                 transform: [{translateX: imgTranslateX_3}],
               },
             ]}>
             <Image style={styles.slideImage} source={assets.banner_odyssee} />
             <View style={styles.imageBackground}>
-              <Animated.View
-                style={
-                  {
-                    // transform: [{translateY: textTranslateY_1}],
-                  }
-                }>
+              <Animated.View style={{}}>
                 <StyledText
                   color="DEFAULT_WHITE"
                   type="contentTitle"
@@ -344,18 +234,12 @@ const Login = () => {
             style={[
               styles.slideImage,
               {
-                // opacity: imgOpacity_4,
                 transform: [{translateX: imgTranslateX_4}],
               },
             ]}>
             <Image style={styles.slideImage} source={assets.banner_2} />
             <View style={styles.imageBackground}>
-              <Animated.View
-                style={
-                  {
-                    // transform: [{translateY: textTranslateY_1}],
-                  }
-                }>
+              <Animated.View style={{}}>
                 <StyledText
                   color="DEFAULT_WHITE"
                   type="contentTitle"
@@ -399,6 +283,6 @@ const Login = () => {
       </View>
     </View>
   );
-};;
+};
 
 export default Login;

@@ -8,7 +8,6 @@ const AddCartButton = ({id}: {id: string}) => {
   const [isSelected, setIsSeletcted] = React.useState(false);
 
   const addCart = (id: string) => {
-    // 장바구니 추가 API 호출 코드
     setIsSeletcted(true);
     SimpleToast.show(
       isSelected

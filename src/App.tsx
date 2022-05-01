@@ -1,5 +1,4 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
 import {Provider} from 'react-redux';
 import {LikedProvider} from './contexts/LikedProvider';
 import {OrderProvider} from './contexts/OrderProvider';
@@ -19,5 +18,3 @@ const App = () => {
 };
 
 export default App;
-
-  // Provider 바깥에서는 useSelector를 못쓴다. 그래서 App에서 감싸줌

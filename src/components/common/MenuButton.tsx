@@ -16,40 +16,7 @@ type MenuButtonProps = {
 
 const MenuButton = ({onPress, style}: MenuButtonProps) => {
   return (
-    <TouchableOpacity
-      style={[
-        // {
-        //   height: 30,
-        //   width: 35,
-        //   justifyContent: 'space-between',
-        // },
-        style,
-      ]}
-      onPress={onPress}>
-      {/* <View
-        style={{
-          width: '100%',
-          height: 5,
-          backgroundColor: theme.colors.DEFAULT_WHITE,
-          borderRadius: 5,
-        }}
-      />
-      <View
-        style={{
-          width: '100%',
-          height: 5,
-          backgroundColor: theme.colors.DEFAULT_WHITE,
-          borderRadius: 5,
-        }}
-      />
-      <View
-        style={{
-          width: '100%',
-          height: 5,
-          backgroundColor: theme.colors.DEFAULT_WHITE,
-          borderRadius: 5,
-        }}
-      /> */}
+    <TouchableOpacity style={style} onPress={onPress}>
       <Image source={assets.icon_menu} style={{width: 30, height: 30}} />
     </TouchableOpacity>
   );
